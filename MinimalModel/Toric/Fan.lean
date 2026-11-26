@@ -20,6 +20,9 @@ A face of a cone is a face in the sense of Mathlib, `PointedCone.IsFaceOf`: a su
 * `Fan.bot_mem`, `Fan.inf_mem`: a fan with a cone contains the zero cone, and it contains the intersection of two of its cones.
 * `Fan.trivial`, `Fan.ofCone`, `Fan.affine`: the trivial fan, the fan of the faces of one cone, and the fan of the affine space `𝔸ⁿ`.
 * `isSimplicial_orthant`, `Fan.isSimplicialFan_affine`: the positive orthant is simplicial, so the fan of `𝔸ⁿ` is simplicial.
+* `eq_of_isFaceOf_latticeCone_pair`: the faces of the cone of two lattice points.
+* `isPrimitive_primitivePart`, `latticeCone_primitivePart`: a nonzero lattice point is a positive multiple of a primitive point, and the two span the same ray.
+* `IsPrimitive.toNR_mem_latticeCone_iff`: the lattice points of the ray of a primitive point `u` are the points `k • u` with `k : ℕ`.
 -/
 
 namespace MinimalModel.Toric
@@ -205,6 +208,35 @@ theorem eq_bot_or_eq_of_isFaceOf_latticeCone_singleton {v : Fin n → ℤ}
   · exact Or.inl latticeCone_empty
   · exact Or.inr rfl
 
+/-- A vector is in the cone of two lattice points `a` and `b` when it is a nonnegative combination of `a` and `b`. -/
+theorem mem_latticeCone_pair {a b : Fin n → ℤ} {x : NR n} :
+    x ∈ latticeCone {a, b} ↔ ∃ r s : ℝ, 0 ≤ r ∧ 0 ≤ s ∧ r • toNR a + s • toNR b = x := by
+  rw [latticeCone, Finset.coe_insert, Finset.coe_singleton, Set.image_insert_eq,
+    Set.image_singleton, Submodule.mem_span_pair]
+  constructor
+  · rintro ⟨c, d, h⟩
+    exact ⟨c, d, c.2, d.2, h⟩
+  · rintro ⟨r, s, hr, hs, h⟩
+    exact ⟨⟨r, hr⟩, ⟨s, hs⟩, h⟩
+
+/-- The cone of two lattice points `a` and `b` has at most four faces: the zero cone, the cone of `a`, the cone of `b` and itself. -/
+theorem eq_of_isFaceOf_latticeCone_pair {a b : Fin n → ℤ} {τ : PointedCone ℝ (NR n)}
+    (h : τ.IsFaceOf (latticeCone {a, b})) :
+    τ = ⊥ ∨ τ = latticeCone {a} ∨ τ = latticeCone {b} ∨ τ = latticeCone {a, b} := by
+  obtain ⟨T, hT, rfl⟩ := exists_subset_of_isFaceOf_latticeCone h
+  have hT' : (T : Set (Fin n → ℤ)) ⊆ {a, b} := by
+    rw [← Finset.coe_singleton, ← Finset.coe_insert]
+    exact Finset.coe_subset.mpr hT
+  rcases Set.subset_pair_iff_eq.mp hT' with h0 | h1 | h2 | h3
+  · left
+    rw [Finset.coe_eq_empty.mp h0, latticeCone_empty]
+  · right; left
+    rw [Finset.coe_eq_singleton.mp h1]
+  · right; right; left
+    rw [Finset.coe_eq_singleton.mp h2]
+  · right; right; right
+    rw [Finset.coe_injective (h3.trans (by rw [Finset.coe_insert, Finset.coe_singleton]))]
+
 /-- The zero cone is a face of each strongly convex cone. -/
 theorem bot_isFaceOf {σ : PointedCone ℝ (NR n)} (hσ : IsStronglyConvex σ) :
     (⊥ : PointedCone ℝ (NR n)).IsFaceOf σ := by
@@ -334,6 +366,147 @@ theorem isSimplicialFan_ofCone {σ : PointedCone ℝ (NR n)} (hr : IsRationalPol
   fun _ hτ => h.of_isFaceOf hτ
 
 end Fan
+
+section Primitive
+
+/-! ### Primitive lattice points
+
+A lattice point `u` is primitive when its coordinates have no common factor. Each nonzero lattice point `v` is a positive multiple of one primitive point, its primitive part. If `u` is primitive, the lattice points of the ray `ℝ≥0 · u` are the points `k • u` with `k : ℕ`. These are the facts behind the primitive generator `u_ρ` of a ray (Cox, Little and Schenck, Section 1.2 and Section 3.1). -/
+
+/-- The content of a lattice point: the greatest common divisor of its coordinates. It is nonnegative. -/
+def content (v : Fin n → ℤ) : ℤ := Finset.univ.gcd v
+
+/-- The content is nonnegative. -/
+theorem content_nonneg (v : Fin n → ℤ) : 0 ≤ content v :=
+  Int.nonneg_of_normalize_eq_self (Finset.normalize_gcd (s := Finset.univ) (f := v))
+
+/-- The content divides each coordinate. -/
+theorem content_dvd (v : Fin n → ℤ) (i : Fin n) : content v ∣ v i :=
+  Finset.gcd_dvd (Finset.mem_univ i)
+
+/-- The content is zero only at the zero point. -/
+theorem content_eq_zero_iff {v : Fin n → ℤ} : content v = 0 ↔ v = 0 := by
+  rw [content, Finset.gcd_eq_zero_iff]
+  constructor
+  · intro h
+    funext i
+    exact h i (Finset.mem_univ i)
+  · rintro rfl i _
+    rfl
+
+/-- Bezout: the content is an integer combination of the coordinates. -/
+theorem exists_sum_mul_eq_content (v : Fin n → ℤ) :
+    ∃ c : Fin n → ℤ, ∑ i, v i * c i = content v := by
+  obtain ⟨c, hc⟩ := Finset.gcd_eq_sum_mul Finset.univ v
+  exact ⟨c, hc.symm⟩
+
+/-- A primitive lattice point: the greatest common divisor of its coordinates is `1`. -/
+def IsPrimitive (v : Fin n → ℤ) : Prop := content v = 1
+
+/-- A primitive lattice point is not zero. -/
+theorem IsPrimitive.ne_zero {v : Fin n → ℤ} (h : IsPrimitive v) : v ≠ 0 := by
+  rintro rfl
+  have h0 : content (0 : Fin n → ℤ) = 0 := content_eq_zero_iff.mpr rfl
+  rw [IsPrimitive, h0] at h
+  exact zero_ne_one h
+
+/-- A lattice point with a coordinate `1` or `-1` is primitive. -/
+theorem isPrimitive_of_isUnit {v : Fin n → ℤ} {i : Fin n} (h : IsUnit (v i)) :
+    IsPrimitive v := by
+  have h1 : IsUnit (content v) := isUnit_of_dvd_unit (content_dvd v i) h
+  rcases Int.isUnit_iff.mp h1 with h2 | h2
+  · exact h2
+  · have := content_nonneg v
+    omega
+
+/-- The primitive part of a lattice point: the point divided by its content. -/
+def primitivePart (v : Fin n → ℤ) : Fin n → ℤ := fun i => v i / content v
+
+/-- A lattice point is its content times its primitive part. -/
+theorem content_smul_primitivePart (v : Fin n → ℤ) : content v • primitivePart v = v := by
+  funext i
+  simp only [Pi.smul_apply, smul_eq_mul, primitivePart]
+  exact Int.mul_ediv_cancel' (content_dvd v i)
+
+/-- The primitive part of a nonzero lattice point is primitive. -/
+theorem isPrimitive_primitivePart {v : Fin n → ℤ} (hv : v ≠ 0) :
+    IsPrimitive (primitivePart v) := by
+  obtain ⟨i, hi⟩ := Function.ne_iff.mp hv
+  refine Finset.extract_gcd' v (primitivePart v) ⟨i, Finset.mem_univ i, hi⟩ fun b _ => ?_
+  exact (congrFun (content_smul_primitivePart v) b).symm
+
+/-- The content of a nonzero lattice point is positive. -/
+theorem content_pos {v : Fin n → ℤ} (hv : v ≠ 0) : 0 < content v :=
+  lt_of_le_of_ne (content_nonneg v) (Ne.symm (mt content_eq_zero_iff.mp hv))
+
+/-- The vector of an integer multiple of a lattice point. -/
+theorem toNR_smul (c : ℤ) (v : Fin n → ℤ) : toNR (c • v) = (c : ℝ) • toNR v := by
+  funext i
+  simp
+
+/-- The cone of a positive multiple of `v` is the cone of `v`. -/
+theorem latticeCone_singleton_smul {v : Fin n → ℤ} {c : ℤ} (hc : 0 < c) :
+    latticeCone {c • v} = latticeCone {v} := by
+  have hc' : (0 : ℝ) < c := Int.cast_pos.mpr hc
+  ext x
+  rw [mem_latticeCone_singleton, mem_latticeCone_singleton, toNR_smul]
+  constructor
+  · rintro ⟨r, hr, rfl⟩
+    exact ⟨r * c, mul_nonneg hr hc'.le, by rw [smul_smul]⟩
+  · rintro ⟨r, hr, rfl⟩
+    exact ⟨r / c, div_nonneg hr hc'.le, by rw [smul_smul, div_mul_cancel₀ _ hc'.ne']⟩
+
+/-- A nonzero lattice point and its primitive part span the same ray. -/
+theorem latticeCone_primitivePart {v : Fin n → ℤ} (hv : v ≠ 0) :
+    latticeCone {primitivePart v} = latticeCone {v} := by
+  conv_rhs => rw [← content_smul_primitivePart v]
+  exact (latticeCone_singleton_smul (content_pos hv)).symm
+
+/-- If `u` is primitive and the vector of `w` is a real multiple `r` of the vector of `u`, then `r` is an integer `k` and `w = k • u`. -/
+theorem IsPrimitive.exists_int_of_smul_eq {u w : Fin n → ℤ} (hu : IsPrimitive u) {r : ℝ}
+    (h : r • toNR u = toNR w) : ∃ k : ℤ, (k : ℝ) = r ∧ w = k • u := by
+  obtain ⟨c, hc⟩ := exists_sum_mul_eq_content u
+  rw [show content u = 1 from hu] at hc
+  have hi : ∀ i, r * (u i : ℝ) = (w i : ℝ) := fun i => by
+    have := congrFun h i
+    simpa using this
+  have hk : ((∑ i, w i * c i : ℤ) : ℝ) = r := by
+    have hsum : ((∑ i, w i * c i : ℤ) : ℝ) = r * ((∑ i, u i * c i : ℤ) : ℝ) := by
+      push_cast
+      rw [Finset.mul_sum]
+      refine Finset.sum_congr rfl fun i _ => ?_
+      rw [← hi i]
+      ring
+    rw [hsum, hc, Int.cast_one, mul_one]
+  obtain ⟨k, hk⟩ : ∃ k : ℤ, (k : ℝ) = r := ⟨_, hk⟩
+  refine ⟨k, hk, toNR_injective ?_⟩
+  rw [toNR_smul, hk, h]
+
+/-- The lattice points of the ray of a primitive point `u` are the multiples `k • u` with `k : ℕ`. -/
+theorem IsPrimitive.toNR_mem_latticeCone_iff {u w : Fin n → ℤ} (hu : IsPrimitive u) :
+    toNR w ∈ latticeCone {u} ↔ ∃ k : ℕ, w = k • u := by
+  rw [mem_latticeCone_singleton]
+  constructor
+  · rintro ⟨r, hr, h⟩
+    obtain ⟨k, hk, rfl⟩ := hu.exists_int_of_smul_eq h
+    have h0 : (0 : ℝ) ≤ (k : ℝ) := by rw [hk]; exact hr
+    have hk0 : 0 ≤ k := by exact_mod_cast h0
+    refine ⟨k.toNat, ?_⟩
+    rw [← natCast_zsmul, Int.toNat_of_nonneg hk0]
+  · rintro ⟨k, rfl⟩
+    refine ⟨k, Nat.cast_nonneg k, ?_⟩
+    rw [← natCast_zsmul, toNR_smul, Int.cast_natCast]
+
+/-- A primitive point that is a multiple `k • g` with `k : ℕ` is equal to `g`. -/
+theorem IsPrimitive.eq_of_eq_nsmul {u g : Fin n → ℤ} (hu : IsPrimitive u) {k : ℕ}
+    (h : u = k • g) : u = g := by
+  have hdvd : (k : ℤ) ∣ content u := Finset.dvd_gcd fun i _ => ⟨g i, by rw [h]; simp⟩
+  rw [show content u = 1 from hu] at hdvd
+  have hk : (k : ℤ) = 1 := Int.eq_one_of_dvd_one (Int.natCast_nonneg k) hdvd
+  have hk' : k = 1 := by exact_mod_cast hk
+  rw [h, hk', one_smul]
+
+end Primitive
 
 section Affine
 
