@@ -105,6 +105,30 @@ sources:
     relationship: background
     note: The source of the toric cone theorem, with CLS11 Theorem 6.3.12. The pinned statement is in MinimalModel/Statements/Toric.lean.
     author_endorsement: false
+  - title: On termination of flips and exceptionally non-canonical singularities
+    authors: [Jingjun Han, Jihao Liu]
+    id: "mmp:HL25"
+    type: paper
+    location: Geometry and Topology 29 (2025), arXiv:2209.13122
+    relationship: background
+    note: The source of the enc pairs (Definition 3.8) and of statement S52 (Conjecture 1.9(2')).
+    author_endorsement: false
+  - title: On effective non-vanishing and base-point-freeness
+    authors: [Yujiro Kawamata]
+    id: "mmp:Kaw00"
+    type: paper
+    location: Asian Journal of Mathematics 4 (2000)
+    relationship: background
+    note: The source of the effective non-vanishing conjecture, whose negation in dimension 4 is statement S57. The reader role checks the number of the conjecture.
+    author_endorsement: false
+  - title: Counterexamples to the effective non-vanishing conjecture
+    authors: [Ajit]
+    id: "mmp:Ajit26"
+    type: paper
+    location: arXiv:2610.09270 v2
+    relationship: background
+    note: The claimed counterexamples in dimension 4 that statement S57 records. The claim is not refereed. The title here is descriptive, and the reader role copies the title of the source.
+    author_endorsement: false
   - title: AxiomMath/MMP
     authors: [AxiomMath]
     id: "mmp:AxiomMMP"
@@ -262,6 +286,30 @@ status:
       kind: statement
       status: open
       note: S56, Fujita's freeness conjecture. The full conjecture is claimed by OpenAI 038 and is not refereed.
+    - name: MinimalModel.KleimanCriterion
+      kind: statement
+      status: known
+      note: S01, Kleiman's criterion, KM98 Theorem 1.18. An R-Cartier divisor on a projective variety is ample exactly when it is positive on the nonzero classes of the closed cone of curves.
+    - name: MinimalModel.KawamataViehweg
+      kind: statement
+      status: known
+      note: S02, Kawamata-Viehweg vanishing, KM98 Theorem 2.70, for a projective morphism and Q-divisors. The higher direct images are the sheaf cohomology of Mathlib on the inverse images of the affine open sets.
+    - name: MinimalModel.ContractionTheorem
+      kind: statement
+      status: known
+      note: S06, the contraction theorem, KM98 Theorem 3.7 parts 3 and 4. The contraction of a negative extremal face exists and is unique, and a Cartier divisor that is zero on the face is locally trivial over the target.
+    - name: MinimalModel.LengthOfExtremalRays
+      kind: statement
+      status: known
+      note: S09, the length of extremal rays, KM98 Theorem 3.7(1). Each negative extremal ray is spanned by a rational curve C with 0 < -(K+Δ)·C ≤ 2 dim X.
+    - name: MinimalModel.NotEffectiveNonVanishing4
+      kind: statement
+      status: claimed
+      note: S57, the negation of effective non-vanishing in dimension 4 (Ajit, arXiv:2610.09270, not refereed). No statement takes it as a hypothesis.
+    - name: MinimalModel.HanLiuEncACC
+      kind: statement
+      status: open
+      note: S52, Han-Liu Conjecture 1.9(2') in dimension 4. The global mlds of enc pairs with coefficients in a finite set satisfy the ACC.
     - name: MinimalModel.IsKlt.isLc
       kind: theorem
       status: proved
@@ -554,3 +602,19 @@ status:
       kind: theorem
       status: proved
       note: Check F3. The pair (A1, c[0]) is lc and plt for c ≤ 1 (affineLinePair_isPlt). It is terminal and canonical for each c.
+    - name: MinimalModel.pointVariety_kleiman
+      kind: theorem
+      status: proved
+      note: Check F2 for S01. The point is projective, and both sides of Kleiman's criterion hold on it.
+    - name: MinimalModel.isEmpty_extremalRay
+      kind: theorem
+      status: proved
+      note: Check F3 for S09. A variety with no curves has no extremal ray.
+    - name: MinimalModel.not_isEnc_of_dim_eq_one
+      kind: theorem
+      status: proved
+      note: Check F3 for S52. No pair on a variety of dimension one is enc. The theorems pointPair_not_isEnc and affineLinePair_not_isEnc give the point and the affine line, and pointPair_globalMld gives the global mld 0 of (Spec k, 0).
+    - name: MinimalModel.pointVariety_sections_ne_bot
+      kind: theorem
+      status: proved
+      note: Check F3 for S57. Each divisor on the point has a nonzero section, so the point is no counterexample to effective non-vanishing.
