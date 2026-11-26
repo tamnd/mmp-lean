@@ -1,0 +1,148 @@
+# The metadata of this formalization. The keys follow the formalization.yaml schema of version 0.4 that resolutionorg/hironaka uses. The relationships bridges and audits are new keys that this project asks the maintainers of the schema to add (spec 14.6, Q-14).
+version: "0.4"
+project:
+  name: mmp-lean
+  description: Statements in Lean 4 of the minimal model program of birational geometry, the proofs of its known parts, an audit of the 4-fold termination claim of AxiomMath/MMP, and the work on its open parts.
+  authors:
+    - The mmp authors
+  responsible_maintainers:
+    - tamnd
+  license: Apache-2.0
+sources:
+  - title: Birational geometry of algebraic varieties
+    authors: [Janos Kollar, Shigefumi Mori]
+    id: "mmp:KM98"
+    type: book
+    location: Cambridge Tracts in Mathematics 134, Cambridge University Press (1998)
+    relationship: background
+    note: The source of the definitions of the pair classes, the cone theorem (Theorem 3.7), the minimal models (Definition 3.50) and the program. The reader role checks each theorem number against the book before a node depends on it (Q-11).
+    author_endorsement: false
+  - title: Existence of minimal models for varieties of log general type
+    authors: [Caucher Birkar, Paolo Cascini, Christopher D. Hacon, James McKernan]
+    id: "mmp:BCHM10"
+    type: paper
+    location: Journal of the American Mathematical Society 23 (2010), 405-468
+    relationship: background
+    note: The source of statements S30 (the existence of klt flips) and S32 (the finite generation of the canonical ring).
+    author_endorsement: false
+  - title: Algebraic geometry
+    authors: [Robin Hartshorne]
+    id: "mmp:Har77"
+    type: book
+    location: Graduate Texts in Mathematics 52, Springer (1977)
+    relationship: background
+    note: The source of Castelnuovo's contraction theorem, Theorem V.5.7, statement S10.
+    author_endorsement: false
+  - title: Letters of a bi-rationalist V. Minimal log discrepancies and termination of log flips
+    authors: [Vyacheslav V. Shokurov]
+    id: "mmp:Sho04"
+    type: paper
+    location: Proceedings of the Steklov Institute of Mathematics 246 (2004), 315-336
+    relationship: background
+    note: The source of statement S28, the reduction of the termination of flips to the ACC and the lower semicontinuity of minimal log discrepancies.
+    author_endorsement: false
+  - title: Toric varieties
+    authors: [David A. Cox, John B. Little, Henry K. Schenck]
+    id: "mmp:CLS11"
+    type: book
+    location: Graduate Studies in Mathematics 124, American Mathematical Society (2011)
+    relationship: background
+    note: The source of the definitions of cones and fans in MinimalModel/Toric/Fan.lean.
+    author_endorsement: false
+  - title: AxiomMath/MMP
+    authors: [AxiomMath]
+    id: "mmp:AxiomMMP"
+    type: formalization
+    location: https://github.com/AxiomMath/MMP at commit 1f9ade3670
+    relationship: audits
+    note: The Lean project that claims the termination of the minimal model program for lc 4-folds with a rational boundary. Statement S22 is the statement of this project for the same claim. The audit steps A1 to A8 of spec 04 read the definitions and the proofs of this commit. S22 stays claimed until the audit closes with Q9 yes.
+    author_endorsement: false
+  - title: AxiomMath/MMP, the bridge
+    authors: [AxiomMath]
+    id: "mmp:AxiomMMPBridge"
+    type: formalization
+    location: https://github.com/AxiomMath/MMP at commit 1f9ade3670
+    relationship: bridges
+    note: The package MinimalModelBridge in bridge/ will prove that the statements of this project agree with the statements of AxiomMath/MMP where both apply. At S0 the bridge has no proof yet.
+    author_endorsement: false
+classification:
+  arxiv: [math.AG]
+  msc2020: [14E30, 14E05, 14J17, 14M25, 03B35]
+status:
+  scope: statements
+  sorry_count: 0
+  sorry_in_definitions: false
+  axioms: [propext, Classical.choice, Quot.sound]
+  main_results:
+    - name: MinimalModel.ConeTheoremKlt
+      kind: statement
+      status: known
+      note: S04, the cone theorem for projective klt pairs, KM98 Theorem 3.7 parts 1 and 2. This is a definition of a proposition. It is not proved in this package.
+    - name: MinimalModel.Castelnuovo
+      kind: statement
+      status: known
+      note: S10, Castelnuovo's contraction theorem, Hartshorne V.5.7.
+    - name: MinimalModel.SurfaceConeTheorem
+      kind: statement
+      status: known
+      note: S11, the cone theorem for smooth projective surfaces.
+    - name: MinimalModel.SurfaceMMP
+      kind: statement
+      status: known
+      note: S12, the minimal model program for smooth projective surfaces.
+    - name: MinimalModel.Termination
+      kind: statement
+      status: open
+      note: S20, the termination of flips for projective lc pairs of dimension n. It is open for n at least 4.
+    - name: MinimalModel.TerminationLc4Rational
+      kind: statement
+      status: claimed
+      note: S22, the termination of the program for projective lc 4-folds with a rational boundary, the claim of AxiomMath/MMP. It is never a hypothesis of another proof until the audit closes.
+    - name: MinimalModel.ShokurovReduction
+      kind: statement
+      status: known
+      note: S28, the ACC and the lower semicontinuity of minimal log discrepancies give the termination of flips.
+    - name: MinimalModel.KltFlips
+      kind: statement
+      status: known
+      note: S30, the existence of klt flips, BCHM Corollary 1.4.1.
+    - name: MinimalModel.FiniteGenerationCanonical
+      kind: statement
+      status: known
+      note: S32, the finite generation of the canonical ring of a smooth projective variety, BCHM Corollary 1.1.2.
+    - name: MinimalModel.MinimalModelConj
+      kind: statement
+      status: open
+      note: S33, the existence of minimal models for projective lc pairs with a pseudo-effective log canonical divisor. It is open for n at least 4.
+    - name: MinimalModel.Abundance
+      kind: statement
+      status: open
+      note: S40, the abundance conjecture. It is open for n at least 4.
+    - name: MinimalModel.NonVanishing
+      kind: statement
+      status: open
+      note: S41, the non-vanishing conjecture. It is open for n at least 4.
+    - name: MinimalModel.ACCMld
+      kind: statement
+      status: open
+      note: S49, the ACC conjecture for minimal log discrepancies. It is open for n at least 4.
+    - name: MinimalModel.LSCMld
+      kind: statement
+      status: open
+      note: S50, the lower semicontinuity conjecture for minimal log discrepancies. It is open for n at least 4.
+    - name: MinimalModel.IsKlt.isLc
+      kind: theorem
+      status: proved
+      note: Check F3. A klt pair is lc.
+    - name: MinimalModel.exists_finite_program
+      kind: theorem
+      status: proved
+      note: Check F3. Each model has a program of length zero, so the termination statements are about every program.
+    - name: MinimalModel.TerminationLc4Rational.noInfiniteFlips
+      kind: theorem
+      status: proved
+      note: Check F3. S22 gives the termination of flips for the 4-folds of its class.
+    - name: MinimalModel.nonempty_pairModel
+      kind: theorem
+      status: proved
+      note: Check F2. The point Spec k is a pair model, so the type PairModel k is not empty and no statement is true only because it has no model.

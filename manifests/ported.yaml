@@ -1,0 +1,3 @@
+# One entry for each ported source (spec 05.4). mmp port check reads this file.
+# At S0 the package has no ported file. The first ports are planned at S2, from AxiomMath/Stacks (Q-08).
+[]

@@ -1,0 +1,21 @@
+name = "MinimalModelBridge"
+version = "0.1.0"
+defaultTargets = ["MinimalModelBridge"]
+
+[leanOptions]
+autoImplicit = false
+relaxedAutoImplicit = false
+
+# AxiomMath/MMP at the audited commit (spec 04, route R2, and Q-02). It pins its own Mathlib commit, 56a005855ea17e0b0958f73ec801ae140b0a1679, which is on the toolchain v4.35.0.
+[[require]]
+name = "MMP"
+git = "https://github.com/AxiomMath/MMP"
+rev = "1f9ade367087ec711a2ce1382bad279a5a0284c3"
+
+# The statements of this project. The bridge builds them against the Mathlib commit of AxiomMath/MMP.
+[[require]]
+name = "MinimalModel"
+path = ".."
+
+[[lean_lib]]
+name = "MinimalModelBridge"

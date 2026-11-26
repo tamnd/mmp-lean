@@ -1,0 +1,20 @@
+name = "MinimalModel"
+version = "0.1.0"
+defaultTargets = ["MinimalModel"]
+
+[leanOptions]
+pp.unicode.fun = true
+autoImplicit = false
+relaxedAutoImplicit = false
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "v4.35.0"
+
+[[lean_lib]]
+name = "MinimalModel"
+
+[[lean_lib]]
+name = "Comparator"
+roots = ["Comparator.Challenge", "Comparator.Solution"]
