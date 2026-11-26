@@ -97,6 +97,14 @@ sources:
     relationship: background
     note: The source of the definitions of cones and fans in MinimalModel/Toric/Fan.lean.
     author_endorsement: false
+  - title: Decomposition of toric morphisms
+    authors: [Miles Reid]
+    id: "mmp:Rei83"
+    type: paper
+    location: Arithmetic and Geometry, Vol. II, Progress in Mathematics 36, Birkhauser (1983), 395-418
+    relationship: background
+    note: The source of the toric cone theorem, with CLS11 Theorem 6.3.12. The pinned statement is in MinimalModel/Statements/Toric.lean.
+    author_endorsement: false
   - title: AxiomMath/MMP
     authors: [AxiomMath]
     id: "mmp:AxiomMMP"
@@ -418,6 +426,14 @@ status:
       kind: theorem
       status: proved
       note: Route R3, S2 in combinatorial form. On a complete simplicial fan, an R-Cartier divisor is nef exactly when its degree on each wall curve is nonnegative (CLS11 Theorem 6.3.12 and Proposition 6.4.4). The geometric form needs the toric variety as a scheme, which is not in the repository yet.
+    - name: MinimalModel.Toric.ToricConeTheorem
+      kind: statement
+      status: known
+      note: The pinned statement of the toric cone theorem in combinatorial form, in MinimalModel/Statements/Toric.lean (CLS11 Theorem 6.3.12 and Proposition 6.4.4, Rei83). Row Q4 of spec 14 compares toricConeTheorem with it.
+    - name: MinimalModel.Toric.toricConeTheorem
+      kind: theorem
+      status: proved
+      note: Route R3, S2. The toric cone theorem in the form of the pinned statement ToricConeTheorem, from Fan.coneTheorem. The job comparator of the workflow trust checks it against Comparator/Challenge.lean.
     - name: MinimalModel.IsPlt
       kind: def
       status: proved

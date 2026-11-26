@@ -4,6 +4,10 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 
 ## Unreleased
 
+### Added
+
+- `MinimalModel/Statements/Toric.lean`: the pinned statement `ToricConeTheorem` of the toric cone theorem in combinatorial form, and the theorem `toricConeTheorem` that proves it from `Fan.coneTheorem`. `comparator.json` and `Comparator/Challenge.lean` list it, so the job `comparator` of the workflow `trust` checks it (row Q4).
+
 ## v0.0.3 - 2026-11-26
 
 ### Added

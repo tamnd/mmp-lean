@@ -3,6 +3,7 @@ Copyright (c) 2026 The mmp authors. All rights reserved.
 Released under the Apache 2.0 licence as described in the file LICENSE.
 -/
 import MinimalModel.Toric.Cone
+import MinimalModel.Statements.Toric
 
 /-!
 # The toric cone theorem
@@ -17,6 +18,7 @@ The main step is that a support function on a complete fan is convex in the sens
 * `Fan.concaveOn_iff_forall_isConvexAcross_of_isSimplicialFan`: the same for a complete simplicial fan.
 * `Fan.IsWallPair.nonempty_wallData`: two simplicial maximal cones that meet in a wall carry the data of a wall.
 * `Fan.coneTheorem`: the toric cone theorem in combinatorial form.
+* `toricConeTheorem`: the same, in the form of the pinned statement `ToricConeTheorem` of `MinimalModel/Statements/Toric.lean`.
 -/
 
 open Topology Filter
@@ -557,5 +559,9 @@ theorem coneTheorem (hc : F.IsComplete) (hs : F.IsSimplicialFan) {D : F.TDivisor
       (h σ σ' hw W)
 
 end Fan
+
+/-- **The toric cone theorem**, in the form of the pinned statement `ToricConeTheorem` of `MinimalModel/Statements/Toric.lean`. The job `comparator` of the workflow `trust` checks this theorem against the statement (row Q4 of spec 14). -/
+theorem toricConeTheorem : ToricConeTheorem :=
+  fun _ _ hc hs _ hD => Fan.coneTheorem hc hs hD
 
 end MinimalModel.Toric

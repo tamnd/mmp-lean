@@ -20,6 +20,7 @@ import MinimalModel.Toric.Wall
 import MinimalModel.Toric.Cone
 import MinimalModel.Toric.ConeTheorem
 import MinimalModel.Toric.Examples
+import MinimalModel.Statements.Toric
 import MinimalModel.Fidelity.AffineLine
 import MinimalModel.Fidelity.Centre
 import MinimalModel.Fidelity.AffineLinePairs
