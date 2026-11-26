@@ -11,3 +11,5 @@ import MinimalModel.Statements.Abundance
 import MinimalModel.Fidelity.Basic
 import MinimalModel.Fidelity.Point
 import MinimalModel.Toric.Fan
+import MinimalModel.Toric.Divisor
+import MinimalModel.Toric.Examples
