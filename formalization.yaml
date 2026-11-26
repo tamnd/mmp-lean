@@ -398,3 +398,71 @@ status:
       kind: theorem
       status: proved
       note: Route R3. The anticanonical divisor of the projective plane is nef. This is a check F2 instance.
+    - name: MinimalModel.IsPlt
+      kind: def
+      status: proved
+      note: The class of purely log terminal pairs, KM98 Definition 2.34. The coefficients of the boundary are at most one, and each exceptional divisorial valuation has a positive log discrepancy.
+    - name: MinimalModel.Pair.HasDivisorLogDiscrepancy
+      kind: def
+      status: proved
+      note: A hypothesis. Each divisorial valuation that is not exceptional has the log discrepancy 1 - Δ Q for a prime divisor Q. It holds for every pair, but the proof needs the uniqueness of the centre of a valuation, which is not formalized.
+    - name: MinimalModel.IsKlt.isPlt
+      kind: theorem
+      status: proved
+      note: Check F3. A klt pair is plt.
+    - name: MinimalModel.IsKlt.isDlt
+      kind: theorem
+      status: proved
+      note: Check F3. A klt pair is dlt, with the closed set Z equal to X.
+    - name: MinimalModel.IsDlt.isLc
+      kind: theorem
+      status: proved
+      note: Check F3. A dlt pair is lc.
+    - name: MinimalModel.IsCanonical.isPlt
+      kind: theorem
+      status: proved
+      note: Check F3. A canonical pair with coefficients at most one is plt.
+    - name: MinimalModel.IsTerminal.isPlt
+      kind: theorem
+      status: proved
+      note: Check F3. A terminal pair with coefficients at most one is plt.
+    - name: MinimalModel.IsPlt.isKlt
+      kind: theorem
+      status: proved
+      note: Check F3. A plt pair with coefficients less than one is klt, with the hypothesis Pair.HasDivisorLogDiscrepancy.
+    - name: MinimalModel.IsCanonical.isKlt
+      kind: theorem
+      status: proved
+      note: Check F3. A canonical pair with coefficients less than one is klt, with the hypothesis Pair.HasDivisorLogDiscrepancy.
+    - name: MinimalModel.IsTerminal.isKlt
+      kind: theorem
+      status: proved
+      note: Check F3. A terminal pair with coefficients less than one is klt, with the hypothesis Pair.HasDivisorLogDiscrepancy.
+    - name: MinimalModel.IsPlt.isLc
+      kind: theorem
+      status: proved
+      note: Check F3. A plt pair is lc, with the hypothesis Pair.HasDivisorLogDiscrepancy.
+    - name: MinimalModel.IsPlt.isDlt
+      kind: theorem
+      status: proved
+      note: Check F3. A plt pair is dlt when it is lc and a closed set Z is given, such that the pair is snc outside Z and each divisorial valuation with centre in Z is exceptional.
+    - name: MinimalModel.not_isPlt_of_one_lt
+      kind: theorem
+      status: proved
+      note: Check F3. A pair with a coefficient more than one is not plt.
+    - name: MinimalModel.pointPair_isPlt
+      kind: theorem
+      status: proved
+      note: Check F2. The pair (Spec k, 0) is plt, so the class of plt pairs is not empty.
+    - name: MinimalModel.affineLinePair_two_not_isPlt
+      kind: theorem
+      status: proved
+      note: Check F3. The pair (A1, 2[0]) is not plt.
+    - name: MinimalModel.affineLinePair_two_not_isKlt
+      kind: theorem
+      status: proved
+      note: Check F3. The pair (A1, 2[0]) is not klt.
+    - name: MinimalModel.affineLinePair_two_not_isDlt
+      kind: theorem
+      status: proved
+      note: Check F3. The pair (A1, 2[0]) is not dlt.
