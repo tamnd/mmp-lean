@@ -270,3 +270,23 @@ status:
       kind: theorem
       status: proved
       note: Check F2. The point Spec k is a pair model, so the type PairModel k is not empty and no statement is true only because it has no model.
+    - name: MinimalModel.pointPair_isKlt
+      kind: theorem
+      status: proved
+      note: Check F2. The pair (Spec k, 0) is klt, so the class of klt pairs is not empty. Spec k has no divisorial valuation.
+    - name: MinimalModel.pointPair_isDlt
+      kind: theorem
+      status: proved
+      note: Check F2. The pair (Spec k, 0) is dlt, so the class of dlt pairs is not empty.
+    - name: MinimalModel.pointPair_isTerminal
+      kind: theorem
+      status: proved
+      note: Check F2. The pair (Spec k, 0) is terminal, so the class of terminal pairs is not empty.
+    - name: MinimalModel.pointModel_coneDecomposition
+      kind: theorem
+      status: proved
+      note: Check F2 for S04. The hypotheses of the cone theorem hold for (Spec k, 0), and its conclusion holds with no rays.
+    - name: MinimalModel.pointModel_terminates
+      kind: theorem
+      status: proved
+      note: Check F2 for S20 and S22. The model (Spec k, 0) is lc with a rational boundary, and it has no infinite program.
