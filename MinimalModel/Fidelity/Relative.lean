@@ -33,7 +33,7 @@ theorem NumEquiv.symm {I : IntersectionData X} {D D' : Divisor ℝ X} (h : NumEq
     NumEquiv I D' D :=
   ⟨h.2.1, h.1, fun C => (h.2.2 C).symm⟩
 
-/-- A divisor that is not `ℝ`-Cartier is numerically equivalent to no divisor. This is why `GeneralizedAbundance` asks that `L` is `ℝ`-Cartier: then `K + Δ + L` is `ℝ`-Cartier, and the conclusion can hold. -/
+/-- A divisor that is not `ℝ`-Cartier is numerically equivalent to no divisor. This is why `GeneralizedAbundance` asks that `L` is Cartier: then `K + Δ + L` is `ℝ`-Cartier, and the conclusion can hold. -/
 theorem not_numEquiv_of_not_isRCartier {I : IntersectionData X} {D : Divisor ℝ X}
     (h : ¬ IsRCartier D) (D' : Divisor ℝ X) : ¬ NumEquiv I D D' :=
   fun h' => h h'.1

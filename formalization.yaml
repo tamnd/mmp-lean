@@ -309,7 +309,7 @@ status:
     - name: MinimalModel.GeneralizedAbundance
       kind: statement
       status: open
-      note: S45, the generalised abundance conjecture of Lazic and Peternell in dimension n.
+      note: S45, the generalised abundance conjecture of Lazic and Peternell in dimension n, for a rational boundary, a nef Cartier divisor L and a semiample Q-divisor.
     - name: MinimalModel.IitakaConj
       kind: statement
       status: open

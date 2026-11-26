@@ -10,6 +10,10 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 - `MinimalModel/Statements/BasicRelative.lean`, `MinimalModel/Toric/Program.lean` and `MinimalModel/Statements/ToricMMP.lean`, with additions to `LowDim.lean`, `Termination.lean`, `Models.lean`, `Abundance.lean` and `Boundedness.lean`: the statements S14 `SurfaceAbundance`, S17 `ThreefoldAbundance`, S29 `HanLiuReduction`, S31 `BCHM`, S39 `ToricMMP`, S43 `AbundanceNuZero`, S45 `GeneralizedAbundance`, S46 `IitakaConj` and S54 `IndexConj`. The new vocabulary is numerical equivalence, the Kodaira dimension, the relative notions and models of BCHM, and the toric program on fans. `MinimalModel/Fidelity/Relative.lean` checks that the relative notions over `Spec k` are the absolute ones.
 - `MinimalModel/Statements/Toric.lean`: the pinned statement `ToricConeTheorem` of the toric cone theorem in combinatorial form, and the theorem `toricConeTheorem` that proves it from `Fan.coneTheorem`. `comparator.json` and `Comparator/Challenge.lean` list it, so the job `comparator` of the workflow `trust` checks it (row Q4).
 
+### Fixed
+
+- The sources of S43 and S45, checked against the arXiv copies. S43 cites Gongyo, arXiv:1101.1394, Theorem 6.1 and Lemma 6.2 (Theorem 1.2 there is about minimal models), and Nakayama, Corollary V.4.9. S45 `GeneralizedAbundance` now takes the boundary with rational coefficients, `L` a nef Cartier divisor and the semiample divisor `M` a `ℚ`-divisor, as Lazić and Peternell do. The arXiv copy does not number the conjecture, so the docstring names it and no longer says Conjecture 1.1.
+
 ## v0.0.3 - 2026-11-26
 
 ### Added
