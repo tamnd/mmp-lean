@@ -17,7 +17,7 @@ The support function `φ` of `D` is convex in the sense of Cox, Little and Schen
 
 * `coneDim`: the dimension of a cone.
 * `Fan.IsMaximalCone`, `Fan.IsWallPair`: maximal cones, and pairs of maximal cones that meet in a wall.
-* `Fan.IsConvexAcross`: the wall inequality.
+* `IsConvexAcross`: the wall inequality.
 * `Fan.IsNef`: a divisor whose support function is convex.
 * `Fan.WallData`, `Fan.WallData.degree`: the data of a wall and the degree of a divisor on it.
 
@@ -54,6 +54,10 @@ theorem le_of_mem_hull {m m' : E →ₗ[ℝ] ℝ} {s : Set E} (h : ∀ x ∈ s, 
 
 end Hull
 
+/-- The wall inequality for a function `φ` and two cones `σ` and `σ'`: each linear form `m` that agrees with `φ` on `σ` satisfies `φ ≤ m` on `σ'`. For a support function this says that `φ` bends down across `σ ∩ σ'`. -/
+def IsConvexAcross (φ : NR n → ℝ) (σ σ' : PointedCone ℝ (NR n)) : Prop :=
+  ∀ m : NR n →ₗ[ℝ] ℝ, (∀ x ∈ σ, φ x = m x) → ∀ x ∈ σ', φ x ≤ m x
+
 namespace Fan
 
 variable (F : Fan n)
@@ -65,10 +69,6 @@ def IsMaximalCone (σ : PointedCone ℝ (NR n)) : Prop :=
 /-- Two different maximal cones `σ` and `σ'` of the fan that meet in a wall: the cone `σ ∩ σ'` has dimension `n - 1`. -/
 def IsWallPair (σ σ' : PointedCone ℝ (NR n)) : Prop :=
   F.IsMaximalCone σ ∧ F.IsMaximalCone σ' ∧ σ ≠ σ' ∧ coneDim (σ ⊓ σ') + 1 = n
-
-/-- The wall inequality for a function `φ` and two cones `σ` and `σ'`: each linear form `m` that agrees with `φ` on `σ` satisfies `φ ≤ m` on `σ'`. For a support function this says that `φ` bends down across `σ ∩ σ'`. -/
-def IsConvexAcross (φ : NR n → ℝ) (σ σ' : PointedCone ℝ (NR n)) : Prop :=
-  ∀ m : NR n →ₗ[ℝ] ℝ, (∀ x ∈ σ, φ x = m x) → ∀ x ∈ σ', φ x ≤ m x
 
 /-- A divisor `D` with real coefficients is nef: it has a support function `φ` that is convex in the sense of Cox, Little and Schenck, `φ(t u + (1 - t) v) ≥ t φ(u) + (1 - t) φ(v)`. This is `ConcaveOn` in Mathlib. On a complete fan the support function is unique (`IsSupportFunctionOf.eqOn_support`), and the condition says that it is convex. By Cox, Little and Schenck, Theorems 6.1.7 and 6.3.12, this is the same as the nefness of the divisor on the toric variety. We take it as the definition, since this file works with the fan only. -/
 def IsNef (D : F.TDivisor ℝ) : Prop :=
@@ -123,7 +123,7 @@ theorem degree_eq_sub {D : F.TDivisor ℝ} {φ : NR n → ℝ} (hφ : F.IsSuppor
 /-- The degree of a divisor on a wall is nonnegative exactly when its support function satisfies the wall inequality across the wall (Cox, Little and Schenck, Sections 6.3 and 6.4). -/
 theorem degree_nonneg_iff (hσ : σ ∈ F.cones) (hσ' : σ' ∈ F.cones) {D : F.TDivisor ℝ}
     {φ : NR n → ℝ} (hφ : F.IsSupportFunctionOf D φ) :
-    0 ≤ W.degree D ↔ F.IsConvexAcross φ σ σ' := by
+    0 ≤ W.degree D ↔ IsConvexAcross φ σ σ' := by
   constructor
   · intro h m' hm' x hx
     obtain ⟨m'', hm''⟩ := hφ.1 σ' hσ'
