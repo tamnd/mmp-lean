@@ -409,7 +409,7 @@ theorem exists_mem_coneDim_eq (hc : F.IsComplete)
   · exact hpK (Set.mem_iUnion₂.mpr ⟨C, ⟨hC, hdim⟩, hpC⟩)
   · exact hp C ((hL C).mpr ⟨hC, hdim⟩) (Submodule.subset_span hpC)
 
-/-- **Part 1.** On a complete fan whose cones are closed, a support function `φ` is convex in the sense of Cox, Little and Schenck (`ConcaveOn` in Mathlib) exactly when it satisfies the wall inequality at each wall (Cox, Little and Schenck, Theorem 6.1.10 and Lemma 6.4.3). The proof is the generic segment argument of the module docstring. -/
+/-- **Part 1.** On a complete fan whose cones are closed, a support function `φ` is convex in the sense of Cox, Little and Schenck (`ConcaveOn` in Mathlib) exactly when it satisfies the wall inequality at each wall (Cox, Little and Schenck, Sections 6.1 and 6.4). The proof is the generic segment argument of the module docstring. -/
 theorem concaveOn_iff_forall_isConvexAcross (hc : F.IsComplete)
     (hcl : ∀ σ ∈ F.cones, IsClosed (σ : Set (NR n))) (hφ : F.IsSupportFunction φ) :
     ConcaveOn ℝ Set.univ φ ↔ ∀ σ σ', F.IsWallPair σ σ' → IsConvexAcross φ σ σ' := by
@@ -430,7 +430,7 @@ theorem concaveOn_iff_forall_isConvexAcross_of_isSimplicialFan (hc : F.IsComplet
 
 /-! ### The data of a wall -/
 
-/-- Two rays of the fan that share a nonzero vector are equal. -/
+/-- A ray of the fan that shares a nonzero vector with a second ray is contained in it. -/
 theorem ray_le_of_mem {ρ₁ ρ₂ : F.Ray} {y : NR n} (h₁ : y ∈ ρ₁.1) (h₂ : y ∈ ρ₂.1) (hy : y ≠ 0) :
     ρ₁.1 ≤ ρ₂.1 := by
   have hface : (ρ₁.1 ⊓ ρ₂.1).IsFaceOf (latticeCone {F.generator ρ₁}) := by
