@@ -34,3 +34,4 @@ import MinimalModel.Fidelity.AffineLinePairs
 import MinimalModel.Fidelity.PointStatements
 import MinimalModel.Fidelity.Relative
 import MinimalModel.Fidelity.LinearSystems
+import MinimalModel.Fidelity.ToricCone
