@@ -12,6 +12,7 @@ import MinimalModel.Statements.Boundedness
 import MinimalModel.Statements.Effective
 import MinimalModel.Fidelity.Basic
 import MinimalModel.Fidelity.Point
+import MinimalModel.Fidelity.PointPairs
 import MinimalModel.Toric.Fan
 import MinimalModel.Toric.Divisor
 import MinimalModel.Toric.Examples
