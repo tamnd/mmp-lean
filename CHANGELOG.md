@@ -6,6 +6,7 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 
 ### Added
 
+- `MinimalModel/Statements/Classes.lean`: the class `IsPlt` of purely log terminal pairs (KM98 Definition 2.34) and the implications among the classes of pairs. Klt gives plt and dlt, dlt gives lc, and terminal and canonical give plt when the coefficients are at most one. The implications to klt and lc, and plt to dlt, take the missing facts as hypotheses. The checks show that `(Spec k, 0)` is plt and that `(𝔸¹, 2[0])` is not plt, not klt and not dlt.
 - `MinimalModel/Toric/Cone.lean`: the data of a wall, the degree of a divisor on a wall (CLS11 Proposition 6.4.4), and the fact that the degree is nonnegative exactly when the wall inequality holds. On `ℙ²` each prime divisor has degree 1 on each wall, and `-K` is nef.
 
 ## v0.0.2 - 2026-11-26

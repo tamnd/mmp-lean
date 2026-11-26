@@ -4,11 +4,12 @@ Released under the Apache 2.0 licence as described in the file LICENSE.
 -/
 import MinimalModel.Fidelity.Basic
 import MinimalModel.Fidelity.Point
+import MinimalModel.Statements.Classes
 
 /-!
 # Fidelity check F2: the classes of pairs and the programs on a point
 
-This file continues `MinimalModel/Fidelity/Point.lean`. It shows that the model `(Spec k, 0)` is in each class of pairs of spec 06.1: klt, lc, terminal, canonical and dlt. It also shows that the conclusions of S04 and S20 hold for this model, and that the model is minimal.
+This file continues `MinimalModel/Fidelity/Point.lean`. It shows that the model `(Spec k, 0)` is in each class of pairs of spec 06.1: klt, lc, terminal, canonical, dlt and plt. It also shows that the conclusions of S04 and S20 hold for this model, and that the model is minimal.
 
 The function field of `Spec k` is `k`. A divisorial valuation must take the value `exp (-1)` on some element, and it is trivial on `k`, so `Spec k` has no divisorial valuation. Thus each condition on the log discrepancies holds with no valuation to check. A model with no curves has no extremal contraction, so it has no step of a program.
 
@@ -139,6 +140,9 @@ theorem pointPair_isCanonical : IsCanonical (pointPair k) := (pointPair_isTermin
 theorem pointPair_isDlt : IsDlt (pointPair k) :=
   ⟨pointPair_isLc k, Set.univ, isClosed_univ, fun x hx => absurd (Set.mem_univ x) hx,
     fun v hv => absurd hv (pointVariety_not_isDivisorial k v)⟩
+
+/-- The pair `(Spec k, 0)` is plt. -/
+theorem pointPair_isPlt : IsPlt (pointPair k) := (pointPair_isKlt k).isPlt
 
 /-- The boundary of `(Spec k, 0)` is rational. -/
 theorem pointPair_isRationalBoundary : (pointPair k).IsRationalBoundary := fun Q => isEmptyElim Q

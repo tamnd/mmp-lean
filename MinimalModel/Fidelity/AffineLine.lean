@@ -3,6 +3,7 @@ Copyright (c) 2026 The mmp authors. All rights reserved.
 Released under the Apache 2.0 licence as described in the file LICENSE.
 -/
 import MinimalModel.Fidelity.Basic
+import MinimalModel.Statements.Classes
 
 /-!
 # Fidelity checks on the affine line
@@ -11,9 +12,9 @@ This file gives the checks F3 of spec 06.3 in dimension one, and a part of the c
 
 The file also computes a canonical divisor. The form `dX` is not zero, and its divisor is zero. The proof uses the derivation `d/dX` on `k(X)`, which keeps each stalk. On a normal variety, each stalk at a prime divisor is a discrete valuation ring. Thus a rational function is regular there if and only if its order is not negative.
 
-With these, the file gives two negative instances. The pair `(𝔸¹, 2[0])` is not lc, and the pair `(𝔸¹, [0])` is not klt. These follow from the coefficient of `[0]`.
+With these, the file gives negative instances. The pair `(𝔸¹, 2[0])` is not lc, not klt, not plt and not dlt, and the pair `(𝔸¹, [0])` is not klt. These follow from the coefficient of `[0]`.
 
-The file does not show that the pair `(𝔸¹, 0)` is klt, lc or terminal. That needs a description of all divisorial valuations over `𝔸¹`, which is not done here. The file only builds this pair and shows that its boundary is zero.
+The file does not show that the pair `(𝔸¹, 0)` is klt, lc, plt or terminal, nor that `(𝔸¹, [0])` is plt. That needs a description of all divisorial valuations over `𝔸¹`, which is not done here. The file only builds this pair and shows that its boundary is zero.
 -/
 
 universe u
@@ -369,6 +370,18 @@ def affineLinePair (c : ℝ) (hc : 0 ≤ c) : Pair (affineLine k) where
 /-- F3: the pair `(𝔸¹, 2 [0])` is not lc. -/
 theorem affineLinePair_two_not_isLc : ¬ IsLc (affineLinePair k 2 zero_le_two) :=
   not_isLc_of_one_lt (Q := zeroDivisor k) (by norm_num [affineLinePair])
+
+/-- F3: the pair `(𝔸¹, 2 [0])` is not klt. -/
+theorem affineLinePair_two_not_isKlt : ¬ IsKlt (affineLinePair k 2 zero_le_two) :=
+  fun h => affineLinePair_two_not_isLc k h.isLc
+
+/-- F3: the pair `(𝔸¹, 2 [0])` is not plt. -/
+theorem affineLinePair_two_not_isPlt : ¬ IsPlt (affineLinePair k 2 zero_le_two) :=
+  not_isPlt_of_one_lt (Q := zeroDivisor k) (by norm_num [affineLinePair])
+
+/-- F3: the pair `(𝔸¹, 2 [0])` is not dlt. -/
+theorem affineLinePair_two_not_isDlt : ¬ IsDlt (affineLinePair k 2 zero_le_two) :=
+  fun h => affineLinePair_two_not_isLc k h.isLc
 
 /-- F3: the pair `(𝔸¹, [0])` is not klt. -/
 theorem affineLinePair_one_not_isKlt : ¬ IsKlt (affineLinePair k 1 zero_le_one) :=
