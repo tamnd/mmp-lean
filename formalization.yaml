@@ -405,7 +405,7 @@ status:
     - name: MinimalModel.Pair.HasDivisorLogDiscrepancy
       kind: def
       status: proved
-      note: A hypothesis. Each divisorial valuation that is not exceptional has the log discrepancy 1 - Δ Q for a prime divisor Q. It holds for every pair, but the proof needs the uniqueness of the centre of a valuation, which is not formalized.
+      note: A hypothesis. Each divisorial valuation that is not exceptional has the log discrepancy 1 - Δ Q for a prime divisor Q. It holds for every pair, and Pair.hasDivisorLogDiscrepancy proves it.
     - name: MinimalModel.IsKlt.isPlt
       kind: theorem
       status: proved
@@ -466,3 +466,55 @@ status:
       kind: theorem
       status: proved
       note: Check F3. The pair (A1, 2[0]) is not dlt.
+    - name: MinimalModel.IsCentre.eq
+      kind: theorem
+      status: proved
+      note: A valuation of the function field has at most one centre on X. The proof uses the valuative criterion for the separated morphism to Spec k.
+    - name: MinimalModel.IsCentre.valuation_eq_exp
+      kind: theorem
+      status: proved
+      note: When a prime divisor Q is a centre of a valuation that takes the value exp(-1), the valuation is the order along Q.
+    - name: MinimalModel.IsCentre.formOrd_eq
+      kind: theorem
+      status: proved
+      note: The order of the form of a divisor D along such a valuation is the coefficient of D at Q.
+    - name: MinimalModel.Pair.hasDivisorLogDiscrepancy
+      kind: theorem
+      status: proved
+      note: Each divisorial valuation that is not exceptional has the log discrepancy 1 - Δ Q for a prime divisor Q. This proves the hypothesis Pair.HasDivisorLogDiscrepancy for every pair.
+    - name: MinimalModel.IsPlt.isKlt'
+      kind: theorem
+      status: proved
+      note: Check F3. A plt pair with coefficients less than one is klt, with no hypothesis.
+    - name: MinimalModel.IsCanonical.isKlt'
+      kind: theorem
+      status: proved
+      note: Check F3. A canonical pair with coefficients less than one is klt, with no hypothesis.
+    - name: MinimalModel.IsTerminal.isKlt'
+      kind: theorem
+      status: proved
+      note: Check F3. A terminal pair with coefficients less than one is klt, with no hypothesis.
+    - name: MinimalModel.IsPlt.isLc'
+      kind: theorem
+      status: proved
+      note: Check F3. A plt pair is lc, with no hypothesis.
+    - name: MinimalModel.IsCentre.coheight_eq_one_of_dim_eq_one
+      kind: theorem
+      status: proved
+      note: On a variety of dimension one, a centre of a divisorial valuation has coheight one.
+    - name: MinimalModel.isKlt_of_dim_eq_one
+      kind: theorem
+      status: proved
+      note: On a variety of dimension one, a pair with coefficients less than one is klt. The theorems isLc_of_dim_eq_one, isPlt_of_dim_eq_one, isTerminal_of_dim_eq_one, isCanonical_of_dim_eq_one and isDlt_of_dim_eq_one give the other classes.
+    - name: MinimalModel.affineLinePair_zero_isKlt
+      kind: theorem
+      status: proved
+      note: Check F2. The pair (A1, 0) is klt. The theorems affineLinePair_zero_isLc, _isPlt, _isDlt, _isTerminal and _isCanonical give the other classes.
+    - name: MinimalModel.affineLinePair_isKlt
+      kind: theorem
+      status: proved
+      note: Check F3. The pair (A1, c[0]) is klt and dlt for c < 1 (affineLinePair_isDlt).
+    - name: MinimalModel.affineLinePair_isLc
+      kind: theorem
+      status: proved
+      note: Check F3. The pair (A1, c[0]) is lc and plt for c ≤ 1 (affineLinePair_isPlt). It is terminal and canonical for each c.

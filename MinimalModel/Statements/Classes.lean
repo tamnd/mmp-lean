@@ -13,7 +13,7 @@ This file adds the class `IsPlt` of purely log terminal pairs (KM98 Definition 2
 
 The direct ones are klt to plt, klt to dlt, dlt to lc and plt to klt when the coefficients are less than one and the divisors of `X` have their usual log discrepancy. The classes `IsTerminal` and `IsCanonical` only ask for a condition on the exceptional valuations. So terminal and canonical give plt when the coefficients of `Δ` are at most one.
 
-The classes `IsKlt` and `IsLc` ask for a condition on every divisorial valuation, also on the valuations of the prime divisors of `X`. The log discrepancy of the valuation of a prime divisor `D` of `X` is `1 - coeff_D Δ`. With the definition `LogDiscrepancyIs`, this needs the uniqueness of the centre of a valuation on a separated scheme, which is not formalized here. So the implications canonical to klt and plt to lc take this fact as the hypothesis `Pair.HasDivisorLogDiscrepancy`.
+The classes `IsKlt` and `IsLc` ask for a condition on every divisorial valuation, also on the valuations of the prime divisors of `X`. The log discrepancy of the valuation of a prime divisor `D` of `X` is `1 - coeff_D Δ`. With the definition `LogDiscrepancyIs`, this needs the uniqueness of the centre of a valuation on a separated scheme. So the implications canonical to klt and plt to lc in this file take this fact as the hypothesis `Pair.HasDivisorLogDiscrepancy`. The file `MinimalModel/Fidelity/Centre.lean` proves the hypothesis for every pair (`Pair.hasDivisorLogDiscrepancy`), and gives the implications with no hypothesis.
 
 The class `IsDlt` asks for a closed set `Z` outside which the pair is snc, and for a positive log discrepancy at each valuation with centre in `Z`. The implication plt to dlt takes the lc condition, the set `Z` and the fact that each valuation with centre in `Z` is exceptional as hypotheses.
 -/
@@ -29,7 +29,7 @@ def IsPlt (P : Pair X) : Prop :=
   (∀ Q, P.Δ Q ≤ 1) ∧
     ∀ v : Valuation (FF X) VZ, IsDivisorial v → IsExceptional v → ∀ A, LogDiscrepancyIs P v A → 0 < A
 
-/-- The log discrepancy of each divisorial valuation that is not exceptional over `X` is `1 - Δ Q` for a prime divisor `Q` of `X`. This holds for every pair: such a valuation is the order along a prime divisor `Q` of `X`, and its log discrepancy is `1 - coeff_Q Δ`. The proof needs the uniqueness of the centre of a valuation on a separated scheme, which is not formalized here. So the implications that need this fact take it as a hypothesis. -/
+/-- The log discrepancy of each divisorial valuation that is not exceptional over `X` is `1 - Δ Q` for a prime divisor `Q` of `X`. This holds for every pair: such a valuation is the order along a prime divisor `Q` of `X`, and its log discrepancy is `1 - coeff_Q Δ`. The proof needs the uniqueness of the centre of a valuation on a separated scheme. The implications of this file take this fact as a hypothesis, and `Pair.hasDivisorLogDiscrepancy` in `MinimalModel/Fidelity/Centre.lean` proves it for every pair. -/
 def Pair.HasDivisorLogDiscrepancy (P : Pair X) : Prop :=
   ∀ v : Valuation (FF X) VZ, IsDivisorial v → ¬ IsExceptional v → ∀ A, LogDiscrepancyIs P v A →
     ∃ Q : PrimeDivisor X, A = 1 - P.Δ Q

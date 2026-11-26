@@ -20,3 +20,5 @@ import MinimalModel.Toric.Wall
 import MinimalModel.Toric.Cone
 import MinimalModel.Toric.Examples
 import MinimalModel.Fidelity.AffineLine
+import MinimalModel.Fidelity.Centre
+import MinimalModel.Fidelity.AffineLinePairs
