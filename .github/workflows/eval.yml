@@ -1,0 +1,55 @@
+name: eval
+
+# Elaborate the Lean texts of the eval sets of tamnd/mmp (spec 10.9): each known answer of eval/tasks, each faithful and planted statement of eval/statements, and each definition of eval/audit. The planted texts are wrong but must be well typed.
+on:
+  workflow_dispatch:
+    inputs:
+      mmp_ref:
+        description: the ref of tamnd/mmp whose eval sets to elaborate
+        default: main
+        required: true
+      only:
+        description: one set (tasks, statements or audit), or all
+        default: all
+        required: true
+  pull_request:
+    paths:
+      - .github/workflows/eval.yml
+
+permissions:
+  contents: read
+
+jobs:
+  elab:
+    name: elaborate the eval sets
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: tamnd/mmp
+          ref: ${{ inputs.mmp_ref || 'main' }}
+          path: _mmp
+          persist-credentials: false
+      - name: install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o elan-init.sh
+          sh elan-init.sh -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: get the Mathlib cache
+        run: lake exe cache get
+      - name: build
+        run: lake build
+      - name: elaborate
+        env:
+          ONLY: ${{ inputs.only || 'all' }}
+        run: |
+          if [ "$ONLY" = all ]; then
+            python3 _mmp/scripts/eval.py elab --lean . --jobs 4
+          else
+            python3 _mmp/scripts/eval.py elab --lean . --jobs 4 --only "$ONLY"
+          fi
