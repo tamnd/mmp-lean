@@ -4,6 +4,10 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 
 ## Unreleased
 
+### Added
+
+- `MinimalModel/Toric/Cone.lean`: the data of a wall, the degree of a divisor on a wall (CLS11 Proposition 6.4.4), and the fact that the degree is nonnegative exactly when the wall inequality holds. On `ℙ²` each prime divisor has degree 1 on each wall, and `-K` is nef.
+
 ## v0.0.2 - 2026-11-26
 
 ### Fixed

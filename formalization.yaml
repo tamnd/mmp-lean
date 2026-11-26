@@ -378,3 +378,23 @@ status:
       kind: theorem
       status: proved
       note: Route R3. The general wall relation applies to two adjacent cones of the fan of the projective plane. This is a check F2 instance.
+    - name: MinimalModel.Toric.Fan.WallData.degree
+      kind: def
+      status: proved
+      note: Route R3. The degree of a divisor on the curve of a wall, read off the fan. For smooth cones it is D·V(τ) of CLS11 Proposition 6.4.4.
+    - name: MinimalModel.Toric.Fan.WallData.degree_eq
+      kind: theorem
+      status: proved
+      note: Route R3. The degree on a wall is a_ρ' + m_σ(u_ρ') with the convention m_σ(u_ρ) = -a_ρ (CLS11 Proposition 6.4.4).
+    - name: MinimalModel.Toric.Fan.WallData.degree_nonneg_iff
+      kind: theorem
+      status: proved
+      note: Route R3. The degree on a wall is nonnegative exactly when the support function satisfies the wall inequality (CLS11 Sections 6.3 and 6.4).
+    - name: MinimalModel.Toric.P2.degree_primeDivisor_c12_c20
+      kind: theorem
+      status: proved
+      note: Route R3. Each prime divisor of the projective plane has degree 1 on each of the three walls. This is a check F2 instance.
+    - name: MinimalModel.Toric.P2.isNef_neg_canonical
+      kind: theorem
+      status: proved
+      note: Route R3. The anticanonical divisor of the projective plane is nef. This is a check F2 instance.
