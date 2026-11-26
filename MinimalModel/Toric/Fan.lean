@@ -17,6 +17,7 @@ A face of a cone is a face in the sense of Mathlib, `PointedCone.IsFaceOf`: a su
 * `finite_setOf_isFaceOf_hull`: a finitely generated cone has finitely many faces.
 * `IsRationalPolyhedral.of_isFaceOf`, `IsSimplicial.of_isFaceOf`: a face of a rational polyhedral cone is rational polyhedral, and a face of a simplicial cone is simplicial.
 * `bot_isFaceOf`: the zero cone is a face of each strongly convex cone.
+* `exists_subset_isFaceOf_rays`: a strongly convex cone of a finite set is spanned by points whose rays are faces of the cone, its extremal rays.
 * `Fan.bot_mem`, `Fan.inf_mem`: a fan with a cone contains the zero cone, and it contains the intersection of two of its cones.
 * `Fan.trivial`, `Fan.ofCone`, `Fan.affine`: the trivial fan, the fan of the faces of one cone, and the fan of the affine space `𝔸ⁿ`.
 * `isSimplicial_orthant`, `Fan.isSimplicialFan_affine`: the positive orthant is simplicial, so the fan of `𝔸ⁿ` is simplicial.
@@ -164,6 +165,16 @@ theorem finite_setOf_isFaceOf_hull {s : Set E} (hs : s.Finite) :
   intro F hF
   exact ⟨s ∩ F, Set.inter_subset_left, (eq_hull_inter_of_isFaceOf hF).symm⟩
 
+/-- Two linear forms that agree on a set `s` agree on the conic hull of `s`. -/
+theorem eq_of_mem_hull {m m' : E →ₗ[ℝ] ℝ} {s : Set E} (h : ∀ x ∈ s, m x = m' x) {x : E}
+    (hx : x ∈ PointedCone.hull ℝ s) : m x = m' x := by
+  induction hx using Submodule.span_induction with
+  | mem y hy => exact h y hy
+  | zero => rw [map_zero, map_zero]
+  | add y z _ _ hy hz => rw [map_add, map_add, hy, hz]
+  | smul a y _ hy =>
+    rw [← Nonneg.coe_smul, map_smul, map_smul, hy]
+
 end Face
 
 /-- A face of the cone of `S` is the cone of a subset of `S`. -/
@@ -254,6 +265,82 @@ theorem IsFace.isFaceOf {τ σ : PointedCone ℝ (NR n)} (h : IsFace τ σ) : τ
   rw [map_add, map_smul, smul_eq_mul] at h0
   have h1 : a * u x = 0 := by linarith [mul_nonneg ha.le (hu x hx), hu y hy]
   exact (hτ x).mpr ⟨hx, (mul_eq_zero.mp h1).resolve_left ha.ne'⟩
+
+/-- The cone of `insert v T` is the sum of the ray of `v` and the cone of `T`. -/
+theorem latticeCone_insert (v : Fin n → ℤ) (T : Finset (Fin n → ℤ)) :
+    latticeCone (insert v T) = latticeCone {v} ⊔ latticeCone T := by
+  rw [latticeCone, latticeCone, latticeCone, Finset.coe_insert, Set.image_insert_eq,
+    Submodule.span_insert, Finset.coe_singleton, Set.image_singleton]
+
+/-- The ray of `v` lies in a cone `C` when the vector of `v` is in `C`. -/
+theorem latticeCone_singleton_le {v : Fin n → ℤ} {C : PointedCone ℝ (NR n)} :
+    latticeCone {v} ≤ C ↔ toNR v ∈ C := by
+  rw [latticeCone, Finset.coe_singleton, Set.image_singleton,
+    Submodule.span_singleton_le_iff_mem]
+
+/-- Let the cone of `T` be strongly convex, and let `v ∈ T` be a point that is not in the cone of the other points of `T`. Then the ray of `v` is a face of the cone of `T`. -/
+theorem isFaceOf_latticeCone_singleton {T : Finset (Fin n → ℤ)} {v : Fin n → ℤ} (hv : v ∈ T)
+    (hσ : IsStronglyConvex (latticeCone T)) (hnot : toNR v ∉ latticeCone (T.erase v)) :
+    (latticeCone {v}).IsFaceOf (latticeCone T) := by
+  have hT : latticeCone T = latticeCone {v} ⊔ latticeCone (T.erase v) := by
+    rw [← latticeCone_insert, Finset.insert_erase hv]
+  have hvmem : toNR v ∈ latticeCone {v} := toNR_mem_latticeCone (Finset.mem_singleton_self v)
+  rw [hT] at hσ ⊢
+  refine ⟨le_sup_left, fun {x y a} hx hy ha hxy => ?_⟩
+  obtain ⟨x₁, hx₁, x', hx', rfl⟩ := Submodule.mem_sup.mp hx
+  obtain ⟨y₁, hy₁, y', hy', rfl⟩ := Submodule.mem_sup.mp hy
+  obtain ⟨r, hr, rfl⟩ := mem_latticeCone_singleton.mp hx₁
+  obtain ⟨s, hs, rfl⟩ := mem_latticeCone_singleton.mp hy₁
+  obtain ⟨t, -, hxy⟩ := mem_latticeCone_singleton.mp hxy
+  have hz : (t - a * r - s) • toNR v = a • x' + y' := by
+    rw [sub_smul, sub_smul, hxy, mul_smul]
+    module
+  rcases lt_or_ge 0 (t - a * r - s) with hc | hc
+  · exfalso
+    apply hnot
+    have hv' : toNR v = (t - a * r - s)⁻¹ • (a • x' + y') := by
+      rw [← hz, smul_smul, inv_mul_cancel₀ hc.ne', one_smul]
+    rw [hv']
+    exact PointedCone.smul_mem _ (inv_nonneg.mpr hc.le)
+      (add_mem (PointedCone.smul_mem _ ha.le hx') hy')
+  · have h1 : a • x' ∈ latticeCone {v} ⊔ latticeCone (T.erase v) :=
+      Submodule.mem_sup_right (PointedCone.smul_mem _ ha.le hx')
+    have h2 : -(a • x') ∈ latticeCone {v} ⊔ latticeCone (T.erase v) := by
+      have he : -(a • x') = y' + (-(t - a * r - s)) • toNR v := by
+        rw [neg_smul, hz]
+        abel
+      rw [he]
+      exact add_mem (Submodule.mem_sup_right hy')
+        (Submodule.mem_sup_left (PointedCone.smul_mem _ (neg_nonneg.mpr hc) hvmem))
+    have h3 : x' = 0 := (smul_eq_zero.mp (hσ _ h1 h2)).resolve_left ha.ne'
+    rw [h3, add_zero]
+    exact PointedCone.smul_mem _ hr hvmem
+
+/-- A strongly convex cone spanned by a finite set `S` is spanned by a subset `T` of `S` whose points span faces of the cone. These faces are the extremal rays of the cone, and the points of `T` are not zero. -/
+theorem exists_subset_isFaceOf_rays {S : Finset (Fin n → ℤ)}
+    (hσ : IsStronglyConvex (latticeCone S)) :
+    ∃ T ⊆ S, latticeCone T = latticeCone S ∧
+      ∀ v ∈ T, v ≠ 0 ∧ (latticeCone {v}).IsFaceOf (latticeCone S) := by
+  classical
+  obtain ⟨T, hT, hmin⟩ := (S.powerset.filter fun T => latticeCone T = latticeCone S).exists_min_image
+    Finset.card ⟨S, by simp⟩
+  rw [Finset.mem_filter, Finset.mem_powerset] at hT
+  refine ⟨T, hT.1, hT.2, fun v hv => ?_⟩
+  have hnot : toNR v ∉ latticeCone (T.erase v) := by
+    intro hmem
+    have heq : latticeCone (T.erase v) = latticeCone T := by
+      conv_rhs => rw [← Finset.insert_erase hv]
+      rw [latticeCone_insert, sup_eq_right.mpr (latticeCone_singleton_le.mpr hmem)]
+    have hle := hmin (T.erase v) (by
+      rw [Finset.mem_filter, Finset.mem_powerset]
+      exact ⟨(Finset.erase_subset v T).trans hT.1, heq.trans hT.2⟩)
+    have hlt := Finset.card_erase_lt_of_mem hv
+    omega
+  refine ⟨fun h => hnot ?_, ?_⟩
+  · rw [h, toNR_zero]
+    exact zero_mem _
+  · rw [← hT.2]
+    exact isFaceOf_latticeCone_singleton hv (by rw [hT.2]; exact hσ) hnot
 
 /-- A fan: a finite set of strongly convex rational polyhedral cones that is closed under faces, and in which two cones meet in a face of each. A face is a face in the sense of Mathlib, `PointedCone.IsFaceOf`. -/
 structure Fan (n : ℕ) where

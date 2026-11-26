@@ -15,5 +15,6 @@ import MinimalModel.Fidelity.Point
 import MinimalModel.Fidelity.PointPairs
 import MinimalModel.Toric.Fan
 import MinimalModel.Toric.Divisor
+import MinimalModel.Toric.Wall
 import MinimalModel.Toric.Examples
 import MinimalModel.Fidelity.AffineLine
