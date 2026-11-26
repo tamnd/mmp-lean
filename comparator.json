@@ -1,7 +1,7 @@
 {
   "challenge_module": "Comparator.Challenge",
   "solution_module": "Comparator.Solution",
-  "theorem_names": [],
+  "theorem_names": ["MinimalModel.Toric.toricConeTheorem"],
   "definition_names": [],
   "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"]
 }
