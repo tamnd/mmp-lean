@@ -712,19 +712,19 @@ theorem wall_relation : rayGenerator r1 + rayGenerator r2 + rayGenerator r0 = 0 
 
 /-- Each ray of the fan of `ℙ²` is `r1`, `r2` or `r0`. -/
 theorem ray_cases (ρ : fan.Ray) : ρ.1 = r1 ∨ ρ.1 = r2 ∨ ρ.1 = r0 := by
-  have h := ρ.2
-  rw [rays_fan] at h
+  have h : ρ.1 ∈ ({r1, r2, r0} : Set (PointedCone ℝ (NR 2))) :=
+    (Set.ext_iff.mp rays_fan ρ.1).mp ρ.2
   simpa only [Set.mem_insert_iff, Set.mem_singleton_iff] using h
 
 theorem not_r0_le_c12 : ¬ r0 ≤ c12 := fun h => by
   have := mem_c12.mp (h toNR_e0_mem_r0)
-  simp at this
+  norm_num at this
 theorem not_r1_le_c20 : ¬ r1 ≤ c20 := fun h => by
   have := mem_c20.mp (h toNR_e1_mem_r1)
-  simp at this
+  norm_num at this
 theorem not_r2_le_c01 : ¬ r2 ≤ c01 := fun h => by
   have := mem_c01.mp (h toNR_e2_mem_r2)
-  simp at this
+  norm_num at this
 
 /-- The data `m_σ` of the canonical divisor on a cone `σ ≤ σ'`. -/
 theorem cartier_aux {σ σ' : PointedCone ℝ (NR 2)} (h : σ ≤ σ') (m : Fin 2 → ℤ)
