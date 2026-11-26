@@ -38,7 +38,7 @@ theorem IsRay.rayGenerator_spec {ρ : PointedCone ℝ (NR n)} (h : IsRay ρ) :
     IsPrimitive (rayGenerator ρ) ∧ latticeCone {rayGenerator ρ} = ρ := by
   obtain ⟨hv, hρ⟩ := Classical.choose_spec h
   have he : rayGenerator ρ = primitivePart (Classical.choose h) := by
-    rw [rayGenerator, dif_pos h]
+    rw [rayGenerator, dite_eq_left h]
   rw [he]
   exact ⟨isPrimitive_primitivePart hv, (latticeCone_primitivePart hv).trans hρ.symm⟩
 

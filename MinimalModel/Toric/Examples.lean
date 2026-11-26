@@ -173,12 +173,24 @@ def e2 : Fin 2 → ℤ := ![0, 1]
 /-- The lattice point `e₀ = -e₁ - e₂ = (-1, -1)`. -/
 def e0 : Fin 2 → ℤ := ![-1, -1]
 
-@[simp] theorem e1_zero : e1 0 = 1 := rfl
-@[simp] theorem e1_one : e1 1 = 0 := rfl
-@[simp] theorem e2_zero : e2 0 = 0 := rfl
-@[simp] theorem e2_one : e2 1 = 1 := rfl
-@[simp] theorem e0_zero : e0 0 = -1 := rfl
-@[simp] theorem e0_one : e0 1 = -1 := rfl
+/-- A coordinate of `e1`. -/
+@[simp]
+theorem e1_zero : e1 0 = 1 := rfl
+/-- A coordinate of `e1`. -/
+@[simp]
+theorem e1_one : e1 1 = 0 := rfl
+/-- A coordinate of `e2`. -/
+@[simp]
+theorem e2_zero : e2 0 = 0 := rfl
+/-- A coordinate of `e2`. -/
+@[simp]
+theorem e2_one : e2 1 = 1 := rfl
+/-- A coordinate of `e0`. -/
+@[simp]
+theorem e0_zero : e0 0 = -1 := rfl
+/-- A coordinate of `e0`. -/
+@[simp]
+theorem e0_one : e0 1 = -1 := rfl
 
 /-- The point `e₁` is not zero. -/
 theorem e1_ne_zero : e1 ≠ 0 := fun h => by simpa using congrFun h 0
@@ -217,6 +229,7 @@ noncomputable def c20 : PointedCone ℝ (NR 2) := latticeCone {e2, e0}
 /-- The 2-cone spanned by `e₀` and `e₁`. -/
 noncomputable def c01 : PointedCone ℝ (NR 2) := latticeCone {e0, e1}
 
+/-- The vectors of `r1` in coordinates. -/
 theorem mem_r1 {x : NR 2} : x ∈ r1 ↔ 0 ≤ x 0 ∧ x 1 = 0 := by
   rw [r1, mem_latticeCone_singleton]
   constructor
@@ -225,6 +238,7 @@ theorem mem_r1 {x : NR 2} : x ∈ r1 ↔ 0 ≤ x 0 ∧ x 1 = 0 := by
   · rintro ⟨h0, h1⟩
     exact ⟨x 0, h0, ext (by simp) (by simp [h1])⟩
 
+/-- The vectors of `r2` in coordinates. -/
 theorem mem_r2 {x : NR 2} : x ∈ r2 ↔ x 0 = 0 ∧ 0 ≤ x 1 := by
   rw [r2, mem_latticeCone_singleton]
   constructor
@@ -233,6 +247,7 @@ theorem mem_r2 {x : NR 2} : x ∈ r2 ↔ x 0 = 0 ∧ 0 ≤ x 1 := by
   · rintro ⟨h0, h1⟩
     exact ⟨x 1, h1, ext (by simp [h0]) (by simp)⟩
 
+/-- The vectors of `r0` in coordinates. -/
 theorem mem_r0 {x : NR 2} : x ∈ r0 ↔ x 0 ≤ 0 ∧ x 1 = x 0 := by
   rw [r0, mem_latticeCone_singleton]
   constructor
@@ -241,6 +256,7 @@ theorem mem_r0 {x : NR 2} : x ∈ r0 ↔ x 0 ≤ 0 ∧ x 1 = x 0 := by
   · rintro ⟨h0, h1⟩
     exact ⟨-x 0, by linarith, ext (by simp) (by simp [h1])⟩
 
+/-- The vectors of `c12` in coordinates. -/
 theorem mem_c12 {x : NR 2} : x ∈ c12 ↔ 0 ≤ x 0 ∧ 0 ≤ x 1 := by
   rw [c12, mem_latticeCone_pair]
   constructor
@@ -249,6 +265,7 @@ theorem mem_c12 {x : NR 2} : x ∈ c12 ↔ 0 ≤ x 0 ∧ 0 ≤ x 1 := by
   · rintro ⟨h0, h1⟩
     exact ⟨x 0, x 1, h0, h1, ext (by simp) (by simp)⟩
 
+/-- The vectors of `c20` in coordinates. -/
 theorem mem_c20 {x : NR 2} : x ∈ c20 ↔ x 0 ≤ 0 ∧ x 0 ≤ x 1 := by
   rw [c20, mem_latticeCone_pair]
   constructor
@@ -261,6 +278,7 @@ theorem mem_c20 {x : NR 2} : x ∈ c20 ↔ x 0 ≤ 0 ∧ x 0 ≤ x 1 := by
       simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul, toNR_apply, e2_zero, e2_one, e0_zero,
         e0_one, Int.cast_zero, Int.cast_one, Int.cast_neg] <;> ring
 
+/-- The vectors of `c01` in coordinates. -/
 theorem mem_c01 {x : NR 2} : x ∈ c01 ↔ x 1 ≤ 0 ∧ x 1 ≤ x 0 := by
   rw [c01, mem_latticeCone_pair]
   constructor
@@ -300,26 +318,36 @@ theorem isStronglyConvex_c01 : IsStronglyConvex c01 := by
   obtain ⟨h2, h3⟩ := hnv
   exact ext (by rw [Pi.zero_apply]; linarith) (by rw [Pi.zero_apply]; linarith)
 
+/-- The ray `r1` lies in the cone `c12`. -/
 theorem r1_le_c12 : r1 ≤ c12 := fun x hx => by
   rw [mem_r1] at hx; rw [mem_c12]; constructor <;> linarith [hx.1, hx.2]
+/-- The ray `r2` lies in the cone `c12`. -/
 theorem r2_le_c12 : r2 ≤ c12 := fun x hx => by
   rw [mem_r2] at hx; rw [mem_c12]; constructor <;> linarith [hx.1, hx.2]
+/-- The ray `r2` lies in the cone `c20`. -/
 theorem r2_le_c20 : r2 ≤ c20 := fun x hx => by
   rw [mem_r2] at hx; rw [mem_c20]; constructor <;> linarith [hx.1, hx.2]
+/-- The ray `r0` lies in the cone `c20`. -/
 theorem r0_le_c20 : r0 ≤ c20 := fun x hx => by
   rw [mem_r0] at hx; rw [mem_c20]; constructor <;> linarith [hx.1, hx.2]
+/-- The ray `r0` lies in the cone `c01`. -/
 theorem r0_le_c01 : r0 ≤ c01 := fun x hx => by
   rw [mem_r0] at hx; rw [mem_c01]; constructor <;> linarith [hx.1, hx.2]
+/-- The ray `r1` lies in the cone `c01`. -/
 theorem r1_le_c01 : r1 ≤ c01 := fun x hx => by
   rw [mem_r1] at hx; rw [mem_c01]; constructor <;> linarith [hx.1, hx.2]
 
+/-- The ray `r1` is strongly convex. -/
 theorem isStronglyConvex_r1 : IsStronglyConvex r1 := isStronglyConvex_c12.mono r1_le_c12
+/-- The ray `r2` is strongly convex. -/
 theorem isStronglyConvex_r2 : IsStronglyConvex r2 := isStronglyConvex_c12.mono r2_le_c12
+/-- The ray `r0` is strongly convex. -/
 theorem isStronglyConvex_r0 : IsStronglyConvex r0 := isStronglyConvex_c20.mono r0_le_c20
 
 /-- The linear form `x ↦ a x₀ + b x₁` on `ℝ²`. -/
 noncomputable def form (a b : ℝ) : NR 2 →ₗ[ℝ] ℝ := linearForm ![a, b]
 
+/-- The value of the form `x ↦ a x₀ + b x₁`. -/
 theorem form_apply (a b : ℝ) (x : NR 2) : form a b x = a * x 0 + b * x 1 := by
   simp [form, Fin.sum_univ_two]
 
@@ -330,6 +358,7 @@ theorem isFaceOf_of_form {τ σ : PointedCone ℝ (NR 2)} (a b : ℝ)
   IsFace.isFaceOf ⟨form a b, fun x hx => by rw [form_apply]; exact hσ x hx,
     fun x => by rw [form_apply]; exact hτ x⟩
 
+/-- The ray `r1` is a face of the cone `c12`. -/
 theorem r1_face_c12 : r1.IsFaceOf c12 := isFaceOf_of_form 0 1
   (fun x hx => by rw [mem_c12] at hx; linarith [hx.1, hx.2])
   fun x => by
@@ -340,6 +369,7 @@ theorem r1_face_c12 : r1.IsFaceOf c12 := isFaceOf_of_form 0 1
     · rintro ⟨⟨h0, h1⟩, h2⟩
       exact ⟨by linarith, by linarith⟩
 
+/-- The ray `r2` is a face of the cone `c12`. -/
 theorem r2_face_c12 : r2.IsFaceOf c12 := isFaceOf_of_form 1 0
   (fun x hx => by rw [mem_c12] at hx; linarith [hx.1, hx.2])
   fun x => by
@@ -350,6 +380,7 @@ theorem r2_face_c12 : r2.IsFaceOf c12 := isFaceOf_of_form 1 0
     · rintro ⟨⟨h0, h1⟩, h2⟩
       exact ⟨by linarith, by linarith⟩
 
+/-- The ray `r2` is a face of the cone `c20`. -/
 theorem r2_face_c20 : r2.IsFaceOf c20 := isFaceOf_of_form (-1) 0
   (fun x hx => by rw [mem_c20] at hx; linarith [hx.1, hx.2])
   fun x => by
@@ -360,6 +391,7 @@ theorem r2_face_c20 : r2.IsFaceOf c20 := isFaceOf_of_form (-1) 0
     · rintro ⟨⟨h0, h1⟩, h2⟩
       exact ⟨by linarith, by linarith⟩
 
+/-- The ray `r0` is a face of the cone `c20`. -/
 theorem r0_face_c20 : r0.IsFaceOf c20 := isFaceOf_of_form (-1) 1
   (fun x hx => by rw [mem_c20] at hx; linarith [hx.1, hx.2])
   fun x => by
@@ -370,6 +402,7 @@ theorem r0_face_c20 : r0.IsFaceOf c20 := isFaceOf_of_form (-1) 1
     · rintro ⟨⟨h0, h1⟩, h2⟩
       exact ⟨by linarith, by linarith⟩
 
+/-- The ray `r0` is a face of the cone `c01`. -/
 theorem r0_face_c01 : r0.IsFaceOf c01 := isFaceOf_of_form 1 (-1)
   (fun x hx => by rw [mem_c01] at hx; linarith [hx.1, hx.2])
   fun x => by
@@ -380,6 +413,7 @@ theorem r0_face_c01 : r0.IsFaceOf c01 := isFaceOf_of_form 1 (-1)
     · rintro ⟨⟨h0, h1⟩, h2⟩
       exact ⟨by linarith, by linarith⟩
 
+/-- The ray `r1` is a face of the cone `c01`. -/
 theorem r1_face_c01 : r1.IsFaceOf c01 := isFaceOf_of_form 0 (-1)
   (fun x hx => by rw [mem_c01] at hx; linarith [hx.1, hx.2])
   fun x => by
@@ -394,6 +428,7 @@ theorem r1_face_c01 : r1.IsFaceOf c01 := isFaceOf_of_form 0 (-1)
 theorem eq_zero {x : NR 2} (h0 : x 0 = 0) (h1 : x 1 = 0) : x = 0 :=
   ext (by rw [h0, Pi.zero_apply]) (by rw [h1, Pi.zero_apply])
 
+/-- The intersection of `r1` and `r2`. -/
 theorem r1_inf_r2 : r1 ⊓ r2 = ⊥ := by
   ext x
   rw [Submodule.mem_inf, mem_r1, mem_r2, Submodule.mem_bot]
@@ -403,6 +438,7 @@ theorem r1_inf_r2 : r1 ⊓ r2 = ⊥ := by
   · rintro rfl
     simp
 
+/-- The intersection of `r1` and `r0`. -/
 theorem r1_inf_r0 : r1 ⊓ r0 = ⊥ := by
   ext x
   rw [Submodule.mem_inf, mem_r1, mem_r0, Submodule.mem_bot]
@@ -412,6 +448,7 @@ theorem r1_inf_r0 : r1 ⊓ r0 = ⊥ := by
   · rintro rfl
     simp
 
+/-- The intersection of `r2` and `r0`. -/
 theorem r2_inf_r0 : r2 ⊓ r0 = ⊥ := by
   ext x
   rw [Submodule.mem_inf, mem_r2, mem_r0, Submodule.mem_bot]
@@ -421,6 +458,7 @@ theorem r2_inf_r0 : r2 ⊓ r0 = ⊥ := by
   · rintro rfl
     simp
 
+/-- The intersection of `r1` and `c20`. -/
 theorem r1_inf_c20 : r1 ⊓ c20 = ⊥ := by
   ext x
   rw [Submodule.mem_inf, mem_r1, mem_c20, Submodule.mem_bot]
@@ -430,6 +468,7 @@ theorem r1_inf_c20 : r1 ⊓ c20 = ⊥ := by
   · rintro rfl
     simp
 
+/-- The intersection of `r2` and `c01`. -/
 theorem r2_inf_c01 : r2 ⊓ c01 = ⊥ := by
   ext x
   rw [Submodule.mem_inf, mem_r2, mem_c01, Submodule.mem_bot]
@@ -439,6 +478,7 @@ theorem r2_inf_c01 : r2 ⊓ c01 = ⊥ := by
   · rintro rfl
     simp
 
+/-- The intersection of `r0` and `c12`. -/
 theorem r0_inf_c12 : r0 ⊓ c12 = ⊥ := by
   ext x
   rw [Submodule.mem_inf, mem_r0, mem_c12, Submodule.mem_bot]
@@ -448,6 +488,7 @@ theorem r0_inf_c12 : r0 ⊓ c12 = ⊥ := by
   · rintro rfl
     simp
 
+/-- The intersection of `c12` and `c20`. -/
 theorem c12_inf_c20 : c12 ⊓ c20 = r2 := by
   ext x
   rw [Submodule.mem_inf, mem_c12, mem_c20, mem_r2]
@@ -457,6 +498,7 @@ theorem c12_inf_c20 : c12 ⊓ c20 = r2 := by
   · rintro ⟨h0, h1⟩
     exact ⟨⟨by linarith, h1⟩, by linarith, by linarith⟩
 
+/-- The intersection of `c20` and `c01`. -/
 theorem c20_inf_c01 : c20 ⊓ c01 = r0 := by
   ext x
   rw [Submodule.mem_inf, mem_c20, mem_c01, mem_r0]
@@ -466,6 +508,7 @@ theorem c20_inf_c01 : c20 ⊓ c01 = r0 := by
   · rintro ⟨h0, h1⟩
     exact ⟨⟨h0, by linarith⟩, by linarith, by linarith⟩
 
+/-- The intersection of `c01` and `c12`. -/
 theorem c01_inf_c12 : c01 ⊓ c12 = r1 := by
   ext x
   rw [Submodule.mem_inf, mem_c01, mem_c12, mem_r1]
@@ -475,19 +518,29 @@ theorem c01_inf_c12 : c01 ⊓ c12 = r1 := by
   · rintro ⟨h0, h1⟩
     exact ⟨⟨by linarith, by linarith⟩, h0, by linarith⟩
 
+/-- The intersection of `r2` and `r1`. -/
 theorem r2_inf_r1 : r2 ⊓ r1 = ⊥ := by rw [inf_comm, r1_inf_r2]
+/-- The intersection of `r0` and `r1`. -/
 theorem r0_inf_r1 : r0 ⊓ r1 = ⊥ := by rw [inf_comm, r1_inf_r0]
+/-- The intersection of `r0` and `r2`. -/
 theorem r0_inf_r2 : r0 ⊓ r2 = ⊥ := by rw [inf_comm, r2_inf_r0]
+/-- The intersection of `c20` and `r1`. -/
 theorem c20_inf_r1 : c20 ⊓ r1 = ⊥ := by rw [inf_comm, r1_inf_c20]
+/-- The intersection of `c01` and `r2`. -/
 theorem c01_inf_r2 : c01 ⊓ r2 = ⊥ := by rw [inf_comm, r2_inf_c01]
+/-- The intersection of `c12` and `r0`. -/
 theorem c12_inf_r0 : c12 ⊓ r0 = ⊥ := by rw [inf_comm, r0_inf_c12]
+/-- The intersection of `c20` and `c12`. -/
 theorem c20_inf_c12 : c20 ⊓ c12 = r2 := by rw [inf_comm, c12_inf_c20]
+/-- The intersection of `c01` and `c20`. -/
 theorem c01_inf_c20 : c01 ⊓ c20 = r0 := by rw [inf_comm, c20_inf_c01]
+/-- The intersection of `c12` and `c01`. -/
 theorem c12_inf_c01 : c12 ⊓ c01 = r1 := by rw [inf_comm, c01_inf_c12]
 
 /-- The cones of the fan of `ℙ²`: the zero cone, three rays and three 2-cones. -/
 def cones : Set (PointedCone ℝ (NR 2)) := {⊥, r1, r2, r0, c12, c20, c01}
 
+/-- The cones of the fan of `ℙ²`. -/
 theorem mem_cones {σ : PointedCone ℝ (NR 2)} :
     σ ∈ cones ↔ σ = ⊥ ∨ σ = r1 ∨ σ = r2 ∨ σ = r0 ∨ σ = c12 ∨ σ = c20 ∨ σ = c01 :=
   Iff.rfl
@@ -552,12 +605,19 @@ noncomputable def fan : Fan 2 where
       | exact r0_face_c01
       | exact r1_face_c01
 
+/-- The cone `⊥` is a cone of the fan of `ℙ²`. -/
 theorem bot_mem : (⊥ : PointedCone ℝ (NR 2)) ∈ fan.cones := Or.inl rfl
+/-- The cone `r1` is a cone of the fan of `ℙ²`. -/
 theorem r1_mem : r1 ∈ fan.cones := Or.inr (Or.inl rfl)
+/-- The cone `r2` is a cone of the fan of `ℙ²`. -/
 theorem r2_mem : r2 ∈ fan.cones := Or.inr (Or.inr (Or.inl rfl))
+/-- The cone `r0` is a cone of the fan of `ℙ²`. -/
 theorem r0_mem : r0 ∈ fan.cones := Or.inr (Or.inr (Or.inr (Or.inl rfl)))
+/-- The cone `c12` is a cone of the fan of `ℙ²`. -/
 theorem c12_mem : c12 ∈ fan.cones := Or.inr (Or.inr (Or.inr (Or.inr (Or.inl rfl))))
+/-- The cone `c20` is a cone of the fan of `ℙ²`. -/
 theorem c20_mem : c20 ∈ fan.cones := Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inl rfl)))))
+/-- The cone `c01` is a cone of the fan of `ℙ²`. -/
 theorem c01_mem : c01 ∈ fan.cones := Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inr rfl)))))
 
 /-- The fan of `ℙ²` is complete: each vector of `ℝ²` is in one of the three 2-cones. -/
@@ -615,13 +675,20 @@ theorem not_isRay_of_mem {σ : PointedCone ℝ (NR 2)} {x y : NR 2} (hx : x ∈ 
   obtain ⟨-, hr⟩ := hxy s r (by rw [smul_smul, smul_smul, mul_comm])
   exact hx0 (by rw [hr, zero_smul])
 
+/-- The vector of `e1` lies in `c12`. -/
 theorem toNR_e1_mem_c12 : toNR e1 ∈ c12 := toNR_mem_latticeCone (by simp)
+/-- The vector of `e2` lies in `c12`. -/
 theorem toNR_e2_mem_c12 : toNR e2 ∈ c12 := toNR_mem_latticeCone (by simp)
+/-- The vector of `e2` lies in `c20`. -/
 theorem toNR_e2_mem_c20 : toNR e2 ∈ c20 := toNR_mem_latticeCone (by simp)
+/-- The vector of `e0` lies in `c20`. -/
 theorem toNR_e0_mem_c20 : toNR e0 ∈ c20 := toNR_mem_latticeCone (by simp)
+/-- The vector of `e0` lies in `c01`. -/
 theorem toNR_e0_mem_c01 : toNR e0 ∈ c01 := toNR_mem_latticeCone (by simp)
+/-- The vector of `e1` lies in `c01`. -/
 theorem toNR_e1_mem_c01 : toNR e1 ∈ c01 := toNR_mem_latticeCone (by simp)
 
+/-- The 2-cone `c12` is not a ray. -/
 theorem not_isRay_c12 : ¬ IsRay c12 :=
   not_isRay_of_mem toNR_e1_mem_c12 toNR_e2_mem_c12 (toNR_ne_zero e1_ne_zero) fun a b h => by
     have h0 := congrFun h 0
@@ -629,6 +696,7 @@ theorem not_isRay_c12 : ¬ IsRay c12 :=
     simp at h0 h1
     constructor <;> linarith
 
+/-- The 2-cone `c20` is not a ray. -/
 theorem not_isRay_c20 : ¬ IsRay c20 :=
   not_isRay_of_mem toNR_e2_mem_c20 toNR_e0_mem_c20 (toNR_ne_zero e2_ne_zero) fun a b h => by
     have h0 := congrFun h 0
@@ -636,6 +704,7 @@ theorem not_isRay_c20 : ¬ IsRay c20 :=
     simp at h0 h1
     constructor <;> linarith
 
+/-- The 2-cone `c01` is not a ray. -/
 theorem not_isRay_c01 : ¬ IsRay c01 :=
   not_isRay_of_mem toNR_e0_mem_c01 toNR_e1_mem_c01 (toNR_ne_zero e0_ne_zero) fun a b h => by
     have h0 := congrFun h 0
@@ -643,8 +712,11 @@ theorem not_isRay_c01 : ¬ IsRay c01 :=
     simp at h0 h1
     constructor <;> linarith
 
+/-- The cone `r1` is a ray. -/
 theorem isRay_r1 : IsRay r1 := ⟨e1, e1_ne_zero, rfl⟩
+/-- The cone `r2` is a ray. -/
 theorem isRay_r2 : IsRay r2 := ⟨e2, e2_ne_zero, rfl⟩
+/-- The cone `r0` is a ray. -/
 theorem isRay_r0 : IsRay r0 := ⟨e0, e0_ne_zero, rfl⟩
 
 /-- The rays of the fan of `ℙ²` are `r1`, `r2` and `r0`. -/
@@ -667,18 +739,24 @@ theorem rays_fan : fan.rays = {r1, r2, r0} := by
     · exact ⟨r2_mem, isRay_r2⟩
     · exact ⟨r0_mem, isRay_r0⟩
 
+/-- The vector of `e1` lies in `r1`. -/
 theorem toNR_e1_mem_r1 : toNR e1 ∈ r1 := toNR_mem_latticeCone (Finset.mem_singleton_self _)
+/-- The vector of `e2` lies in `r2`. -/
 theorem toNR_e2_mem_r2 : toNR e2 ∈ r2 := toNR_mem_latticeCone (Finset.mem_singleton_self _)
+/-- The vector of `e0` lies in `r0`. -/
 theorem toNR_e0_mem_r0 : toNR e0 ∈ r0 := toNR_mem_latticeCone (Finset.mem_singleton_self _)
 
+/-- The rays `r1` and `r2` are different. -/
 theorem r1_ne_r2 : r1 ≠ r2 := fun h => by
   have h' : toNR e1 ∈ r2 := h ▸ toNR_e1_mem_r1
   have := mem_r2.mp h'
   simp at this
+/-- The rays `r1` and `r0` are different. -/
 theorem r1_ne_r0 : r1 ≠ r0 := fun h => by
   have h' : toNR e1 ∈ r0 := h ▸ toNR_e1_mem_r1
   have := mem_r0.mp h'
   simp at this
+/-- The rays `r2` and `r0` are different. -/
 theorem r2_ne_r0 : r2 ≠ r0 := fun h => by
   have h' : toNR e2 ∈ r0 := h ▸ toNR_e2_mem_r2
   have := mem_r0.mp h'
@@ -716,12 +794,15 @@ theorem ray_cases (ρ : fan.Ray) : ρ.1 = r1 ∨ ρ.1 = r2 ∨ ρ.1 = r0 := by
     (Set.ext_iff.mp rays_fan ρ.1).mp ρ.2
   simpa only [Set.mem_insert_iff, Set.mem_singleton_iff] using h
 
+/-- The ray `r0` is not in the cone `c12`. -/
 theorem not_r0_le_c12 : ¬ r0 ≤ c12 := fun h => by
   have := mem_c12.mp (h toNR_e0_mem_r0)
   norm_num at this
+/-- The ray `r1` is not in the cone `c20`. -/
 theorem not_r1_le_c20 : ¬ r1 ≤ c20 := fun h => by
   have := mem_c20.mp (h toNR_e1_mem_r1)
   norm_num at this
+/-- The ray `r2` is not in the cone `c01`. -/
 theorem not_r2_le_c01 : ¬ r2 ≤ c01 := fun h => by
   have := mem_c01.mp (h toNR_e2_mem_r2)
   norm_num at this
@@ -732,6 +813,7 @@ theorem cartier_aux {σ σ' : PointedCone ℝ (NR 2)} (h : σ ≤ σ') (m : Fin 
     ∃ m : Fin 2 → ℤ, ∀ ρ : fan.Ray, ρ.1 ≤ σ → ∑ i, m i * fan.generator ρ i = -fan.canonical ρ :=
   ⟨m, fun ρ hρ => by rw [Fan.canonical_apply, neg_neg]; exact hm ρ (hρ.trans h)⟩
 
+/-- The data `m_σ` of the canonical divisor on the cone `c12`. -/
 theorem cartier_c12 (ρ : fan.Ray) (hρ : ρ.1 ≤ c12) :
     ∑ i, (![1, 1] : Fin 2 → ℤ) i * fan.generator ρ i = 1 := by
   rcases ray_cases ρ with h | h | h <;> rw [h] at hρ
@@ -739,6 +821,7 @@ theorem cartier_c12 (ρ : fan.Ray) (hρ : ρ.1 ≤ c12) :
   · rw [Fan.generator, h, rayGenerator_r2]; simp [Fin.sum_univ_two]
   · exact absurd hρ not_r0_le_c12
 
+/-- The data `m_σ` of the canonical divisor on the cone `c20`. -/
 theorem cartier_c20 (ρ : fan.Ray) (hρ : ρ.1 ≤ c20) :
     ∑ i, (![-2, 1] : Fin 2 → ℤ) i * fan.generator ρ i = 1 := by
   rcases ray_cases ρ with h | h | h <;> rw [h] at hρ
@@ -746,6 +829,7 @@ theorem cartier_c20 (ρ : fan.Ray) (hρ : ρ.1 ≤ c20) :
   · rw [Fan.generator, h, rayGenerator_r2]; simp [Fin.sum_univ_two]
   · rw [Fan.generator, h, rayGenerator_r0]; simp [Fin.sum_univ_two]
 
+/-- The data `m_σ` of the canonical divisor on the cone `c01`. -/
 theorem cartier_c01 (ρ : fan.Ray) (hρ : ρ.1 ≤ c01) :
     ∑ i, (![1, -2] : Fin 2 → ℤ) i * fan.generator ρ i = 1 := by
   rcases ray_cases ρ with h | h | h <;> rw [h] at hρ

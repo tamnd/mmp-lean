@@ -290,3 +290,55 @@ status:
       kind: theorem
       status: proved
       note: Check F2 for S20 and S22. The model (Spec k, 0) is lc with a rational boundary, and it has no infinite program.
+    - name: MinimalModel.Toric.isPrimitive_primitivePart
+      kind: theorem
+      status: proved
+      note: Route R3. The primitive part of a nonzero lattice point is primitive, and latticeCone_primitivePart shows that it spans the same ray (CLS11 Section 1.2).
+    - name: MinimalModel.Toric.IsPrimitive.toNR_mem_latticeCone_iff
+      kind: theorem
+      status: proved
+      note: Route R3. The lattice points of the ray of a primitive point u are the points k u with k a natural number.
+    - name: MinimalModel.Toric.IsRay.rayGenerator_spec
+      kind: theorem
+      status: proved
+      note: Route R3. The primitive generator u of a ray is primitive and spans the ray (CLS11 Section 3.1).
+    - name: MinimalModel.Toric.IsRay.toNR_mem_iff
+      kind: theorem
+      status: proved
+      note: Route R3. The lattice points of a ray are the multiples k u of its primitive generator, so u generates the semigroup of lattice points of the ray.
+    - name: MinimalModel.Toric.IsRay.eq_rayGenerator
+      kind: theorem
+      status: proved
+      note: Route R3. The primitive generator of a ray is unique. A primitive lattice point of the ray is the primitive generator.
+    - name: MinimalModel.Toric.Fan.isQCartier_iff
+      kind: theorem
+      status: proved
+      note: Route R3. A torus-invariant divisor is Q-Cartier when it has the data m in the rational dual lattice on each cone, with the value minus a at the primitive generator of each ray of the cone (CLS11 Theorem 4.2.8).
+    - name: MinimalModel.Toric.Fan.IsQCartier.isRCartier
+      kind: theorem
+      status: proved
+      note: Route R3. A Q-Cartier divisor satisfies the criterion of CLS11 Theorem 4.2.8 over the reals.
+    - name: MinimalModel.Toric.Fan.IsSupportFunctionOf.isRCartier
+      kind: theorem
+      status: proved
+      note: Route R3. A divisor with a support function satisfies the criterion of CLS11 Theorem 4.2.8 over the reals. The converse needs the fact that a cone of the fan is spanned by its rays, and it is not done yet.
+    - name: MinimalModel.Toric.P2.isComplete
+      kind: theorem
+      status: proved
+      note: Check F2. The fan of the projective plane, with the rays e1, e2 and -e1-e2 and three 2-cones, is a fan and it is complete.
+    - name: MinimalModel.Toric.P2.isSimplicialFan
+      kind: theorem
+      status: proved
+      note: Check F2. The fan of the projective plane is simplicial.
+    - name: MinimalModel.Toric.P2.coeffSum_canonical
+      kind: theorem
+      status: proved
+      note: Check F2. The fan of the projective plane has three rays, and the sum of the coefficients of its canonical divisor is -3.
+    - name: MinimalModel.Toric.P2.isCartier_canonical
+      kind: theorem
+      status: proved
+      note: Check F2. The canonical divisor of the projective plane is Cartier, so the classes of Cartier and Q-Cartier divisors are not empty.
+    - name: MinimalModel.Toric.P2.wall_relation
+      kind: theorem
+      status: proved
+      note: Route R3. The wall relation of the fan of the projective plane. The sum of the three primitive generators is zero (CLS11 Section 6.4).

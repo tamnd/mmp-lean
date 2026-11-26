@@ -7,6 +7,7 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 ### Added
 
 - `MinimalModel/Fidelity/AffineLine.lean`: the affine line as a normal variety, the Cartier divisor `[0]`, and the canonical divisor `div(dX) = 0`. The checks F3 show that `(𝔸¹, 2[0])` is not lc and that `(𝔸¹, [0])` is not klt.
+- The toric files of route R3, steps 3 and 4. `MinimalModel/Toric/Fan.lean` has the primitive lattice points. `MinimalModel/Toric/Divisor.lean` has the primitive generator of a ray with its uniqueness, the Cartier and Q-Cartier conditions on the fan and the support functions. `MinimalModel/Toric/Examples.lean` has the fan of `ℙ²`, which is complete and simplicial, with a Cartier canonical divisor and the wall relation.
 
 ## v0.0.1 - 2026-11-26
 
