@@ -100,16 +100,6 @@ theorem c12_ne_c20 : c12 ≠ c20 := fun h => by
   have := (mem_c20.mp (h ▸ one_one_mem_c12)).1
   norm_num at this
 
-/-- The cones `c12` and `c20` meet in the ray `r2`. -/
-theorem c12_inf_c20 : c12 ⊓ c20 = r2 := by
-  ext x
-  rw [Submodule.mem_inf, mem_c12, mem_c20, mem_r2]
-  constructor
-  · rintro ⟨⟨h0, h1⟩, h2, -⟩
-    exact ⟨le_antisymm h2 h0, h1⟩
-  · rintro ⟨h0, h1⟩
-    exact ⟨⟨h0.ge, h1⟩, h0.le, by linarith⟩
-
 /-- The vector `e₂` is not zero in `ℝ²`. -/
 theorem toNR_e2_ne_zero : toNR e2 ≠ 0 := fun h => by
   have := congrFun h 1
