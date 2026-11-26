@@ -35,7 +35,7 @@ noncomputable def canonicalRing {k : Type u} [Field k] {X : NormalVariety k} (K 
 def FiniteGenerationCanonical : Prop :=
   ∀ X : NormalVariety k, X.IsSmooth → IsProjective X → ∀ K : CanonicalDivisor X, (canonicalRing K).FG
 
-/-- S33, the existence of minimal models (spec 03). Each projective lc pair of dimension `n` with `K + Δ` pseudo-effective has a minimal model in the sense of KM98 Definition 3.50. This is open for `n ≥ 4`. -/
+/-- S33, the existence of minimal models (spec 03). Each projective lc pair of dimension `n` with `K + Δ` pseudo-effective has a minimal model in the sense of KM98 Definition 3.50. This is known for `n ≤ 4` and open for `n ≥ 5` (spec 01.1). -/
 def MinimalModelConj (n : ℕ) : Prop :=
   ∀ A : PairModel k, A.X.dim = n → IsLc A.P → IsPseudoEffective A.P.KΔ → ∃ B, IsMinimalModel A B
 
