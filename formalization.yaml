@@ -321,7 +321,7 @@ status:
     - name: MinimalModel.Toric.Fan.IsSupportFunctionOf.isRCartier
       kind: theorem
       status: proved
-      note: Route R3. A divisor with a support function satisfies the criterion of CLS11 Theorem 4.2.8 over the reals. The converse needs the fact that a cone of the fan is spanned by its rays, and it is not done yet.
+      note: Route R3. A divisor with a support function satisfies the criterion of CLS11 Theorem 4.2.8 over the reals. The converse is `isRCartier_iff_exists_isSupportFunctionOf`.
     - name: MinimalModel.Toric.P2.isComplete
       kind: theorem
       status: proved
@@ -342,3 +342,39 @@ status:
       kind: theorem
       status: proved
       note: Route R3. The wall relation of the fan of the projective plane. The sum of the three primitive generators is zero (CLS11 Section 6.4).
+    - name: MinimalModel.Toric.exists_subset_isFaceOf_rays
+      kind: theorem
+      status: proved
+      note: Route R3. A strongly convex cone spanned by finitely many lattice points is spanned by a subset of them, each of which spans a ray that is a face of the cone (CLS11 Lemma 1.2.15).
+    - name: MinimalModel.Toric.eq_hull_rayGenerator
+      kind: theorem
+      status: proved
+      note: Route R3. A strongly convex rational polyhedral cone is the cone spanned by the primitive generators of its rays (CLS11 Lemma 1.2.15).
+    - name: MinimalModel.Toric.Fan.eq_hull_generator
+      kind: theorem
+      status: proved
+      note: Route R3. Each cone of a fan is spanned by the primitive generators of the rays of the fan that lie in it.
+    - name: MinimalModel.Toric.Fan.IsRCartier.exists_isSupportFunctionOf
+      kind: theorem
+      status: proved
+      note: Route R3. An R-Cartier divisor on a fan has a support function (CLS11 Theorem 4.2.12).
+    - name: MinimalModel.Toric.Fan.IsSupportFunctionOf.eqOn_support
+      kind: theorem
+      status: proved
+      note: Route R3. The support function of a divisor is unique on the support of the fan (CLS11 Theorem 4.2.12).
+    - name: MinimalModel.Toric.Fan.isRCartier_iff_exists_isSupportFunctionOf
+      kind: theorem
+      status: proved
+      note: Route R3. A divisor on a fan is R-Cartier if and only if it has a support function (CLS11 Theorem 4.2.12).
+    - name: MinimalModel.Toric.IsLatticeBasis.repr_nonneg
+      kind: theorem
+      status: proved
+      note: Route R3. The coordinates of a lattice point of a smooth cone in the basis of its generators are nonnegative.
+    - name: MinimalModel.Toric.Fan.exists_unique_wall_relation
+      kind: theorem
+      status: proved
+      note: Route R3. Two smooth cones of a fan that share all generators but one satisfy the wall relation with unique integer coefficients (CLS11 Section 6.4).
+    - name: MinimalModel.Toric.P2.existsUnique_wall_c12_c20
+      kind: theorem
+      status: proved
+      note: Route R3. The general wall relation applies to two adjacent cones of the fan of the projective plane. This is a check F2 instance.

@@ -2,7 +2,7 @@
 Copyright (c) 2026 The mmp authors. All rights reserved.
 Released under the Apache 2.0 licence as described in the file LICENSE.
 -/
-import MinimalModel.Toric.Divisor
+import MinimalModel.Toric.Wall
 
 /-!
 # The fans of the projective line and the projective plane
@@ -852,5 +852,86 @@ theorem isCartier_canonical : fan.IsCartier fan.canonical := by
 /-- The canonical divisor of `ℙ²` is Q-Cartier. -/
 theorem isQCartier_canonical : fan.IsQCartier fan.canonical :=
   isCartier_canonical.isQCartier
+
+/-- The canonical divisor of `ℙ²` has a support function (Cox, Little and Schenck, Theorem 4.2.12). -/
+theorem exists_isSupportFunctionOf_canonical :
+    ∃ φ : NR 2 → ℝ, fan.IsSupportFunctionOf (Fan.TDivisor.toReal fan fan.canonical) φ :=
+  isQCartier_canonical.isRCartier.exists_isSupportFunctionOf
+
+/-- The image of the family `a, b` indexed by `Option Unit` is the set `{a, b}`. -/
+theorem range_elim' (a b : Fin 2 → ℤ) :
+    (Set.range fun o : Option Unit => toNR (Option.elim' a (fun _ => b) o)) =
+      toNR '' ((({a, b} : Finset (Fin 2 → ℤ))) : Set (Fin 2 → ℤ)) := by
+  ext x
+  constructor
+  · rintro ⟨o, rfl⟩
+    cases o with
+    | none => exact ⟨a, by simp, rfl⟩
+    | some _ => exact ⟨b, by simp, rfl⟩
+  · rintro ⟨y, hy, rfl⟩
+    rw [Finset.coe_insert, Finset.coe_singleton, Set.mem_insert_iff,
+      Set.mem_singleton_iff] at hy
+    rcases hy with rfl | rfl
+    · exact ⟨none, rfl⟩
+    · exact ⟨some (), rfl⟩
+
+/-- The cone `c12` is the cone of the family `e₁, e₂`. -/
+theorem familyCone_e1_e2 : familyCone (Option.elim' e1 fun _ : Unit => e2) = c12 := by
+  rw [familyCone, c12, latticeCone, range_elim']
+
+/-- The cone `c20` is the cone of the family `e₀, e₂`. -/
+theorem familyCone_e0_e2 : familyCone (Option.elim' e0 fun _ : Unit => e2) = c20 := by
+  rw [familyCone, c20, latticeCone, range_elim', Finset.pair_comm]
+
+/-- The points `e₁, e₂` are a basis of the lattice `ℤ²`. -/
+theorem isLatticeBasis_e1_e2 : IsLatticeBasis (Option.elim' e1 fun _ : Unit => e2) := by
+  constructor
+  · rw [Fintype.linearIndependent_iff]
+    intro g hg o
+    rw [Fintype.sum_option] at hg
+    have h0 := congrFun hg 0
+    have h1 := congrFun hg 1
+    simp [e1, e2] at h0 h1
+    rcases o with _ | ⟨⟩
+    · exact h0
+    · exact h1
+  · rw [Submodule.top_le_span_range_iff_forall_exists_fun]
+    intro x
+    refine ⟨Option.elim' (x 0) fun _ => x 1, ?_⟩
+    rw [Fintype.sum_option]
+    funext j
+    fin_cases j <;> simp [e1, e2]
+
+/-- The points `e₀, e₂` are a basis of the lattice `ℤ²`. -/
+theorem isLatticeBasis_e0_e2 : IsLatticeBasis (Option.elim' e0 fun _ : Unit => e2) := by
+  constructor
+  · rw [Fintype.linearIndependent_iff]
+    intro g hg o
+    rw [Fintype.sum_option] at hg
+    have h0 := congrFun hg 0
+    have h1 := congrFun hg 1
+    simp [e0, e2] at h0 h1
+    rcases o with _ | ⟨⟩
+    · exact h0
+    · simpa [h0] using h1
+  · rw [Submodule.top_le_span_range_iff_forall_exists_fun]
+    intro x
+    refine ⟨Option.elim' (-x 0) fun _ => x 1 - x 0, ?_⟩
+    rw [Fintype.sum_option]
+    funext j
+    fin_cases j <;> simp [e0, e2]
+
+/-- The points `e₁` and `e₀` are different. -/
+theorem e1_ne_e0 : e1 ≠ e0 := fun h => by simpa using congrFun h 0
+
+/-- The wall relation of `Fan.exists_unique_wall_relation` for the adjacent cones `c12` and `c20` of the fan of `ℙ²`, with the wall `r2`. There is a unique `b` with `e₁ + e₀ = b • e₂`, and it is `-1`. This shows that the hypotheses of the wall relation can hold. -/
+theorem existsUnique_wall_c12_c20 : ∃! b : Unit → ℤ, e1 + e0 = ∑ i, b i • e2 :=
+  fan.exists_unique_wall_relation isLatticeBasis_e1_e2 isLatticeBasis_e0_e2
+    (by rw [familyCone_e1_e2]; exact c12_mem) (by rw [familyCone_e0_e2]; exact c20_mem) e1_ne_e0
+
+/-- The coefficient of the wall relation of `c12` and `c20` is `-1`: `e₁ + e₀ = -e₂`. -/
+theorem wall_c12_c20 : e1 + e0 = ∑ _i : Unit, (-1 : ℤ) • e2 := by
+  funext j
+  fin_cases j <;> simp [e1, e2, e0]
 
 end MinimalModel.Toric.P2

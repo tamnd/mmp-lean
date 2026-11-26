@@ -81,6 +81,25 @@ theorem rayGenerator_latticeCone {u : Fin n → ℤ} (hu : IsPrimitive u) :
   (IsRay.eq_rayGenerator ⟨u, hu.ne_zero, rfl⟩ hu
     (toNR_mem_latticeCone (Finset.mem_singleton_self u))).symm
 
+/-- A strongly convex rational polyhedral cone `σ` is spanned by the primitive generators of its rays, the faces of `σ` that are rays. These are the extremal rays of `σ` (Cox, Little and Schenck, Lemma 1.2.15). -/
+theorem eq_hull_rayGenerator {σ : PointedCone ℝ (NR n)} (hr : IsRationalPolyhedral σ)
+    (hs : IsStronglyConvex σ) :
+    σ = PointedCone.hull ℝ {x | ∃ ρ, ρ.IsFaceOf σ ∧ IsRay ρ ∧ toNR (rayGenerator ρ) = x} := by
+  obtain ⟨S, rfl⟩ := hr
+  obtain ⟨T, -, hT, hT'⟩ := exists_subset_isFaceOf_rays hs
+  apply le_antisymm
+  · conv_lhs => rw [← hT]
+    refine Submodule.span_le.mpr ?_
+    rintro _ ⟨v, hv, rfl⟩
+    obtain ⟨hv0, hface⟩ := hT' v hv
+    have hray : IsRay (latticeCone {v}) := ⟨v, hv0, rfl⟩
+    obtain ⟨k, hk⟩ := hray.toNR_mem_iff.mp (toNR_mem_latticeCone (Finset.mem_singleton_self v))
+    rw [SetLike.mem_coe, hk, ← natCast_zsmul, toNR_smul]
+    exact PointedCone.smul_mem _ (by positivity) (Submodule.subset_span ⟨_, hface, hray, rfl⟩)
+  · refine Submodule.span_le.mpr ?_
+    rintro _ ⟨ρ, hρ, hray, rfl⟩
+    exact hρ.le hray.toNR_rayGenerator_mem
+
 /-- The linear form `x ↦ Σ cᵢ xᵢ` on `N_ℝ`, for a vector `c` of `M_ℝ = ℝⁿ`. -/
 noncomputable def linearForm (c : Fin n → ℝ) : NR n →ₗ[ℝ] ℝ where
   toFun x := ∑ i, c i * x i
@@ -273,6 +292,75 @@ theorem IsSupportFunctionOf.isRCartier {D : F.TDivisor ℝ} {φ : NR n → ℝ}
   intro σ hσ
   obtain ⟨m, hm⟩ := h.1 σ hσ
   exact ⟨m, fun ρ hρ => by rw [← hm _ (hρ (F.toNR_generator_mem ρ)), h.2 ρ]⟩
+
+variable (F) in
+/-- A ray of a fan that lies in a cone `σ` of the fan is a face of `σ`. -/
+theorem isFaceOf_of_le {σ : PointedCone ℝ (NR n)} (hσ : σ ∈ F.cones) (ρ : F.Ray)
+    (hρ : ρ.1 ≤ σ) : ρ.1.IsFaceOf σ := by
+  have h := F.inter_face_right ρ.2.1 hσ
+  rwa [inf_eq_left.mpr hρ] at h
+
+variable (F) in
+/-- Each cone `σ` of a fan is spanned by the primitive generators `u_ρ` of the rays `ρ` of the fan in `σ` (Cox, Little and Schenck, Lemma 1.2.15). -/
+theorem eq_hull_generator {σ : PointedCone ℝ (NR n)} (hσ : σ ∈ F.cones) :
+    σ = PointedCone.hull ℝ {x | ∃ ρ : F.Ray, ρ.1 ≤ σ ∧ toNR (F.generator ρ) = x} := by
+  apply le_antisymm
+  · conv_lhs => rw [eq_hull_rayGenerator (F.rational σ hσ) (F.stronglyConvex σ hσ)]
+    refine Submodule.span_le.mpr ?_
+    rintro _ ⟨ρ, hρ, hray, rfl⟩
+    exact Submodule.subset_span ⟨⟨ρ, F.face_mem σ hσ ρ hρ, hray⟩, hρ.le, rfl⟩
+  · refine Submodule.span_le.mpr ?_
+    rintro _ ⟨ρ, hρ, rfl⟩
+    exact hρ (F.toNR_generator_mem ρ)
+
+variable (F) in
+/-- Two linear forms that agree at the primitive generators of the rays in a cone `σ` of the fan agree on `σ`. -/
+theorem eq_of_eq_generator {σ : PointedCone ℝ (NR n)} (hσ : σ ∈ F.cones)
+    {m m' : NR n →ₗ[ℝ] ℝ}
+    (h : ∀ ρ : F.Ray, ρ.1 ≤ σ → m (toNR (F.generator ρ)) = m' (toNR (F.generator ρ)))
+    {x : NR n} (hx : x ∈ σ) : m x = m' x := by
+  refine eq_of_mem_hull ?_ ((F.eq_hull_generator hσ).le hx)
+  rintro _ ⟨ρ, hρ, rfl⟩
+  exact h ρ hρ
+
+/-- Cox, Little and Schenck, Theorem 4.2.12, existence: a divisor that satisfies the criterion over `ℝ` has a support function. On a cone `σ` it is the linear form `m_σ`. Two such forms agree on the intersection of two cones, since it is a cone of the fan spanned by the generators of its rays. -/
+theorem IsRCartier.exists_isSupportFunctionOf {D : F.TDivisor ℝ} (h : F.IsRCartier D) :
+    ∃ φ : NR n → ℝ, F.IsSupportFunctionOf D φ := by
+  classical
+  have h' : ∀ σ ∈ F.cones, ∃ m : NR n →ₗ[ℝ] ℝ,
+      ∀ ρ : F.Ray, ρ.1 ≤ σ → m (toNR (F.generator ρ)) = -D ρ := h
+  choose! m hm using h'
+  have key : ∀ σ ∈ F.cones, ∀ τ ∈ F.cones, ∀ x ∈ σ, x ∈ τ → m σ x = m τ x := by
+    intro σ hσ τ hτ x hxσ hxτ
+    refine F.eq_of_eq_generator (F.inf_mem hσ hτ) (fun ρ hρ => ?_) (Submodule.mem_inf.mpr ⟨hxσ, hxτ⟩)
+    rw [hm σ hσ ρ (le_trans hρ inf_le_left), hm τ hτ ρ (le_trans hρ inf_le_right)]
+  let φ : NR n → ℝ := fun x => if hx : ∃ σ ∈ F.cones, x ∈ σ then m hx.choose x else 0
+  have hφ : ∀ σ ∈ F.cones, ∀ x ∈ σ, φ x = m σ x := by
+    intro σ hσ x hx
+    have hex : ∃ σ ∈ F.cones, x ∈ σ := ⟨σ, hσ, hx⟩
+    change (if hx : ∃ σ ∈ F.cones, x ∈ σ then m hx.choose x else 0) = m σ x
+    rw [dif_pos hex]
+    exact key _ hex.choose_spec.1 σ hσ x hex.choose_spec.2 hx
+  refine ⟨φ, fun σ hσ => ⟨m σ, hφ σ hσ⟩, fun ρ => ?_⟩
+  rw [hφ ρ.1 ρ.2.1 _ (F.toNR_generator_mem ρ), hm ρ.1 ρ.2.1 ρ le_rfl]
+
+/-- Cox, Little and Schenck, Theorem 4.2.12, uniqueness: two support functions of the same divisor agree on the support `|Σ|` of the fan. -/
+theorem IsSupportFunctionOf.eqOn_support {D : F.TDivisor ℝ} {φ ψ : NR n → ℝ}
+    (hφ : F.IsSupportFunctionOf D φ) (hψ : F.IsSupportFunctionOf D ψ) :
+    Set.EqOn φ ψ F.support := by
+  intro x hx
+  obtain ⟨σ, hσ, hxσ⟩ := F.mem_support.mp hx
+  obtain ⟨m, hm⟩ := hφ.1 σ hσ
+  obtain ⟨m', hm'⟩ := hψ.1 σ hσ
+  rw [hm x hxσ, hm' x hxσ]
+  refine F.eq_of_eq_generator hσ (fun ρ hρ => ?_) hxσ
+  have hu := hρ (F.toNR_generator_mem ρ)
+  rw [← hm _ hu, ← hm' _ hu, hφ.2 ρ, hψ.2 ρ]
+
+/-- Cox, Little and Schenck, Theorem 4.2.12: a divisor satisfies the criterion over `ℝ` exactly when it has a support function. By `IsSupportFunctionOf.eqOn_support`, the support function is unique on `|Σ|`. -/
+theorem isRCartier_iff_exists_isSupportFunctionOf {D : F.TDivisor ℝ} :
+    F.IsRCartier D ↔ ∃ φ : NR n → ℝ, F.IsSupportFunctionOf D φ :=
+  ⟨fun h => h.exists_isSupportFunctionOf, fun ⟨_, h⟩ => h.isRCartier⟩
 
 variable (F)
 
