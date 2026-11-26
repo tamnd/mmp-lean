@@ -14,7 +14,7 @@ The file also computes a canonical divisor. The form `dX` is not zero, and its d
 
 With these, the file gives negative instances. The pair `(𝔸¹, 2[0])` is not lc, not klt, not plt and not dlt, and the pair `(𝔸¹, [0])` is not klt. These follow from the coefficient of `[0]`.
 
-The file does not show that the pair `(𝔸¹, 0)` is klt, lc, plt or terminal, nor that `(𝔸¹, [0])` is plt. That needs a description of all divisorial valuations over `𝔸¹`, which is not done here. The file only builds this pair and shows that its boundary is zero.
+The file builds the pair `(𝔸¹, 0)` and shows that its boundary is zero. The positive instances need the centres of the divisorial valuations over `𝔸¹`. They are in `MinimalModel/Fidelity/AffineLinePairs.lean`: the pair `(𝔸¹, 0)` is klt, lc, plt, dlt, terminal and canonical, and `(𝔸¹, [0])` is lc and plt.
 -/
 
 universe u
