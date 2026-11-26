@@ -6,6 +6,8 @@ name: trust
 #
 # The job comparator runs `lake comparator --paranoid` with comparator.json. When comparator.json has no theorem, the job skips the comparison. It checks that each proved top theorem has exactly the type of its pinned statement in Comparator/Challenge.lean and uses only the permitted axioms. With --paranoid it also runs the external checkers that come with Lean. This is check Q4 of spec 14, and a second part of check Q3.
 #
+# The job record writes replay.json from the results of the other jobs and uploads it as the artifact replay-record, for the rows Q3 and Q4 of the trust report of mmp.
+#
 # The job nanoda exports the declarations of the package MinimalModel with leanexport, together with all the declarations that they use, Mathlib included. nanoda, a type checker for Lean written in Rust, then checks the export. nanoda is built from a pinned commit of ammkrn/nanoda_lib. This is also check Q3.
 on:
   schedule:
@@ -167,3 +169,51 @@ jobs:
           start=$(date +%s)
           lake comparator --config comparator.json --paranoid
           echo "the comparison took $(( $(date +%s) - start )) s"
+
+  record:
+    name: the replay record
+    # This job writes replay.json from the results of the four jobs above, and uploads it as the artifact replay-record. mmp copies it to records/replay.json and reads it for the rows Q3 and Q4 of spec 14 (mmp trust). leanchecker uses the kernel of Lean, so it is not independent. lean4lean and nanoda are other type checkers.
+    needs: [core, lean4lean, nanoda, comparator]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: write replay.json
+        env:
+          CORE: ${{ needs.core.result }}
+          L4L: ${{ needs.lean4lean.result }}
+          NANODA: ${{ needs.nanoda.result }}
+          COMPARATOR: ${{ needs.comparator.result }}
+          RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          ok() { [ "$1" = success ] && echo true || echo false; }
+          theorems=$(jq '.theorem_names | length' comparator.json)
+          if [ "$theorems" -eq 0 ]; then
+            comparator=null
+          else
+            comparator=$(jq -n --argjson ok "$(ok "$COMPARATOR")" --arg note "lake comparator --paranoid on $theorems theorems: $COMPARATOR" '{ok: $ok, note: $note}')
+          fi
+          jq -n \
+            --arg commit "$GITHUB_SHA" \
+            --arg date "$(date -u +%F)" \
+            --arg run "$RUN" \
+            --argjson core "$(ok "$CORE")" \
+            --argjson l4l "$(ok "$L4L")" \
+            --argjson nanoda "$(ok "$NANODA")" \
+            --arg cn "$CORE" --arg ln "$L4L" --arg nn "$NANODA" \
+            --argjson comparator "$comparator" \
+            '{commit: $commit, date: $date, run: $run,
+              checkers: [
+                {name: "leanchecker --fresh", independent: false, ok: $core, note: $cn},
+                {name: "lean4lean", independent: true, ok: $l4l, note: $ln},
+                {name: "nanoda", independent: true, ok: $nanoda, note: $nn}],
+              comparator: $comparator} | if .comparator == null then del(.comparator) else . end' > replay.json
+          cat replay.json
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: replay-record
+          path: replay.json
+          retention-days: 90
