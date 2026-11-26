@@ -4,6 +4,8 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 
 ## Unreleased
 
+## v0.0.2 - 2026-11-26
+
 ### Fixed
 
 - The docstring of `MinimalModel.MinimalModelConj` (S33) says that the statement is known for `n ≤ 4` and open for `n ≥ 5`, as spec 01.1 says. The docstrings of `MinimalModel/Fidelity/PointPairs.lean` no longer call the point an F2 instance of S22, because S22 is about dimension 4.
