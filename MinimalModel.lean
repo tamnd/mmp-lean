@@ -4,6 +4,9 @@ Released under the Apache 2.0 licence as described in the file LICENSE.
 -/
 import MinimalModel.Statements.Basic
 import MinimalModel.Statements.Classes
+import MinimalModel.Statements.Curves
+import MinimalModel.Statements.Cohomology
+import MinimalModel.Statements.Enc
 import MinimalModel.Statements.Foundations
 import MinimalModel.Statements.LowDim
 import MinimalModel.Statements.Termination
@@ -24,3 +27,4 @@ import MinimalModel.Statements.Toric
 import MinimalModel.Fidelity.AffineLine
 import MinimalModel.Fidelity.Centre
 import MinimalModel.Fidelity.AffineLinePairs
+import MinimalModel.Fidelity.PointStatements

@@ -3,16 +3,31 @@ Copyright (c) 2026 The mmp authors. All rights reserved.
 Released under the Apache 2.0 licence as described in the file LICENSE.
 -/
 import MinimalModel.Statements.Basic
+import MinimalModel.Statements.Curves
+import MinimalModel.Statements.Cohomology
 
 /-!
 # Family A: foundations
 
-The statements of family A of spec 06.2.2 that are planned at S0 and S1: S04, S05, S07 and S08. The other statements of the family (S01 to S03, S06 and S09) need vocabulary that is not in `Basic.lean` yet.
+The statements of family A of spec 06.2.2: S01, S02 and S04 to S09. The statement S03 needs vocabulary that is not in the tree yet. The statements S01, S02, S06 and S09 use the vocabulary of `Curves.lean` and `Cohomology.lean`.
 -/
 
 universe u
 
+open AlgebraicGeometry CategoryTheory
+
 namespace MinimalModel
+
+section Kleiman
+
+variable (k : Type u) [Field k] [IsAlgClosed k]
+
+/-- S01, Kleiman's criterion (KM98, Chapter 1, Theorem 1.18). Let `X` be a projective variety and `D` an `ℝ`-Cartier divisor on `X`. Then `D` is ample if and only if `D · z > 0` for each nonzero class `z` of the closed cone of curves `NE(X)`. The criterion holds in each characteristic, so the statement does not assume `CharZero k`. The intersection numbers are a structure `IntersectionData X`, which has at most one value on each `ℝ`-Cartier divisor. So the statement quantifies over it. -/
+def KleimanCriterion : Prop :=
+  ∀ X : NormalVariety k, IsProjective X → ∀ (I : IntersectionData X) (D : Divisor ℝ X)
+    (hD : IsRCartier D), IsAmple D ↔ ∀ z ∈ I.coneOfCurves, z ≠ 0 → 0 < z ⟨D, hD⟩
+
+end Kleiman
 
 variable (k : Type u) [Field k] [IsAlgClosed k] [CharZero k]
 
@@ -37,5 +52,31 @@ def BasepointFree : Prop :=
   ∀ A : PairModel k, IsKlt A.P → ∀ D : Divisor ℤ A.X, IsCartier D → IsNef A.I D.toReal →
     ∀ a : ℝ, 0 < a → IsNef A.I (a • D.toReal - A.P.KΔ) → IsBig (a • D.toReal - A.P.KΔ) →
       ∃ b₀ : ℕ, ∀ b : ℕ, b₀ ≤ b → IsFree ((b : ℤ) • D)
+
+/-- S02, Kawamata-Viehweg vanishing (KM98 Theorem 2.70). Let `(X, Δ)` be a klt pair with `Δ` a `ℚ`-divisor, and `π : X → U` a projective morphism to a scheme `U` of finite type over `k`. Let `N` be a `ℚ`-Cartier Weil divisor and `M` a `ℚ`-Cartier `ℚ`-divisor that is `π`-nef and `π`-big, with `N ≡_π K + Δ + M`. Then `R^i π_* 𝒪_X(N) = 0` for each `i > 0`. The relative notions are the ones of `Curves.lean`: they use the curves that `π` contracts, which are complete. The higher direct images are the ones of `Cohomology.lean`. A `π`-big divisor here is an `f`-ample divisor plus an effective one, which needs `π` projective. -/
+def KawamataViehweg : Prop :=
+  ∀ (X : NormalVariety k) (P : Pair X), IsKlt P → P.IsRationalBoundary →
+    ∀ (U : Scheme.{u}) (g : U ⟶ Spec (CommRingCat.of k)) (π : X.toScheme ⟶ U),
+      LocallyOfFiniteType g → π ≫ g = X.str → IsProjectiveHom (X := X) π →
+      ∀ N : Divisor ℤ X, IsQCartier N.toRat → ∀ M : Divisor ℚ X, IsQCartier M →
+        IsNefRel M.ratToReal π → IsBigRel M.ratToReal π →
+        IsNumTrivialRel (N.toReal - P.KΔ - M.ratToReal) π → HigherDirectImagesVanish N π
+
+/-- S06, the contraction theorem (KM98 Theorem 3.7, parts 3 and 4). Let `(X, Δ)` be a projective klt pair and `F` a `(K + Δ)`-negative extremal face of `NE(X)`. Then there is a morphism `cont_F : X → Z` over `k` onto a projective normal variety `Z` with `(cont_F)_* 𝒪_X = 𝒪_Z` that contracts a curve exactly when its class is in `F`. It is unique up to a unique isomorphism of `Z`. Each Cartier divisor `L` with `L · C = 0` for the curves `C` with class in `F` is trivial on the inverse image of an open neighbourhood of each point of `Z`. Because `(cont_F)_* 𝒪_X = 𝒪_Z`, this is the same as `𝒪_X(L) ≅ cont_F^* L_Z` for a line bundle `L_Z` on `Z`. -/
+def ContractionTheorem : Prop :=
+  ∀ A : PairModel k, IsKlt A.P → ∀ F : ExtremalFace A.I, F.IsNegative A.P.KΔR →
+    ∃ (Z : NormalVariety k) (f : A.X.toScheme ⟶ Z.toScheme), IsContractionOfFace A F Z f ∧
+      (∀ (Z' : NormalVariety k) (f' : A.X.toScheme ⟶ Z'.toScheme), IsContractionOfFace A F Z' f' →
+        ∃ e : Z.toScheme ≅ Z'.toScheme, f ≫ e.hom = f') ∧
+      ∀ L : Divisor ℤ A.X, IsCartier L →
+        (∀ C : Curve A.X, A.I.curveClass C ∈ F.carrier → A.I.dot L.toReal C = 0) →
+        ∀ z : Z.toScheme, ∃ V : Z.toScheme.Opens, z ∈ V ∧
+          ∃ φ : FF A.X, IsDivOn L φ (f ⁻¹ᵁ V : Set A.X.toScheme)
+
+/-- S09, the length of extremal rays (KM98 Theorem 3.7(1), after Kawamata 1991). Let `(X, Δ)` be a projective klt pair. Each `(K + Δ)`-negative extremal ray `R` of `NE(X)` is spanned by the class of a rational curve `C` with `0 < -(K + Δ) · C ≤ 2 dim X`. -/
+def LengthOfExtremalRays : Prop :=
+  ∀ A : PairModel k, IsKlt A.P → ∀ R : ExtremalRay A.I, R.generator A.P.KΔR < 0 →
+    ∃ C : Curve A.X, C.IsRational ∧ ray R.generator = ray (A.I.curveClass C) ∧
+      0 < -A.I.dot A.P.KΔ C ∧ -A.I.dot A.P.KΔ C ≤ 2 * (A.X.dim : ℝ)
 
 end MinimalModel
