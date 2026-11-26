@@ -61,7 +61,9 @@ theorem centreMorphism_closedPoint {v : Valuation (FF X) VZ} {x : X.toScheme} (h
   have h1 : Spec.map (centreStalkHom hx) (IsLocalRing.closedPoint v.valuationSubring) =
       IsLocalRing.closedPoint (X.toScheme.presheaf.stalk x) :=
     IsLocalRing.comap_closedPoint (centreStalkHom hx).hom
-  rw [centreMorphism, Scheme.Hom.comp_apply, h1, Scheme.fromSpecStalk_closedPoint]
+  show X.toScheme.fromSpecStalk x
+    (Spec.map (centreStalkHom hx) (IsLocalRing.closedPoint v.valuationSubring)) = x
+  rw [h1, Scheme.fromSpecStalk_closedPoint]
 
 /-- On the generic point, the morphism of a centre is the morphism of the function field. -/
 theorem specMap_comp_centreMorphism {v : Valuation (FF X) VZ} {x : X.toScheme} (hx : IsCentre v x) :
@@ -283,14 +285,18 @@ theorem IsCentre.coheight_ne_zero {v : Valuation (FF X) VZ} (hπ : ∃ π, v π 
   have h1 : x ⤳ genericPoint X.toScheme := h0 hle
   have hxη : x = genericPoint X.toScheme := (h1.antisymm hη).eq
   subst hxη
-  have h2 : ∀ s : X.toScheme.presheaf.stalk (genericPoint X.toScheme),
-      algebraMap _ (FF X) s = s := fun s => by
-    change (X.toScheme.presheaf.stalkSpecializes (specializes_refl _)).hom s = s
-    rw [TopCat.Presheaf.stalkSpecializes_refl]
-    rfl
+  have hfield : IsField (X.toScheme.presheaf.stalk (genericPoint X.toScheme)) :=
+    isField_stalk_of_closure_mem_irreducibleComponents X.toScheme (genericPoint X.toScheme)
+      (by simp [irreducibleComponents_eq_singleton])
+  have hsurj : Function.Surjective
+      (algebraMap (X.toScheme.presheaf.stalk (genericPoint X.toScheme)) (FF X)) :=
+    IsFractionRing.surjective_iff_isField.mpr hfield
   obtain ⟨π, hπ⟩ := hπ
-  have h3 := hx.1 π⁻¹
-  rw [h2, map_inv₀, hπ, ← WithZero.exp_neg, neg_neg, WithZero.exp_le_one_iff] at h3
+  obtain ⟨s, hs⟩ := hsurj π⁻¹
+  have h3 : v π⁻¹ ≤ 1 := by
+    rw [← hs]
+    exact hx.1 s
+  rw [map_inv₀, hπ, ← WithZero.exp_neg, neg_neg, WithZero.exp_le_one_iff] at h3
   omega
 
 /-- On a variety of dimension one, a centre of a divisorial valuation has coheight one. -/
