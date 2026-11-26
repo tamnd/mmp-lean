@@ -4,6 +4,8 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 
 ## Unreleased
 
+## v0.0.3 - 2026-11-26
+
 ### Added
 
 - `MinimalModel/Fidelity/Centre.lean` and `MinimalModel/Fidelity/AffineLinePairs.lean`: a valuation has at most one centre on a variety, and the log discrepancy of a prime divisor is `1 - Δ Q` for every pair, so plt, canonical and terminal give klt and plt gives lc with no hypothesis. On a curve each centre of a divisorial valuation is a prime divisor, so `(𝔸¹, 0)` is klt, lc, plt, dlt, terminal and canonical, `(𝔸¹, c[0])` is klt for `c < 1` and `(𝔸¹, c[0])` is lc for `c ≤ 1`.
