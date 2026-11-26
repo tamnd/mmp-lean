@@ -2,14 +2,14 @@
 Copyright (c) 2026 The mmp authors. All rights reserved.
 Released under the Apache 2.0 licence as described in the file LICENSE.
 -/
-import MinimalModel.Toric.Wall
+import MinimalModel.Toric.Cone
 
 /-!
 # The fans of the projective line and the projective plane
 
 Check F2 of spec 06.3 asks for instances of the definitions, so that no statement is true only because its hypotheses can never hold. This file gives the fan of the projective line `ℙ¹` and the fan of the projective plane `ℙ²`. It lives in `N_ℝ = ℝ`, and its cones are `0`, `ℝ≥0 · e` and `ℝ≥0 · (-e)`. We prove that it is a fan, that it is complete and simplicial, that it has two rays, and that the sum of the coefficients of its canonical divisor is `-2`. This is the degree of the canonical divisor of `ℙ¹`.
 
-The fan of `ℙ²` lives in `N_ℝ = ℝ²`. Its rays are spanned by `e₁`, `e₂` and `e₀ = -e₁ - e₂`, and its three 2-cones are spanned by two of them (Cox, Little and Schenck, Example 3.1.10). We prove that it is a fan, that it is complete and simplicial, that it has three rays with the primitive generators `e₁`, `e₂` and `e₀`, that the sum of the coefficients of its canonical divisor is `-3`, and that its canonical divisor is Cartier. The wall relation of each pair of adjacent 2-cones is `e₁ + e₂ + e₀ = 0`.
+The fan of `ℙ²` lives in `N_ℝ = ℝ²`. Its rays are spanned by `e₁`, `e₂` and `e₀ = -e₁ - e₂`, and its three 2-cones are spanned by two of them (Cox, Little and Schenck, Example 3.1.10). We prove that it is a fan, that it is complete and simplicial, that it has three rays with the primitive generators `e₁`, `e₂` and `e₀`, that the sum of the coefficients of its canonical divisor is `-3`, and that its canonical divisor is Cartier. The wall relation of each pair of adjacent 2-cones is `e₁ + e₂ + e₀ = 0`. Each of the three walls carries a `Fan.WallData`, the degree of each prime divisor `D_ρ` on each wall is `1`, and the anticanonical divisor `-K` is nef.
 
 The fan of the affine space `𝔸ⁿ` is `Fan.affine` in `MinimalModel/Toric/Fan.lean`.
 -/
@@ -933,5 +933,247 @@ theorem existsUnique_wall_c12_c20 : ∃! b : Unit → ℤ, e1 + e0 = ∑ i, b i 
 theorem wall_c12_c20 : e1 + e0 = ∑ _i : Unit, (-1 : ℤ) • e2 := by
   funext j
   fin_cases j <;> simp [e1, e2, e0]
+
+/-! ### The walls of `ℙ²` -/
+
+/-- The ray `r1` as a ray of the fan of `ℙ²`. -/
+noncomputable def ray1 : fan.Ray := ⟨r1, r1_mem, isRay_r1⟩
+
+/-- The ray `r2` as a ray of the fan of `ℙ²`. -/
+noncomputable def ray2 : fan.Ray := ⟨r2, r2_mem, isRay_r2⟩
+
+/-- The ray `r0` as a ray of the fan of `ℙ²`. -/
+noncomputable def ray0 : fan.Ray := ⟨r0, r0_mem, isRay_r0⟩
+
+/-- The generator of `ray1` is `e₁`. -/
+theorem generator_ray1 : fan.generator ray1 = e1 := rayGenerator_r1
+
+/-- The generator of `ray2` is `e₂`. -/
+theorem generator_ray2 : fan.generator ray2 = e2 := rayGenerator_r2
+
+/-- The generator of `ray0` is `e₀`. -/
+theorem generator_ray0 : fan.generator ray0 = e0 := rayGenerator_r0
+
+/-- The rays `ray1` and `ray2` are different. -/
+theorem ray1_ne_ray2 : ray1 ≠ ray2 := fun h => r1_ne_r2 (congrArg Subtype.val h)
+
+/-- The rays `ray1` and `ray0` are different. -/
+theorem ray1_ne_ray0 : ray1 ≠ ray0 := fun h => r1_ne_r0 (congrArg Subtype.val h)
+
+/-- The rays `ray2` and `ray0` are different. -/
+theorem ray2_ne_ray0 : ray2 ≠ ray0 := fun h => r2_ne_r0 (congrArg Subtype.val h)
+
+/-- Each ray of the fan of `ℙ²` is `ray1`, `ray2` or `ray0`. -/
+theorem ray_eq (ρ : fan.Ray) : ρ = ray1 ∨ ρ = ray2 ∨ ρ = ray0 := by
+  rcases ray_cases ρ with h | h | h
+  · exact Or.inl (Subtype.ext h)
+  · exact Or.inr (Or.inl (Subtype.ext h))
+  · exact Or.inr (Or.inr (Subtype.ext h))
+
+/-- The data of a wall of `ℙ²` from a relation `u_c = -u_a - u_b`, where `c` is the ray of `σ'` that is not in `σ`, and `a` and `b` are the rays of `σ`. -/
+noncomputable def wallData {σ σ' : PointedCone ℝ (NR 2)} (a b c : fan.Ray) (hab : a ≠ b)
+    (hc' : c.1 ≤ σ') (hc : ¬ c.1 ≤ σ) (heq : ∀ ρ : fan.Ray, ρ.1 ≤ σ' → ρ = c ∨ ρ.1 ≤ σ)
+    (ha : a.1 ≤ σ) (hb : b.1 ≤ σ)
+    (hrel : toNR (fan.generator c) =
+      (-1 : ℝ) • toNR (fan.generator a) + (-1 : ℝ) • toNR (fan.generator b)) :
+    fan.WallData σ σ' where
+  ray := c
+  ray_le := hc'
+  ray_not_le := hc
+  eq_or_le := heq
+  base := Finset.cons a {b} (Finset.notMem_singleton.mpr hab)
+  base_le ρ hρ := by
+    rcases Finset.mem_cons.mp hρ with h | h
+    · rw [h]
+      exact ha
+    · rw [Finset.mem_singleton.mp h]
+      exact hb
+  coeff _ := -1
+  relation := by
+    rw [Finset.sum_cons, Finset.sum_singleton]
+    exact hrel
+
+/-- The degree of a divisor `D` on a wall of `ℙ²` given by `wallData a b c` is `a_a + a_b + a_c`. -/
+theorem degree_wallData {σ σ' : PointedCone ℝ (NR 2)} {a b c : fan.Ray} {hab : a ≠ b}
+    {hc' : c.1 ≤ σ'} {hc : ¬ c.1 ≤ σ} {heq : ∀ ρ : fan.Ray, ρ.1 ≤ σ' → ρ = c ∨ ρ.1 ≤ σ}
+    {ha : a.1 ≤ σ} {hb : b.1 ≤ σ}
+    {hrel : toNR (fan.generator c) =
+      (-1 : ℝ) • toNR (fan.generator a) + (-1 : ℝ) • toNR (fan.generator b)}
+    (D : fan.TDivisor ℝ) :
+    (wallData a b c hab hc' hc heq ha hb hrel).degree D = D a + D b + D c := by
+  simp only [Fan.WallData.degree, wallData, Finset.sum_cons, Finset.sum_singleton]
+  ring
+
+/-- The wall between `c12` and `c20`. The ray of `c20` that is not in `c12` is `r0`, and `e₀ = -e₁ - e₂`. -/
+noncomputable def wallData_c12_c20 : fan.WallData c12 c20 :=
+  wallData ray1 ray2 ray0 ray1_ne_ray2 r0_le_c20 not_r0_le_c12
+    (fun ρ hρ => by
+      rcases ray_eq ρ with rfl | rfl | rfl
+      · exact absurd hρ not_r1_le_c20
+      · exact Or.inr r2_le_c12
+      · exact Or.inl rfl)
+    r1_le_c12 r2_le_c12
+    (by
+      rw [generator_ray0, generator_ray1, generator_ray2]
+      exact P2.ext (by simp [toNR_apply]) (by simp [toNR_apply]))
+
+/-- The wall between `c20` and `c01`. The ray of `c01` that is not in `c20` is `r1`, and `e₁ = -e₂ - e₀`. -/
+noncomputable def wallData_c20_c01 : fan.WallData c20 c01 :=
+  wallData ray2 ray0 ray1 ray2_ne_ray0 r1_le_c01 not_r1_le_c20
+    (fun ρ hρ => by
+      rcases ray_eq ρ with rfl | rfl | rfl
+      · exact Or.inl rfl
+      · exact absurd hρ not_r2_le_c01
+      · exact Or.inr r0_le_c20)
+    r2_le_c20 r0_le_c20
+    (by
+      rw [generator_ray0, generator_ray1, generator_ray2]
+      exact P2.ext (by simp [toNR_apply]) (by simp [toNR_apply]))
+
+/-- The wall between `c01` and `c12`. The ray of `c12` that is not in `c01` is `r2`, and `e₂ = -e₀ - e₁`. -/
+noncomputable def wallData_c01_c12 : fan.WallData c01 c12 :=
+  wallData ray0 ray1 ray2 ray1_ne_ray0.symm r2_le_c12 not_r2_le_c01
+    (fun ρ hρ => by
+      rcases ray_eq ρ with rfl | rfl | rfl
+      · exact Or.inr r1_le_c01
+      · exact Or.inl rfl
+      · exact absurd hρ not_r0_le_c12)
+    r0_le_c01 r1_le_c01
+    (by
+      rw [generator_ray0, generator_ray1, generator_ray2]
+      exact P2.ext (by simp [toNR_apply]) (by simp [toNR_apply]))
+
+/-- The degree of a divisor on the wall between `c12` and `c20` is `a₁ + a₂ + a₀`. -/
+theorem degree_c12_c20 (D : fan.TDivisor ℝ) :
+    wallData_c12_c20.degree D = D ray1 + D ray2 + D ray0 :=
+  degree_wallData D
+
+/-- The degree of a divisor on the wall between `c20` and `c01` is `a₁ + a₂ + a₀`. -/
+theorem degree_c20_c01 (D : fan.TDivisor ℝ) :
+    wallData_c20_c01.degree D = D ray1 + D ray2 + D ray0 := by
+  have h : wallData_c20_c01.degree D = D ray2 + D ray0 + D ray1 := degree_wallData D
+  rw [h]
+  ring
+
+/-- The degree of a divisor on the wall between `c01` and `c12` is `a₁ + a₂ + a₀`. -/
+theorem degree_c01_c12 (D : fan.TDivisor ℝ) :
+    wallData_c01_c12.degree D = D ray1 + D ray2 + D ray0 := by
+  have h : wallData_c01_c12.degree D = D ray0 + D ray1 + D ray2 := degree_wallData D
+  rw [h]
+  ring
+
+/-- The coefficients of a prime divisor `D_ρ` of `ℙ²` add up to `1`. -/
+theorem primeDivisor_sum (ρ : fan.Ray) :
+    Fan.TDivisor.toReal fan (fan.primeDivisor ρ) ray1 +
+      Fan.TDivisor.toReal fan (fan.primeDivisor ρ) ray2 +
+      Fan.TDivisor.toReal fan (fan.primeDivisor ρ) ray0 = 1 := by
+  classical
+  rcases ray_eq ρ with rfl | rfl | rfl <;>
+    simp [Fan.primeDivisor_apply, ray1_ne_ray2, ray1_ne_ray0, ray2_ne_ray0, ray1_ne_ray2.symm,
+      ray1_ne_ray0.symm, ray2_ne_ray0.symm]
+
+/-- The degree of each prime divisor `D_ρ` of `ℙ²` on the wall between `c12` and `c20` is `1`. -/
+theorem degree_primeDivisor_c12_c20 (ρ : fan.Ray) :
+    wallData_c12_c20.degree (Fan.TDivisor.toReal fan (fan.primeDivisor ρ)) = 1 := by
+  rw [degree_c12_c20, primeDivisor_sum]
+
+/-- The degree of each prime divisor `D_ρ` of `ℙ²` on the wall between `c20` and `c01` is `1`. -/
+theorem degree_primeDivisor_c20_c01 (ρ : fan.Ray) :
+    wallData_c20_c01.degree (Fan.TDivisor.toReal fan (fan.primeDivisor ρ)) = 1 := by
+  rw [degree_c20_c01, primeDivisor_sum]
+
+/-- The degree of each prime divisor `D_ρ` of `ℙ²` on the wall between `c01` and `c12` is `1`. -/
+theorem degree_primeDivisor_c01_c12 (ρ : fan.Ray) :
+    wallData_c01_c12.degree (Fan.TDivisor.toReal fan (fan.primeDivisor ρ)) = 1 := by
+  rw [degree_c01_c12, primeDivisor_sum]
+
+/-- The degree of the anticanonical divisor `-K` of `ℙ²` on each wall is `3`. -/
+theorem degree_neg_canonical :
+    wallData_c12_c20.degree (-fan.canonicalReal) = 3 ∧
+      wallData_c20_c01.degree (-fan.canonicalReal) = 3 ∧
+      wallData_c01_c12.degree (-fan.canonicalReal) = 3 := by
+  refine ⟨?_, ?_, ?_⟩
+  · rw [degree_c12_c20]
+    simp only [Finsupp.coe_neg, Pi.neg_apply, Fan.canonicalReal_apply]
+    norm_num
+  · rw [degree_c20_c01]
+    simp only [Finsupp.coe_neg, Pi.neg_apply, Fan.canonicalReal_apply]
+    norm_num
+  · rw [degree_c01_c12]
+    simp only [Finsupp.coe_neg, Pi.neg_apply, Fan.canonicalReal_apply]
+    norm_num
+
+/-! ### The anticanonical divisor of `ℙ²` is nef -/
+
+/-- The support function of the anticanonical divisor `-K` of `ℙ²`: the minimum of the linear forms `(-1, -1)`, `(2, -1)` and `(-1, 2)` of `-K` on the three 2-cones. -/
+noncomputable def negCanonicalSupport (x : NR 2) : ℝ :=
+  min (min (form (-1) (-1) x) (form 2 (-1) x)) (form (-1) 2 x)
+
+/-- On `c12`, the support function of `-K` is `(-1, -1)`. -/
+theorem negCanonicalSupport_c12 (x : NR 2) (hx : x ∈ c12) :
+    negCanonicalSupport x = form (-1) (-1) x := by
+  obtain ⟨h0, h1⟩ := mem_c12.mp hx
+  have hA : form (-1) (-1) x ≤ form 2 (-1) x := by
+    rw [form_apply, form_apply]
+    linarith
+  have hC : form (-1) (-1) x ≤ form (-1) 2 x := by
+    rw [form_apply, form_apply]
+    linarith
+  rw [negCanonicalSupport, min_eq_left hA, min_eq_left hC]
+
+/-- On `c20`, the support function of `-K` is `(2, -1)`. -/
+theorem negCanonicalSupport_c20 (x : NR 2) (hx : x ∈ c20) :
+    negCanonicalSupport x = form 2 (-1) x := by
+  obtain ⟨h0, h1⟩ := mem_c20.mp hx
+  have hA : form 2 (-1) x ≤ form (-1) (-1) x := by
+    rw [form_apply, form_apply]
+    linarith
+  have hC : form 2 (-1) x ≤ form (-1) 2 x := by
+    rw [form_apply, form_apply]
+    linarith
+  rw [negCanonicalSupport, min_eq_right hA, min_eq_left hC]
+
+/-- On `c01`, the support function of `-K` is `(-1, 2)`. -/
+theorem negCanonicalSupport_c01 (x : NR 2) (hx : x ∈ c01) :
+    negCanonicalSupport x = form (-1) 2 x := by
+  obtain ⟨h0, h1⟩ := mem_c01.mp hx
+  have hA : form (-1) 2 x ≤ form (-1) (-1) x := by
+    rw [form_apply, form_apply]
+    linarith
+  have hB : form (-1) 2 x ≤ form 2 (-1) x := by
+    rw [form_apply, form_apply]
+    linarith
+  rw [negCanonicalSupport, min_eq_right (le_min hA hB)]
+
+/-- `negCanonicalSupport` is the support function of the anticanonical divisor `-K` of `ℙ²`. -/
+theorem isSupportFunctionOf_negCanonicalSupport :
+    fan.IsSupportFunctionOf (-fan.canonicalReal) negCanonicalSupport := by
+  refine ⟨fun σ hσ => ?_, fun ρ => ?_⟩
+  · rcases mem_cones.mp hσ with rfl | rfl | rfl | rfl | rfl | rfl | rfl
+    · exact ⟨_, fun x hx =>
+        negCanonicalSupport_c12 x ((bot_le : (⊥ : PointedCone ℝ (NR 2)) ≤ c12) hx)⟩
+    · exact ⟨_, fun x hx => negCanonicalSupport_c12 x (r1_le_c12 hx)⟩
+    · exact ⟨_, fun x hx => negCanonicalSupport_c12 x (r2_le_c12 hx)⟩
+    · exact ⟨_, fun x hx => negCanonicalSupport_c20 x (r0_le_c20 hx)⟩
+    · exact ⟨_, negCanonicalSupport_c12⟩
+    · exact ⟨_, negCanonicalSupport_c20⟩
+    · exact ⟨_, negCanonicalSupport_c01⟩
+  · simp only [Finsupp.coe_neg, Pi.neg_apply, Fan.canonicalReal_apply, neg_neg]
+    rcases ray_eq ρ with rfl | rfl | rfl
+    · rw [generator_ray1, negCanonicalSupport_c12 _ toNR_e1_mem_c12, form_apply]
+      simp [toNR_apply]
+    · rw [generator_ray2, negCanonicalSupport_c12 _ toNR_e2_mem_c12, form_apply]
+      simp [toNR_apply]
+    · rw [generator_ray0, negCanonicalSupport_c20 _ toNR_e0_mem_c20, form_apply]
+      simp [toNR_apply]
+
+/-- The support function of `-K` is convex in the sense of Cox, Little and Schenck: it is the minimum of three linear forms. -/
+theorem concaveOn_negCanonicalSupport : ConcaveOn ℝ Set.univ negCanonicalSupport :=
+  (((form (-1) (-1)).concaveOn convex_univ).inf ((form 2 (-1)).concaveOn convex_univ)).inf
+    ((form (-1) 2).concaveOn convex_univ)
+
+/-- The anticanonical divisor `-K = D₁ + D₂ + D₀` of `ℙ²` is nef. -/
+theorem isNef_neg_canonical : fan.IsNef (-fan.canonicalReal) :=
+  ⟨negCanonicalSupport, isSupportFunctionOf_negCanonicalSupport, concaveOn_negCanonicalSupport⟩
 
 end MinimalModel.Toric.P2
