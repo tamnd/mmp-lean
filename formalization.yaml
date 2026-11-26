@@ -298,6 +298,10 @@ status:
       kind: statement
       status: known
       note: S31, BCHM Theorem 1.2. A klt pair over a quasi-projective base, with a big boundary and a pseudo-effective log canonical divisor or with a big log canonical divisor, has a log terminal model, an lc model in the big case, and a finitely generated log canonical ring.
+    - name: MinimalModel.FinitenessOfModels
+      kind: statement
+      status: known
+      note: S34, BCHM Theorem E. For a klt variety projective over a quasi-projective base, a rational affine space V of divisors and a general ample Q-divisor A over the base, finitely many birational maps give all the weak log canonical models of the boundaries in L_A(V). The field is uncountable, so that very general members exist.
     - name: MinimalModel.ToricMMP
       kind: statement
       status: known
