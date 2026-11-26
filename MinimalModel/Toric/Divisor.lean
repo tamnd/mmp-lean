@@ -78,7 +78,7 @@ theorem IsRay.eq_rayGenerator {ρ : PointedCone ℝ (NR n)} (h : IsRay ρ) {u : 
 /-- The cone of a primitive point `u` is a ray, and its primitive generator is `u`. -/
 theorem rayGenerator_latticeCone {u : Fin n → ℤ} (hu : IsPrimitive u) :
     rayGenerator (latticeCone {u}) = u :=
-  ((⟨u, hu.ne_zero, rfl⟩ : IsRay (latticeCone {u})).eq_rayGenerator hu
+  (IsRay.eq_rayGenerator ⟨u, hu.ne_zero, rfl⟩ hu
     (toNR_mem_latticeCone (Finset.mem_singleton_self u))).symm
 
 /-- The linear form `x ↦ Σ cᵢ xᵢ` on `N_ℝ`, for a vector `c` of `M_ℝ = ℝⁿ`. -/
