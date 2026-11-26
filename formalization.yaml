@@ -282,6 +282,42 @@ status:
       kind: statement
       status: open
       note: S51, the mld bound of Shokurov. The mld at a closed point is at most the dimension, with equality only at a smooth point outside the boundary.
+    - name: MinimalModel.SurfaceAbundance
+      kind: statement
+      status: known
+      note: S14, abundance for projective lc surface pairs (Fujino 2012, Theorem 8.1).
+    - name: MinimalModel.ThreefoldAbundance
+      kind: statement
+      status: known
+      note: S17, abundance for projective lc 3-folds with a rational boundary (Miyaoka, Kawamata, Keel, Matsuki and McKernan).
+    - name: MinimalModel.HanLiuReduction
+      kind: statement
+      status: known
+      note: S29, a reduction. The ACC for the global mlds of enc pairs and the termination of Q-factorial terminal flips in dimension d give the termination of lc flips in each dimension at most d (Han and Liu, Theorem 1.1).
+    - name: MinimalModel.BCHM
+      kind: statement
+      status: known
+      note: S31, BCHM Theorem 1.2. A klt pair over a quasi-projective base, with a big boundary and a pseudo-effective log canonical divisor or with a big log canonical divisor, has a log terminal model, an lc model in the big case, and a finitely generated log canonical ring.
+    - name: MinimalModel.ToricMMP
+      kind: statement
+      status: known
+      note: S39, each toric program of a complete simplicial projective fan and a rational divisor ends with a minimal model or a Mori fibre space.
+    - name: MinimalModel.AbundanceNuZero
+      kind: statement
+      status: known
+      note: S43, abundance for projective lc pairs with a nef log canonical divisor of numerical dimension zero (Nakayama, Gongyo).
+    - name: MinimalModel.GeneralizedAbundance
+      kind: statement
+      status: open
+      note: S45, the generalised abundance conjecture of Lazic and Peternell in dimension n.
+    - name: MinimalModel.IitakaConj
+      kind: statement
+      status: open
+      note: S46, the Iitaka conjecture C(n, m).
+    - name: MinimalModel.IndexConj
+      kind: statement
+      status: open
+      note: S54, the index conjecture for klt log Calabi-Yau pairs with coefficients in a finite set of rational numbers.
     - name: MinimalModel.FujitaFreeness
       kind: statement
       status: open

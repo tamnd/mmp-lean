@@ -7,7 +7,7 @@ import MinimalModel.Statements.Basic
 /-!
 # Family B: surfaces and 3-folds
 
-The statements of family B of spec 06.2.2 that are planned at S0 and S1. At S0: Castelnuovo's contraction theorem, the cone theorem for smooth surfaces and the minimal model program for smooth surfaces. A smooth surface there is a smooth projective variety of dimension 2 with the boundary 0. At S1: the program for lc surface pairs, and the flips, the termination and the program for 3-folds.
+The statements of family B of spec 06.2.2 that are planned at S0 and S1. At S0: Castelnuovo's contraction theorem, the cone theorem for smooth surfaces and the minimal model program for smooth surfaces. A smooth surface there is a smooth projective variety of dimension 2 with the boundary 0. At S1: the program for lc surface pairs, and the flips, the termination and the program for 3-folds. At S2: abundance for lc surfaces and for lc 3-folds.
 -/
 
 universe u
@@ -48,6 +48,10 @@ def SurfaceMMP : Prop :=
 def LcSurfaceMMP : Prop :=
   ∀ A : PairModel k, A.X.dim = 2 → IsLc A.P → EveryProgramEnds A
 
+/-- S14, abundance for lc surface pairs (Fujino, Minimal model theory for log surfaces, Publ. RIMS 48 (2012), Theorem 8.1). Let `(X, Δ)` be a projective lc pair of dimension 2 with a boundary `Δ` with real coefficients. If `K + Δ` is nef, then it is semiample. This is `Abundance 2` of family E, written out so that this file does not depend on family E. -/
+def SurfaceAbundance : Prop :=
+  ∀ A : PairModel k, A.X.dim = 2 → IsLc A.P → IsNef A.I A.P.KΔ → IsSemiample A.P.KΔ
+
 /-- S15, the existence of 3-fold klt flips (Mori 1988; Shokurov; KM98 Chapter 6). Let `(X, Δ)` be a projective `ℚ`-factorial klt pair of dimension 3, and let `f : X → Z` be a flipping contraction: a small contraction of relative Picard number one with `-(K + Δ)` ample over `Z`. Then the flip `g : X⁺ → Z` exists. This is S30 in dimension 3, with the hypothesis of `ℚ`-factoriality of the source. -/
 def ThreefoldFlips : Prop :=
   ∀ A : PairModel k, A.X.dim = 3 → IsQFactorial A.X → IsKlt A.P →
@@ -60,6 +64,11 @@ def ThreefoldFlips : Prop :=
 /-- S16, the termination of 3-fold lc flips, `T(3)` (Shokurov; Kawamata 1992). For each projective lc pair of dimension 3, each sequence of `(K + Δ)`-flips is finite. This is the statement `Termination 3` of family C, written out so that this file does not depend on family C. -/
 def ThreefoldTermination : Prop :=
   ∀ A : PairModel k, A.X.dim = 3 → IsLc A.P → ¬ HasInfiniteFlips A
+
+/-- S17, abundance for lc 3-folds (Miyaoka 1988 and Kawamata 1992 for terminal 3-folds; Keel, Matsuki and McKernan, Log abundance theorem for threefolds, Duke Math. J. 75 (1994), Theorem 1.1, for lc pairs). Let `(X, Δ)` be a projective lc pair of dimension 3 with a boundary `Δ` with rational coefficients. If `K + Δ` is nef, then it is semiample. The source states the theorem for `ℚ`-divisors, so the statement asks that the coefficients are rational. The case of real coefficients follows by the usual reduction to rational boundaries (Shokurov polytopes), which is not part of the source. -/
+def ThreefoldAbundance : Prop :=
+  ∀ A : PairModel k, A.X.dim = 3 → IsLc A.P → A.P.IsRationalBoundary → IsNef A.I A.P.KΔ →
+    IsSemiample A.P.KΔ
 
 /-- S18, the minimal model program for lc 3-folds (AxiomMath/MMP `projectiveLowerLogMMP_three`). Let `(X, Δ)` be a projective lc pair of dimension 3. Then each program from `(X, Δ)` runs and ends: each sequence of steps is finite, and each finite program extends to a program that ends with a minimal model or a Mori fibre space. The proof in the literature uses the existence of lc flips in dimension 3, the termination `T(3)` (S16), and the cone and contraction theorems for lc pairs (Fujino). -/
 def ThreefoldLcMMP : Prop :=

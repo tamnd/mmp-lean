@@ -14,6 +14,7 @@ import MinimalModel.Statements.Models
 import MinimalModel.Statements.Abundance
 import MinimalModel.Statements.Boundedness
 import MinimalModel.Statements.Effective
+import MinimalModel.Statements.BasicRelative
 import MinimalModel.Fidelity.Basic
 import MinimalModel.Fidelity.Point
 import MinimalModel.Fidelity.PointPairs
@@ -24,7 +25,10 @@ import MinimalModel.Toric.Cone
 import MinimalModel.Toric.ConeTheorem
 import MinimalModel.Toric.Examples
 import MinimalModel.Statements.Toric
+import MinimalModel.Toric.Program
+import MinimalModel.Statements.ToricMMP
 import MinimalModel.Fidelity.AffineLine
 import MinimalModel.Fidelity.Centre
 import MinimalModel.Fidelity.AffineLinePairs
 import MinimalModel.Fidelity.PointStatements
+import MinimalModel.Fidelity.Relative

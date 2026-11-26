@@ -2,7 +2,8 @@
 Copyright (c) 2026 The mmp authors. All rights reserved.
 Released under the Apache 2.0 licence as described in the file LICENSE.
 -/
-import MinimalModel.Statements.Basic
+import MinimalModel.Statements.BasicRelative
+import MinimalModel.Statements.Boundedness
 
 /-!
 # Family C: termination and flips
@@ -80,5 +81,13 @@ def LcFlips : Prop :=
     IsRAmpleOver (-A.P.KΔ) f →
     ∃ (B : PairModel k) (g : B.X.toScheme ⟶ Z.toScheme), g ≫ Z.str = B.X.str ∧
       IsContraction g ∧ IsSmallHom g ∧ IsRAmpleOver B.P.KΔ g ∧ IsStrictTransform A B f g
+
+/-- The hypothesis (2) of Han and Liu, Theorem 1.1: each sequence of `ℚ`-factorial terminal flips in dimension `d` terminates. For each projective `ℚ`-factorial terminal pair of dimension `d`, each sequence of `(K + Δ)`-flips is finite. A flip keeps the source `ℚ`-factorial and terminal, so the hypothesis is asked of the first model. -/
+def QFactorialTerminalTermination (d : ℕ) : Prop :=
+  ∀ A : PairModel k, A.X.dim = d → IsQFactorial A.X → IsTerminal A.P → ¬ HasInfiniteFlips A
+
+/-- S29, the reduction of Han and Liu (arXiv:2209.13122, Theorem 1.1). Let `d` be a positive integer. Assume the ACC for the global mlds of enc pairs of dimension `d` with coefficients in a finite set (`EncMldACC` of `Boundedness.lean`, which is Conjecture 1.9(2') of the source), and the termination of `ℚ`-factorial terminal flips in dimension `d`. Then each sequence of lc flips in each dimension `m ≤ d` terminates. Theorem 1.2 of the source is the case `d = 4`, where the second hypothesis is known. The flips of the source are not asked to be projective; this statement is about the projective pairs of `Termination`. The class is reduction. -/
+def HanLiuReduction (d : ℕ) : Prop :=
+  EncMldACC k d → QFactorialTerminalTermination k d → ∀ m ≤ d, Termination k m
 
 end MinimalModel
