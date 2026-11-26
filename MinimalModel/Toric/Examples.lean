@@ -1165,7 +1165,7 @@ theorem isSupportFunctionOf_negCanonicalSupport :
     · rw [generator_ray2, negCanonicalSupport_c12 _ toNR_e2_mem_c12, form_apply]
       simp [toNR_apply]
     · rw [generator_ray0, negCanonicalSupport_c20 _ toNR_e0_mem_c20, form_apply]
-      simp [toNR_apply]
+      norm_num [toNR_apply]
 
 /-- The support function of `-K` is convex in the sense of Cox, Little and Schenck: it is the minimum of three linear forms. -/
 theorem concaveOn_negCanonicalSupport : ConcaveOn ℝ Set.univ negCanonicalSupport :=
