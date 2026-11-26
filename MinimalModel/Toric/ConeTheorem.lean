@@ -240,7 +240,7 @@ theorem IsSupportFunction.add_le (hc : F.IsComplete) (hφ : F.IsSupportFunction 
 theorem IsSupportFunction.continuous (hc : F.IsComplete)
     (hcl : ∀ σ ∈ F.cones, IsClosed (σ : Set (NR n))) (hφ : F.IsSupportFunction φ) :
     Continuous φ := by
-  haveI := F.finite.to_subtype
+  have := F.finite.to_subtype
   refine LocallyFinite.continuous (f := fun C : F.cones => (C.1 : Set (NR n)))
     (locallyFinite_of_finite _) ?_ (fun C => hcl C.1 C.2) fun C => ?_
   · refine Set.eq_univ_of_forall fun x => ?_
@@ -300,7 +300,7 @@ theorem exists_local (hc : F.IsComplete) (hcl : ∀ σ ∈ F.cones, IsClosed (σ
 theorem le_of_span_eq_top (hc : F.IsComplete) (hcl : ∀ σ ∈ F.cones, IsClosed (σ : Set (NR n)))
     (hφ : F.IsSupportFunction φ)
     (hwall : ∀ σ σ', F.IsWallPair σ σ' → IsConvexAcross φ σ σ')
-    (hσ : σ ∈ F.cones) (hspan : Submodule.span ℝ (σ : Set (NR n)) = ⊤)
+    (hspan : Submodule.span ℝ (σ : Set (NR n)) = ⊤)
     {m : NR n →ₗ[ℝ] ℝ} (hm : ∀ x ∈ σ, φ x = m x) (x : NR n) : φ x ≤ m x := by
   classical
   obtain ⟨L, hL⟩ : ∃ L : Finset (PointedCone ℝ (NR n)),
@@ -417,7 +417,7 @@ theorem concaveOn_iff_forall_isConvexAcross (hc : F.IsComplete)
   refine ⟨convex_univ, fun x _ y _ a b ha hb _ => ?_⟩
   obtain ⟨C, hC, hdim, hz⟩ := exists_mem_coneDim_eq hc hcl (a • x + b • y)
   obtain ⟨m, hm⟩ := hφ C hC
-  have hle := le_of_span_eq_top hc hcl hφ hwall hC (span_eq_top_of_coneDim_eq hdim) hm
+  have hle := le_of_span_eq_top hc hcl hφ hwall (span_eq_top_of_coneDim_eq hdim) hm
   rw [hm _ hz, map_add, map_smul, map_smul]
   exact add_le_add (smul_le_smul_of_nonneg_left (hle x) ha)
     (smul_le_smul_of_nonneg_left (hle y) hb)
@@ -533,7 +533,7 @@ theorem IsWallPair.nonempty_wallData (hs : F.IsSimplicialFan) (hw : F.IsWallPair
   · rw [Finset.sum_map, ← hcv]
     refine Finset.sum_congr rfl fun ρ _ => ?_
     show c ρ • v ρ = (if h : ρ.1.1 ≤ σ then c ⟨ρ.1, h⟩ else 0) • toNR (F.generator ρ.1)
-    rw [dif_pos ρ.2]
+    rw [dite_cond_eq_true (eq_true ρ.2)]
 
 /-! ### Part 3: the toric cone theorem -/
 
