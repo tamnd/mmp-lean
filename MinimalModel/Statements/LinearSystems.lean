@@ -56,7 +56,7 @@ theorem ordAt_algebraMap (c : k) (P : PrimeDivisor X) : ordAt (algebraMap k (FF 
   by_cases hc : c = 0
   · rw [hc, map_zero]
     simp [ordAt]
-  haveI : Nonempty (⊤ : X.toScheme.Opens) := ⟨⟨genericPoint X.toScheme, trivial⟩⟩
+  have : Nonempty (⊤ : X.toScheme.Opens) := ⟨⟨genericPoint X.toScheme, trivial⟩⟩
   have hu : IsUnit (X.toΓ c) := (IsUnit.mk0 c hc).map X.toΓ
   exact Scheme.ord_of_isUnit (X := X.toScheme) (U := ⊤) hu (x := P.1) trivial
 
