@@ -398,6 +398,26 @@ status:
       kind: theorem
       status: proved
       note: Route R3. The anticanonical divisor of the projective plane is nef. This is a check F2 instance.
+    - name: MinimalModel.Toric.IsSimplicial.isClosed
+      kind: theorem
+      status: proved
+      note: Route R3. A simplicial cone is closed, as the image of the nonnegative orthant under an injective linear map.
+    - name: MinimalModel.Toric.Fan.concaveOn_iff_forall_isConvexAcross
+      kind: theorem
+      status: proved
+      note: Route R3. On a complete fan with closed cones, a support function is convex exactly when it satisfies the wall inequality at each wall. The proof is the generic segment argument.
+    - name: MinimalModel.Toric.Fan.concaveOn_iff_forall_isConvexAcross_of_isSimplicialFan
+      kind: theorem
+      status: proved
+      note: Route R3. The same for a complete simplicial fan.
+    - name: MinimalModel.Toric.Fan.IsWallPair.nonempty_wallData
+      kind: theorem
+      status: proved
+      note: Route R3. Two simplicial maximal cones that meet in a wall carry the data of a wall.
+    - name: MinimalModel.Toric.Fan.coneTheorem
+      kind: theorem
+      status: proved
+      note: Route R3, S2 in combinatorial form. On a complete simplicial fan, an R-Cartier divisor is nef exactly when its degree on each wall curve is nonnegative (CLS11 Theorem 6.3.12 and Proposition 6.4.4). The geometric form needs the toric variety as a scheme, which is not in the repository yet.
     - name: MinimalModel.IsPlt
       kind: def
       status: proved
