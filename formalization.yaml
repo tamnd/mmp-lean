@@ -345,11 +345,11 @@ status:
     - name: MinimalModel.Toric.exists_subset_isFaceOf_rays
       kind: theorem
       status: proved
-      note: Route R3. A strongly convex cone spanned by finitely many lattice points is spanned by a subset of them, each of which spans a ray that is a face of the cone (CLS11 Lemma 1.2.15).
+      note: Route R3. A strongly convex cone spanned by finitely many lattice points is spanned by a subset of them, each of which spans a ray that is a face of the cone (CLS11 Section 1.2).
     - name: MinimalModel.Toric.eq_hull_rayGenerator
       kind: theorem
       status: proved
-      note: Route R3. A strongly convex rational polyhedral cone is the cone spanned by the primitive generators of its rays (CLS11 Lemma 1.2.15).
+      note: Route R3. A strongly convex rational polyhedral cone is the cone spanned by the primitive generators of its rays (CLS11 Section 1.2).
     - name: MinimalModel.Toric.Fan.eq_hull_generator
       kind: theorem
       status: proved

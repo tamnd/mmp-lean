@@ -339,7 +339,7 @@ theorem IsRCartier.exists_isSupportFunctionOf {D : F.TDivisor ℝ} (h : F.IsRCar
     intro σ hσ x hx
     have hex : ∃ σ ∈ F.cones, x ∈ σ := ⟨σ, hσ, hx⟩
     change (if hx : ∃ σ ∈ F.cones, x ∈ σ then m hx.choose x else 0) = m σ x
-    rw [dif_pos hex]
+    rw [dite_cond_eq_true (eq_true hex)]
     exact key _ hex.choose_spec.1 σ hσ x hex.choose_spec.2 hx
   refine ⟨φ, fun σ hσ => ⟨m σ, hφ σ hσ⟩, fun ρ => ?_⟩
   rw [hφ ρ.1 ρ.2.1 _ (F.toNR_generator_mem ρ), hm ρ.1 ρ.2.1 ρ le_rfl]
