@@ -12,4 +12,5 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 - `MinimalModel/Fidelity/Basic.lean`: the first checks F3.
 - `MinimalModel/Fidelity/Point.lean`: the first check F2. The point `Spec k` is a pair model, so the type `PairModel k` is not empty.
 - `MinimalModel/Toric/Fan.lean`: rational polyhedral cones and fans on `PointedCone`.
+- The fan API of route R3, steps 1 and 2. `MinimalModel/Toric/Fan.lean` now has the faces of cones, the trivial fan, the fan of one cone and the fan of `𝔸ⁿ`. `MinimalModel/Toric/Divisor.lean` has the rays, the torus-invariant divisors and the toric canonical divisor `K = -Σ D_ρ`. `MinimalModel/Toric/Examples.lean` has the fan of `ℙ¹`, which is complete and simplicial.
 - The workflows `build`, `check`, `trust` and `scorecard`.
