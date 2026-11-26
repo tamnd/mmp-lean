@@ -78,30 +78,37 @@ section Point
 
 variable (k : Type u) [Field k]
 
-/-- The map from `k` to the function field of `Spec k` is onto. -/
+/-- On `Spec k`, the map from `k` to the global sections is the inverse of `ΓSpecIso`. -/
+theorem pointVariety_toΓ_apply (c : k) :
+    (pointVariety k).toΓ c = (Scheme.ΓSpecIso (CommRingCat.of k)).inv c := by
+  change (((Scheme.ΓSpecIso (CommRingCat.of k)).inv ≫ Scheme.Hom.appTop (𝟙 _)).hom c) = _
+  simp
+
+/-- On `Spec k`, the map from `k` to the global sections is onto. -/
+theorem pointVariety_toΓ_surjective : Function.Surjective (pointVariety k).toΓ := fun a =>
+  ⟨(Scheme.ΓSpecIso (CommRingCat.of k)).hom a, by
+    rw [pointVariety_toΓ_apply]
+    exact (Scheme.ΓSpecIso (CommRingCat.of k)).hom_inv_id_apply a⟩
+
+/-- The map from `k` to the function field is the map from `k` to the global sections, then the germ at the generic point. -/
+theorem pointVariety_algebraMap_eq [Nonempty (⊤ : (pointVariety k).toScheme.Opens)] (c : k) :
+    algebraMap k (FF (pointVariety k)) c =
+      algebraMap Γ((pointVariety k).toScheme, ⊤) (FF (pointVariety k)) ((pointVariety k).toΓ c) :=
+  rfl
+
+/-- The map from `k` to the function field of `Spec k` is onto. The function field is the fraction field of the global sections, and each global section comes from `k`. -/
 theorem pointVariety_algebraMap_surjective :
     Function.Surjective (algebraMap k (FF (pointVariety k))) := by
+  haveI : Nonempty (⊤ : (pointVariety k).toScheme.Opens) :=
+    ⟨⟨genericPoint (pointVariety k).toScheme, trivial⟩⟩
+  haveI := functionField_isFractionRing_of_isAffineOpen (pointVariety k).toScheme ⊤
+    (isAffineOpen_top (Spec (CommRingCat.of k)))
   intro y
-  let x : PrimeSpectrum k := genericPoint (pointVariety k).toScheme
-  have : x.asIdeal.IsPrime := x.isPrime
-  have hu : x.asIdeal.primeCompl ≤ IsUnit.submonoid k := fun c hc =>
-    (IsUnit.mem_submonoid_iff c).mpr <| isUnit_iff_ne_zero.mpr fun h => hc (by rw [h]; exact x.asIdeal.zero_mem)
-  let e := IsLocalization.atUnits k x.asIdeal.primeCompl (S := Localization.AtPrime x.asIdeal) hu
-  obtain ⟨c, hc⟩ := e.surjective ((Spec.stalkIso (CommRingCat.of k) x).hom y)
-  refine ⟨c, ?_⟩
-  have h1 : (Spec.stalkIso (CommRingCat.of k) x).inv (algebraMap k _ c) =
-      (Spec (CommRingCat.of k)).presheaf.germ ⊤ x trivial ((Scheme.ΓSpecIso (CommRingCat.of k)).inv c) :=
-    by first
-      | exact ConcreteCategory.congr_hom (Spec.algebraMap_stalkIso_inv (R := CommRingCat.of k) (x := x)) c
-      | simpa using ConcreteCategory.congr_hom (Spec.algebraMap_stalkIso_inv (R := CommRingCat.of k) (x := x)) c
-  have h2 : algebraMap k (Localization.AtPrime x.asIdeal) c = e c := (e.commutes c).symm
-  have h3 : algebraMap k (FF (pointVariety k)) c =
-      (Spec (CommRingCat.of k)).presheaf.germ ⊤ x trivial ((Scheme.ΓSpecIso (CommRingCat.of k)).inv c) := by
-    change ((Spec (CommRingCat.of k)).presheaf.germ ⊤ x trivial).hom
-      (((Scheme.ΓSpecIso (CommRingCat.of k)).inv ≫ Scheme.Hom.appTop (𝟙 _)).hom c) = _
-    simp
-  rw [h3, ← h1, h2, hc]
-  exact (Spec.stalkIso (CommRingCat.of k) x).hom_inv_id_apply y
+  obtain ⟨a, b, -, rfl⟩ := IsFractionRing.div_surjective Γ((pointVariety k).toScheme, ⊤) y
+  obtain ⟨a', rfl⟩ := pointVariety_toΓ_surjective k a
+  obtain ⟨b', rfl⟩ := pointVariety_toΓ_surjective k b
+  refine ⟨a' / b', ?_⟩
+  rw [map_div₀, pointVariety_algebraMap_eq, pointVariety_algebraMap_eq]
 
 /-- `Spec k` has no divisorial valuation: each element of `k(X) = k` has the value `0` or `1`. -/
 theorem pointVariety_not_isDivisorial (v : Valuation (FF (pointVariety k)) VZ) : ¬ IsDivisorial v := by
