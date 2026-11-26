@@ -130,7 +130,7 @@ theorem isSimplicialFan : fan.IsSimplicialFan := by
 /-- The rays of the fan of `ℙ¹` are `pos` and `neg`. -/
 theorem rays_fan : fan.rays = {pos, neg} := by
   ext ρ
-  simp only [Fan.rays, Set.mem_setOf_eq, Set.mem_insert_iff, Set.mem_singleton_iff]
+  simp only [Fan.rays, Set.mem_ofPred_eq, Set.mem_insert_iff, Set.mem_singleton_iff]
   constructor
   · rintro ⟨hρ, hr⟩
     rcases mem_cones.mp hρ with rfl | rfl | rfl

@@ -96,7 +96,7 @@ theorem coeffSum_canonical : F.coeffSum F.canonical = -(Nat.card F.Ray : ℤ) :=
 /-- The trivial fan has no rays. -/
 theorem rays_trivial : (trivial n).rays = ∅ := by
   ext ρ
-  simp only [rays, Set.mem_setOf_eq, Set.mem_empty_iff_false, iff_false, not_and]
+  simp only [rays, Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false, not_and]
   intro hρ hr
   exact hr.ne_bot hρ
 

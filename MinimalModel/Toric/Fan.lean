@@ -116,7 +116,7 @@ theorem isSimplicial_bot : IsSimplicial (⊥ : PointedCone ℝ (NR n)) := by
   refine ⟨∅, latticeCone_empty.symm, ?_⟩
   change LinearIndepOn ℝ toNR ((∅ : Finset (Fin n → ℤ)) : Set (Fin n → ℤ))
   rw [Finset.coe_empty]
-  exact linearIndepOn_empty
+  exact linearIndepOn_empty ℝ toNR
 
 /-- The cone of one nonzero lattice point is simplicial. -/
 theorem isSimplicial_latticeCone_singleton {v : Fin n → ℤ} (hv : v ≠ 0) :
@@ -173,8 +173,8 @@ theorem exists_subset_of_isFaceOf_latticeCone {S : Finset (Fin n → ℤ)}
   rw [latticeCone_eq_hull]
   congr 1
   ext x
-  simp only [Set.mem_inter_iff, Set.mem_image, Finset.coe_filter, Set.mem_setOf_eq,
-    Finset.mem_coe, SetLike.mem_coe]
+  simp only [Set.mem_inter_iff, Set.mem_image, Finset.coe_filter, Set.mem_ofPred_eq,
+    SetLike.mem_coe]
   constructor
   · rintro ⟨⟨v, hv, rfl⟩, hx⟩
     exact ⟨v, ⟨hv, hx⟩, rfl⟩
@@ -286,7 +286,6 @@ def trivial (n : ℕ) : Fan n where
     exact Set.mem_singleton_iff.mpr (le_bot_iff.mp hτ.le)
   inter_face σ hσ τ hτ := by
     rw [Set.mem_singleton_iff.mp hσ, Set.mem_singleton_iff.mp hτ, inf_idem]
-    exact PointedCone.IsFaceOf.refl _
 
 /-- The support of the trivial fan is the origin. -/
 theorem support_trivial : (trivial n).support = {0} := by
