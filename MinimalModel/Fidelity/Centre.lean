@@ -288,9 +288,10 @@ theorem IsCentre.coheight_ne_zero {v : Valuation (FF X) VZ} (hπ : ∃ π, v π 
   have hfield : IsField (X.toScheme.presheaf.stalk (genericPoint X.toScheme)) :=
     isField_stalk_of_closure_mem_irreducibleComponents X.toScheme (genericPoint X.toScheme)
       (by simp [irreducibleComponents_eq_singleton])
-  have hsurj : Function.Surjective
-      (algebraMap (X.toScheme.presheaf.stalk (genericPoint X.toScheme)) (FF X)) :=
-    IsFractionRing.surjective_iff_isField.mpr hfield
+  have hsurj : ∀ y : FF X, ∃ s, @algebraMap _ (FF X) _ _
+      (stalkFunctionFieldAlgebra X.toScheme (genericPoint X.toScheme)) s = y := by
+    letI := stalkFunctionFieldAlgebra X.toScheme (genericPoint X.toScheme)
+    exact IsFractionRing.surjective_iff_isField.mpr hfield
   obtain ⟨π, hπ⟩ := hπ
   obtain ⟨s, hs⟩ := hsurj π⁻¹
   have h3 : v π⁻¹ ≤ 1 := by
