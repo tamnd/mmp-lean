@@ -8,7 +8,7 @@ import MinimalModel.Statements.Enc
 /-!
 # Family F: invariants and boundedness
 
-The statements of family F of spec 06.2.2 that are planned at S1: the ACC for log canonical thresholds and the mld bound. The statements S49 and S50 of this family are in `Termination.lean`, because S28 uses them. The statement S52 uses the enc pairs of `Enc.lean`.
+The statements of family F of spec 06.2.2 that are planned at S1 and S2: the ACC for log canonical thresholds, the mld bound and the index conjecture. The statements S49 and S50 of this family are in `Termination.lean`, because S28 uses them. The statement S52 uses the enc pairs of `Enc.lean`, and S29 in `Termination.lean` uses `EncMldACC`.
 -/
 
 universe u
@@ -40,5 +40,12 @@ def EncMldACC (d : ℕ) : Prop :=
 /-- S52, the Han-Liu conjecture on enc pairs in dimension 4 (J. Han and J. Liu, "On termination of flips and exceptionally non-canonical singularities", Geom. Topol. 29 (2025), arXiv:2209.13122, Conjecture 1.9(2') with `d = 4`). For each finite set `Γ ⊆ [0, 1]`, the mlds of the enc pairs of dimension 4 with coefficients in `Γ` satisfy the ACC. By Han-Liu Theorem 1.2, this conjecture gives the termination of lc flips in dimension 4. The source states the conjecture for enc pairs and the global mld, so this statement does too. An enc germ `(X ∋ x, B)` of Definition 3.8(2) is an enc pair near `x` with `mld(X ∋ x, B) = mld(X, B)`, so its mld is in the same set. -/
 def HanLiuEncACC : Prop :=
   EncMldACC k 4
+
+/-- S54, the index conjecture for klt log Calabi-Yau pairs in dimension `n` (Shokurov; the form of spec 03.9). Fix a finite set `I ⊆ [0, 1]` of rational numbers. There is a positive integer `N` with the following property. Let `(X, Δ)` be a projective klt pair of dimension `n` with the coefficients of `Δ` in `I`, such that `K + Δ ∼_ℝ 0`. Then `N (K + Δ)` is the divisor of a rational function, that is `N (K + Δ) ∼ 0`. So the index of `K + Δ` is at most `N`, and divides `N`. The coefficient of a prime divisor outside the support is `0`, so the statement adds `0` to `I`. It is known in low dimensions and open in general. -/
+def IndexConj (n : ℕ) : Prop :=
+  ∀ I : Set ℝ, I.Finite → I ⊆ Set.Icc 0 1 ∩ Set.range ((↑) : ℚ → ℝ) →
+    ∃ N : ℕ, 0 < N ∧ ∀ (X : NormalVariety k) (P : Pair X), IsProjective X → X.dim = n →
+      IsKlt P → P.Δ.CoeffsIn (insert 0 I) → RLinEquiv P.KΔ 0 →
+        ∃ E : Divisor ℤ X, IsPrincipal E ∧ (N : ℝ) • P.KΔ = E.toReal
 
 end MinimalModel

@@ -2,12 +2,12 @@
 Copyright (c) 2026 The mmp authors. All rights reserved.
 Released under the Apache 2.0 licence as described in the file LICENSE.
 -/
-import MinimalModel.Statements.Basic
+import MinimalModel.Statements.BasicRelative
 
 /-!
 # Family D: BCHM, models and the Sarkisov program
 
-The statements of family D of spec 06.2.2 that are planned at S0 and S1.
+The statements of family D of spec 06.2.2 that are planned at S0, S1 and S2. The statement S31 uses the relative notions of `BasicRelative.lean`.
 -/
 
 universe u
@@ -43,5 +43,20 @@ def MinimalModelConj (n : ℕ) : Prop :=
 def MoriFibreSpaceOutput : Prop :=
   ∀ A : PairModel k, IsQFactorial A.X → IsKlt A.P → ¬ IsPseudoEffective A.P.KΔ →
     ∃ p : Program A, ∃ n : ℕ, p.len = n ∧ IsMoriFibreSpace (p.model n)
+
+/-- S31, the main theorem of BCHM (Birkar, Cascini, Hacon and McKernan, Existence of minimal models for varieties of log general type, J. Amer. Math. Soc. 23 (2010), Theorem 1.2; Theorem 3.10 of spec 03). Let `π : X → U` be a projective morphism to a quasi-projective variety, and let `(X, Δ)` be a klt pair (the pair asks that `K + Δ` is `ℝ`-Cartier). Assume that `Δ` is big over `U` and `K + Δ` is pseudo-effective over `U`, or that `K + Δ` is big over `U`. Then:
+1. `(X, Δ)` has a log terminal model over `U`;
+2. if `K + Δ` is big over `U`, then `(X, Δ)` has a log canonical model over `U`;
+3. if `K + Δ` is `ℚ`-Cartier, then `R(π, K + Δ) = ⊕ₘ π_* 𝒪_X(⌊m (K + Δ)⌋)` is a finitely generated `𝒪_U`-algebra.
+
+The models are those of BCHM Definition 3.6.6 (`HasLogTerminalModelOver`, `HasLcModelOver`). The base `U` is a normal variety here. This is no loss: `X` is normal, so `π` factors through the normalization of its image, which is finite over `U`, and each notion of the statement is the same over the normalization.
+
+The row of spec 06.2.2 also names the six statements `A_n` to `F_n` of the induction of BCHM (Theorems A to F of the source). They are the steps of the proof, not part of Theorem 1.2, and they are not stated here. -/
+def BCHM : Prop :=
+  ∀ (X U : NormalVariety k) (π : X.toScheme ⟶ U.toScheme), π ≫ U.str = X.str →
+    IsProjectiveHom π → IsQuasiProjective U → ∀ P : Pair X, IsKlt P →
+    ((IsBigRel P.Δ π ∧ IsPseudoEffectiveOver P.KΔ π) ∨ IsBigRel P.KΔ π) →
+      HasLogTerminalModelOver P π ∧ (IsBigRel P.KΔ π → HasLcModelOver P π) ∧
+        (IsQCartierReal P.KΔ → IsRelFG P.KΔ π)
 
 end MinimalModel
