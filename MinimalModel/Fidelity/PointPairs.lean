@@ -91,7 +91,9 @@ theorem pointVariety_algebraMap_surjective :
   refine ⟨c, ?_⟩
   have h1 : (Spec.stalkIso (CommRingCat.of k) x).inv (algebraMap k _ c) =
       (Spec (CommRingCat.of k)).presheaf.germ ⊤ x trivial ((Scheme.ΓSpecIso (CommRingCat.of k)).inv c) :=
-    congrArg (fun f => f.hom c) (Spec.algebraMap_stalkIso_inv x)
+    by first
+      | exact ConcreteCategory.congr_hom (Spec.algebraMap_stalkIso_inv (R := CommRingCat.of k) (x := x)) c
+      | simpa using ConcreteCategory.congr_hom (Spec.algebraMap_stalkIso_inv (R := CommRingCat.of k) (x := x)) c
   have h2 : algebraMap k (Localization.AtPrime x.asIdeal) c = e c := (e.commutes c).symm
   have h3 : algebraMap k (FF (pointVariety k)) c =
       (Spec (CommRingCat.of k)).presheaf.germ ⊤ x trivial ((Scheme.ΓSpecIso (CommRingCat.of k)).inv c) := by
