@@ -74,8 +74,9 @@ theorem isStronglyConvex_neg : IsStronglyConvex neg := by
 theorem pos_ne_neg : pos ≠ neg := by
   intro h
   have h1 : (1 : NR 1) ∈ pos := mem_pos.mpr (by simp)
-  rw [h, mem_neg] at h1
-  simp at h1
+  have h2 : (1 : NR 1) 0 ≤ 0 := mem_neg.mp (h ▸ h1)
+  have h3 : (1 : NR 1) 0 = (1 : ℝ) := rfl
+  linarith
 
 /-- The fan of `ℙ¹`: the cones `0`, `pos` and `neg`. -/
 noncomputable def fan : Fan 1 where

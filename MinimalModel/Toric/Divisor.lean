@@ -76,7 +76,7 @@ noncomputable def canonical : F.TDivisor ℤ := -∑ ρ : F.Ray, F.primeDivisor 
 @[simp]
 theorem canonical_apply (ρ : F.Ray) : F.canonical ρ = -1 := by
   classical
-  simp [canonical, Finsupp.finsetSum_apply, primeDivisor_apply]
+  simp [canonical, primeDivisor_apply]
 
 /-- The toric canonical divisor as a divisor with real coefficients. -/
 noncomputable def canonicalReal : F.TDivisor ℝ := TDivisor.toReal F F.canonical
