@@ -4,6 +4,8 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 
 ## Unreleased
 
+## v0.0.4 - 2026-11-26
+
 ### Added
 
 - The statements S01 (Kleiman's criterion), S02 (Kawamata-Viehweg vanishing), S06 (the contraction theorem), S09 (the length of extremal rays), S52 (the Han-Liu conjecture on enc pairs in dimension 4) and S57 (the failure of effective non-vanishing in dimension 4). The new files `Curves.lean`, `Cohomology.lean` and `Enc.lean` give their vocabulary: extremal faces, rational curves, relative positivity, the higher direct images of `𝒪_X(D)` and the enc pairs. `MinimalModel/Fidelity/PointStatements.lean` gives the checks F2 and F3 on the point and the affine line.
