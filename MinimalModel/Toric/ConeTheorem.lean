@@ -74,7 +74,7 @@ theorem IsSimplicial.isClosed {σ : PointedCone ℝ (NR n)} (h : IsSimplicial σ
       exact ⟨c, hc, by rw [Fintype.linearCombination_apply]⟩
     · rintro ⟨c, hc, rfl⟩
       exact ⟨c, hc, by rw [Fintype.linearCombination_apply]⟩
-  have hcl : IsClosed {c : (S : Set (Fin n → ℤ)) → ℝ | ∀ i, 0 ≤ c i} := by
+  have hcl : IsClosed {c : ↥(S : Set (Fin n → ℤ)) → ℝ | ∀ i, 0 ≤ c i} := by
     rw [Set.ofPred_forall]
     exact isClosed_iInter fun i => isClosed_le continuous_const (continuous_apply i)
   rw [heq]
@@ -126,7 +126,7 @@ theorem chord_le_of_local {g : ℝ → ℝ} (hg : ContinuousOn g (Set.Icc 0 1))
     isCompact_Icc.exists_isMinOn (Set.nonempty_Icc.mpr zero_le_one) hdc
   have hmin' : ∀ y ∈ Set.Icc (0 : ℝ) 1, d s0 ≤ d y := isMinOn_iff.mp hmin
   by_contra hlt
-  push_neg at hlt
+  push Not at hlt
   have hμ : d s0 < 0 := by
     have := hmin' t ht
     rw [hd t] at this
@@ -322,7 +322,7 @@ theorem le_of_span_eq_top (hc : F.IsComplete) (hcl : ∀ σ ∈ F.cones, IsClose
     omega
   have hint : (interior (σ : Set (NR n))).Nonempty := by
     rw [(PointedCone.convex σ).interior_nonempty_iff_affineSpan_eq_top,
-      affineSpan_eq_top_iff_vectorSpan_eq_top_of_nonempty (k := ℝ) (V := NR n) (P := NR n)
+      AffineSubspace.affineSpan_eq_top_iff_vectorSpan_eq_top_of_nonempty (k := ℝ) (V := NR n) (P := NR n)
         ⟨0, σ.zero_mem⟩, vectorSpan_eq_span_vsub_set_right ℝ (SetLike.mem_coe.mpr σ.zero_mem)]
     simpa using hspan
   obtain ⟨p, hp, hpW⟩ := exists_forall_notMem W L _ isOpen_interior hint hW
@@ -377,7 +377,7 @@ theorem le_of_span_eq_top (hc : F.IsComplete) (hcl : ∀ σ ∈ F.cones, IsClose
   rw [hm p hpσ, hm _ (interior_subset htσ)] at h
   simp only [sub_self, mul_zero, zero_add] at h
   by_contra hpos
-  push_neg at hpos
+  push Not at hpos
   have := mul_pos ht0' (sub_pos.mpr hpos)
   linarith
 
@@ -387,7 +387,7 @@ theorem exists_mem_coneDim_eq (hc : F.IsComplete)
     ∃ C ∈ F.cones, coneDim C = n ∧ x ∈ C := by
   classical
   by_contra hno
-  push_neg at hno
+  push Not at hno
   have hK : IsClosed (⋃ C ∈ {C ∈ F.cones | coneDim C = n}, (C : Set (NR n))) :=
     (F.finite.subset (Set.sep_subset _ _)).isClosed_biUnion fun C hC => hcl C hC.1
   have hxK : x ∉ ⋃ C ∈ {C ∈ F.cones | coneDim C = n}, (C : Set (NR n)) := by
@@ -402,7 +402,7 @@ theorem exists_mem_coneDim_eq (hc : F.IsComplete)
     apply ((hL C).mp hC).2
     change Module.finrank ℝ (Submodule.span ℝ (C : Set (NR n))) = n
     rw [htop, finrank_top, Module.finrank_fin_fun ℝ]
-  obtain ⟨p, hpK, hp⟩ := exists_forall_notMem (fun C => Submodule.span ℝ (C : Set (NR n))) L
+  obtain ⟨p, hpK, hp⟩ := exists_forall_notMem (fun C : PointedCone ℝ (NR n) => Submodule.span ℝ (C : Set (NR n))) L
     _ hK.isOpen_compl ⟨x, hxK⟩ hW
   obtain ⟨C, hC, hpC⟩ := exists_mem_of_isComplete hc p
   by_cases hdim : coneDim C = n
@@ -456,7 +456,7 @@ theorem IsWallPair.nonempty_wallData (hs : F.IsSimplicialFan) (hw : F.IsWallPair
   obtain ⟨hmax, hmax', hne, hdim⟩ := hw
   obtain ⟨ρ0, hρ0, hρ0'⟩ : ∃ ρ : F.Ray, ρ.1 ≤ σ' ∧ ¬ ρ.1 ≤ σ := by
     by_contra h
-    push_neg at h
+    push Not at h
     apply hne
     have hle : σ' ≤ σ := by
       refine (F.eq_hull_generator hmax'.mem).le.trans (Submodule.span_le.mpr ?_)
@@ -503,7 +503,7 @@ theorem IsWallPair.nonempty_wallData (hs : F.IsSimplicialFan) (hw : F.IsWallPair
     obtain ⟨Tρ, hTρ, hρeq⟩ :=
       exists_subset_of_isFaceOf_latticeCone (F.isFaceOf_of_le hmax'.mem ρ hρ)
     by_contra hno
-    push_neg at hno
+    push Not at hno
     apply hρσ
     have hsub : Tρ ⊆ T := fun w hw => by
       by_contra hwT
