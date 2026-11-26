@@ -16,10 +16,6 @@ open AlgebraicGeometry CategoryTheory Order Polynomial
 
 noncomputable section
 
-#check @one_le_inv₀
-#check @Ring.ordFrac_eq_valuation_inv
-#check @StructureSheaf.toStalk_stalkSpecializes
-#check @AlternatingMap.ofSubsingleton_apply_apply
 
 namespace MinimalModel
 
@@ -35,10 +31,13 @@ theorem isDiscreteValuationRing_stalk (P : PrimeDivisor X) :
     intro h
     have h2 := ringKrullDim_stalk_eq_coheight P.1
     rw [P.2, ringKrullDim_eq_zero_of_isField h] at h2
-    exact absurd h2 (by decide)
+    first
+    | exact absurd h2 (by decide)
+    | simp at h2
+    | exact absurd h2 (by norm_num)
   have hm : IsLocalRing.maximalIdeal (X.toScheme.presheaf.stalk P.1) ≠ ⊥ :=
     fun h => hnf ((IsLocalRing.isField_iff_maximalIdeal_eq).mpr h)
-  refine ((IsDiscreteValuationRing.TFAE _ hnf).out 0 3).mpr
+  refine ((IsDiscreteValuationRing.TFAE _ hnf).out 1 4).mpr
     ⟨X.isNormal.isIntegrallyClosed_stalk P.1, IsLocalRing.maximalIdeal _, ⟨hm, inferInstance⟩,
       fun Q hQ => ?_⟩
   have := (Ring.krullDimLE_one_iff_of_isPrime_bot.mp h1) Q hQ.1 hQ.2
@@ -50,15 +49,16 @@ theorem mem_stalkSubring_iff (P : PrimeDivisor X) {g : FF X} (hg : g ≠ 0) :
   have := isDiscreteValuationRing_stalk P
   unfold ordAt
   rw [Scheme.le_ord_iff P.2 hg]
-  change _ ↔ Multiplicative.ofAdd 0 ≤ Ring.ordFrac (X.toScheme.presheaf.stalk P.1) g
+  change _ ↔ (1 : WithZero (Multiplicative ℤ)) ≤ Ring.ordFrac (X.toScheme.presheaf.stalk P.1) g
   rw [Ring.ordFrac_eq_valuation_inv]
   have hv : (IsDiscreteValuationRing.maximalIdeal (X.toScheme.presheaf.stalk P.1)).valuation (FF X) g ≠ 0 :=
     (Valuation.ne_zero_iff _).mpr hg
-  have h1 : ((Multiplicative.ofAdd (0 : ℤ) : Multiplicative ℤ) : ℤᵐ⁰) = 1 := rfl
-  rw [h1, one_le_inv₀ (zero_lt_iff.mpr hv)]
+  rw [one_le_inv₀ (zero_lt_iff.mpr hv), stalkSubring, RingHom.mem_range]
   constructor
   · rintro ⟨s, rfl⟩
-    exact IsDedekindDomain.HeightOneSpectrum.valuation_le_one _ s
+    first
+    | exact IsDedekindDomain.HeightOneSpectrum.valuation_le_one (K := FF X) _ s
+    | exact IsDedekindDomain.HeightOneSpectrum.valuation_le_one (K := FF X) s
   · intro h
     obtain ⟨a, ha⟩ := IsDiscreteValuationRing.exists_lift_of_le_one h
     exact ⟨a, ha⟩
@@ -72,17 +72,13 @@ variable (k : Type u) [Field k]
 /-- The stalks of `Spec k[X]` are integrally closed: each stalk is a localization of the principal ideal domain `k[X]`. -/
 theorem isNormalScheme_affineLine : IsNormalScheme (Spec (CommRingCat.of k[X])) := by
   refine ⟨fun x => ?_⟩
-  have : x.asIdeal.IsPrime := x.isPrime
-  have : IsIntegrallyClosed (Localization.AtPrime x.asIdeal) :=
-    isIntegrallyClosed_of_isLocalization k[X] (Localization.AtPrime x.asIdeal) x.asIdeal.primeCompl
-      (Ideal.primeCompl_le_nonZeroDivisors _)
-  exact IsIntegrallyClosed.of_equiv
-    (Spec.stalkIso (CommRingCat.of k[X]) x).symm.commRingCatIsoToRingEquiv
+  let p : PrimeSpectrum k[X] := x
+  exact isIntegrallyClosed_of_isLocalization (R := k[X]) ((Spec.structureSheaf k[X]).presheaf.stalk p)
+    p.asIdeal.primeCompl (Ideal.primeCompl_le_nonZeroDivisors _)
 
 instance : LocallyOfFiniteType (Spec.map (CommRingCat.ofHom (algebraMap k k[X]))) := by
   rw [HasRingHomProperty.Spec_iff (P := @LocallyOfFiniteType)]
-  change Algebra.FiniteType k k[X]
-  infer_instance
+  exact RingHom.finiteType_algebraMap.mpr inferInstance
 
 /-- The affine line `𝔸¹ = Spec k[X]` as a normal variety over `k`. -/
 def affineLine : NormalVariety k where
@@ -94,27 +90,37 @@ def affineLine : NormalVariety k where
 theorem affineLine_dim : (affineLine k).dim = 1 := by
   have h : topologicalKrullDim (PrimeSpectrum k[X]) = 1 :=
     (PrimeSpectrum.topologicalKrullDim_eq_ringKrullDim k[X]).trans
-      (IsPrincipalIdealRing.ringKrullDim_eq_one _ Polynomial.not_isField)
+      (IsPrincipalIdealRing.ringKrullDim_eq_one _ (Polynomial.not_isField k))
   unfold NormalVariety.dim
   change ENat.toNat (WithBot.unbotD 0 (topologicalKrullDim (PrimeSpectrum k[X]))) = 1
   rw [h]
   rfl
 
-instance : Algebra k[X] (FF (affineLine k)) :=
-  inferInstanceAs (Algebra (CommRingCat.of k[X]) (Spec (CommRingCat.of k[X])).functionField)
+/-- The map from `k[X]` to the global sections of the affine line. -/
+def toΓA : k[X] →+* Γ((affineLine k).toScheme, ⊤) := (Scheme.ΓSpecIso (CommRingCat.of k[X])).inv.hom
 
-instance : IsFractionRing k[X] (FF (affineLine k)) :=
-  inferInstanceAs (IsFractionRing (CommRingCat.of k[X]) (Spec (CommRingCat.of k[X])).functionField)
+variable {k} in
+/-- A point of the affine line, seen as a prime ideal of `k[X]`. -/
+def toPrime (Q : (affineLine k).toScheme) : PrimeSpectrum k[X] := Q
+
+instance : Algebra k[X] (FF (affineLine k)) :=
+  (((affineLine k).toScheme.presheaf.germ ⊤ (genericPoint (affineLine k).toScheme) trivial).hom.comp
+    (toΓA k)).toAlgebra
+
+instance : IsFractionRing k[X] (FF (affineLine k)) := by
+  haveI : IsDomain (CommRingCat.of k[X]) := inferInstanceAs (IsDomain k[X])
+  first
+  | exact functionField_isFractionRing_of_affine (CommRingCat.of k[X])
+  | exact inferInstanceAs
+      (IsFractionRing (CommRingCat.of k[X]) (Spec (CommRingCat.of k[X])).functionField)
 
 instance : IsScalarTower k k[X] (FF (affineLine k)) := by
   refine IsScalarTower.of_algebraMap_eq fun c => ?_
   have h : (Scheme.ΓSpecIso (CommRingCat.of k)).inv ≫ (affineLine k).str.appTop =
       CommRingCat.ofHom (algebraMap k k[X]) ≫ (Scheme.ΓSpecIso (CommRingCat.of k[X])).inv :=
     (Scheme.ΓSpecIso_inv_naturality _).symm
-  change ((Spec (CommRingCat.of k[X])).presheaf.germ ⊤ _ trivial).hom
-    (((Scheme.ΓSpecIso (CommRingCat.of k)).inv ≫ (affineLine k).str.appTop).hom c) = _
-  rw [h]
-  rfl
+  exact congrArg (fun f => ((affineLine k).toScheme.presheaf.germ ⊤
+    (genericPoint (affineLine k).toScheme) trivial).hom (f.hom c)) h
 
 /-- The coordinate `X` as a rational function on the affine line. -/
 def coord : FF (affineLine k) := algebraMap k[X] (FF (affineLine k)) X
@@ -123,20 +129,20 @@ theorem coord_ne_zero : coord k ≠ 0 := by
   rw [coord, ne_eq, map_eq_zero_iff _ (IsFractionRing.injective k[X] _)]
   exact X_ne_zero
 
-/-- The map from `k[X]` to the stalk at a point `Q` of the affine line. -/
 instance (Q : (affineLine k).toScheme) : Algebra k[X] ((affineLine k).toScheme.presheaf.stalk Q) :=
-  inferInstanceAs (Algebra k[X] ((Spec.structureSheaf k[X]).presheaf.stalk (Q : PrimeSpectrum k[X])))
+  (((affineLine k).toScheme.presheaf.germ ⊤ Q trivial).hom.comp (toΓA k)).toAlgebra
 
 instance (Q : (affineLine k).toScheme) :
-    IsLocalization.AtPrime ((affineLine k).toScheme.presheaf.stalk Q) (Q : PrimeSpectrum k[X]).asIdeal :=
-  inferInstanceAs (IsLocalization.AtPrime
-    ((Spec.structureSheaf k[X]).presheaf.stalk (Q : PrimeSpectrum k[X])) (Q : PrimeSpectrum k[X]).asIdeal)
+    IsLocalization.AtPrime ((affineLine k).toScheme.presheaf.stalk Q) (toPrime Q).asIdeal :=
+  StructureSheaf.IsLocalization.to_stalk k[X] (toPrime Q)
 
 instance (Q : (affineLine k).toScheme) :
     IsScalarTower k[X] ((affineLine k).toScheme.presheaf.stalk Q) (FF (affineLine k)) := by
   refine IsScalarTower.of_algebraMap_eq fun r => ?_
-  exact (congrArg (fun f => f.hom r) (StructureSheaf.toStalk_stalkSpecializes (R := k[X])
-    ((genericPoint_spec (affineLine k).toScheme).specializes trivial))).symm
+  exact (congrArg (fun f => f.hom (toΓA k r))
+    ((affineLine k).toScheme.presheaf.germ_stalkSpecializes (U := ⊤) (y := Q) trivial
+      (show genericPoint (affineLine k).toScheme ⤳ Q from
+        (genericPoint_spec (affineLine k).toScheme).specializes trivial))).symm
 
 variable {k}
 
@@ -145,19 +151,19 @@ theorem algebraMap_mem_stalkSubring (Q : (affineLine k).toScheme) (r : k[X]) :
   ⟨algebraMap k[X] _ r, (IsScalarTower.algebraMap_apply _ _ _ r).symm⟩
 
 theorem inv_algebraMap_mem_stalkSubring (Q : (affineLine k).toScheme) {b : k[X]}
-    (hb : b ∉ (Q : PrimeSpectrum k[X]).asIdeal) :
+    (hb : b ∉ (toPrime Q).asIdeal) :
     (algebraMap k[X] (FF (affineLine k)) b)⁻¹ ∈ stalkSubring Q := by
   obtain ⟨u, hu⟩ := IsLocalization.map_units ((affineLine k).toScheme.presheaf.stalk Q)
-    (⟨b, hb⟩ : (Q : PrimeSpectrum k[X]).asIdeal.primeCompl)
-  refine ⟨(u⁻¹ : _ˣ), ?_⟩
-  rw [IsScalarTower.algebraMap_apply k[X] ((affineLine k).toScheme.presheaf.stalk Q), ← hu,
-    eq_inv_iff_mul_eq_one, ← map_mul, Units.inv_mul, map_one]
+    (⟨b, hb⟩ : (toPrime Q).asIdeal.primeCompl)
+  refine ⟨(u⁻¹ : _ˣ), eq_inv_of_mul_eq_one_left ?_⟩
+  rw [IsScalarTower.algebraMap_apply k[X] ((affineLine k).toScheme.presheaf.stalk Q)
+    (FF (affineLine k)) b, ← hu, ← map_mul, Units.inv_mul, map_one]
 
 theorem exists_of_mem_stalkSubring {Q : (affineLine k).toScheme} {y : FF (affineLine k)}
-    (hy : y ∈ stalkSubring Q) : ∃ a b : k[X], b ∉ (Q : PrimeSpectrum k[X]).asIdeal ∧
+    (hy : y ∈ stalkSubring Q) : ∃ a b : k[X], b ∉ (toPrime Q).asIdeal ∧
       y * algebraMap k[X] _ b = algebraMap k[X] _ a := by
   obtain ⟨s, rfl⟩ := hy
-  obtain ⟨a, b, rfl⟩ := IsLocalization.mk'_surjective (Q : PrimeSpectrum k[X]).asIdeal.primeCompl s
+  obtain ⟨a, b, rfl⟩ := IsLocalization.mk'_surjective (toPrime Q).asIdeal.primeCompl s
   refine ⟨a, b, b.2, ?_⟩
   rw [IsScalarTower.algebraMap_apply k[X] ((affineLine k).toScheme.presheaf.stalk Q) (FF _) b,
     IsScalarTower.algebraMap_apply k[X] ((affineLine k).toScheme.presheaf.stalk Q) (FF _) a,
@@ -180,7 +186,8 @@ theorem derivL_D_algebraMap (p : k[X]) :
     derivL k (KaehlerDifferential.D k (FF (affineLine k)) (algebraMap k[X] _ p)) =
       algebraMap k[X] _ (derivative p) := by
   simp [derivL, KaehlerDifferential.tensorKaehlerEquivOfFormallyEtale_symm_D_algebraMap,
-    KaehlerDifferential.polynomialEquiv_D, Algebra.smul_def]
+    KaehlerDifferential.polynomialEquiv_D, LinearMap.baseChange_tmul,
+    TensorProduct.AlgebraTensorModule.rid_tmul, Algebra.smul_def]
 
 theorem derivL_D_coord : derivL k (KaehlerDifferential.D k (FF (affineLine k)) (coord k)) = 1 := by
   rw [coord, derivL_D_algebraMap, derivative_X, map_one]
@@ -191,17 +198,18 @@ theorem derivL_D_mem {Q : (affineLine k).toScheme} {y : FF (affineLine k)} (hy :
   obtain ⟨a, b, hb, h⟩ := exists_of_mem_stalkSubring hy
   set δ := (derivL k).compDer (KaehlerDifferential.D k (FF (affineLine k)))
   have hδ : ∀ z, derivL k (KaehlerDifferential.D k (FF (affineLine k)) z) = δ z := fun _ => rfl
-  have hB : algebraMap k[X] (FF (affineLine k)) b ≠ 0 :=
-    (map_ne_zero_iff _ (IsFractionRing.injective k[X] _)).mpr fun h0 => hb (h0 ▸ Ideal.zero_mem _)
+  have hB : algebraMap k[X] (FF (affineLine k)) b ≠ 0 := by
+    refine (map_ne_zero_iff _ (IsFractionRing.injective k[X] _)).mpr fun h0 => hb ?_
+    rw [h0]
+    exact Ideal.zero_mem _
   have hl := congrArg δ h
-  rw [Derivation.leibniz, ← hδ, ← hδ, derivL_D_algebraMap, derivL_D_algebraMap, smul_eq_mul,
+  rw [Derivation.leibniz, ← hδ, ← hδ, ← hδ, derivL_D_algebraMap, derivL_D_algebraMap, smul_eq_mul,
     smul_eq_mul] at hl
-  have hy' : δ y = (algebraMap k[X] _ b)⁻¹ *
-      (algebraMap k[X] _ (derivative a) - y * algebraMap k[X] _ (derivative b)) := by
-    rw [← hl]
-    field_simp
-    ring
-  rw [hδ, hy']
+  have hy' : derivL k (KaehlerDifferential.D k (FF (affineLine k)) y) =
+      (algebraMap k[X] _ b)⁻¹ *
+        (algebraMap k[X] _ (derivative a) - y * algebraMap k[X] _ (derivative b)) := by
+    rw [← hl, add_sub_cancel_left, ← mul_assoc, inv_mul_cancel₀ hB, one_mul]
+  rw [hy']
   exact Subring.mul_mem _ (inv_algebraMap_mem_stalkSubring Q hb)
     (Subring.sub_mem _ (algebraMap_mem_stalkSubring Q _)
       (Subring.mul_mem _ hy (algebraMap_mem_stalkSubring Q _)))
@@ -275,11 +283,15 @@ def affineLineCanonical : CanonicalDivisor (affineLine k) :=
 def zeroPoint : (affineLine k).toScheme :=
   (⟨Ideal.span {X}, (Ideal.span_singleton_prime X_ne_zero).mpr prime_X⟩ : PrimeSpectrum k[X])
 
+theorem toPrime_zeroPoint : (toPrime (zeroPoint k)).asIdeal = Ideal.span {X} := rfl
+
 /-- The point `0` has coheight one, because the ideal `(X)` has height one. -/
 theorem coheight_zeroPoint : coheight (zeroPoint k) = 1 := by
-  rw [← idealHeight_eq_coheight (CommRingCat.of k[X]) (zeroPoint k)]
-  exact Ideal.height_span_singleton_eq_one_of_mem_nonZeroDivisors
-    (mem_nonZeroDivisors_of_ne_zero X_ne_zero) not_isUnit_X
+  have h := idealHeight_eq_coheight (CommRingCat.of k[X]) (zeroPoint k)
+  have h1 : (Ideal.span {X} : Ideal k[X]).height = 1 :=
+    Ideal.height_span_singleton_eq_one_of_mem_nonZeroDivisors
+      (mem_nonZeroDivisors_of_ne_zero X_ne_zero) not_isUnit_X
+  exact h.symm.trans h1
 
 /-- The prime divisor `[0]` of the affine line. -/
 def zeroDivisor : PrimeDivisor (affineLine k) := ⟨zeroPoint k, coheight_zeroPoint k⟩
@@ -288,22 +300,23 @@ variable {k}
 
 /-- A prime divisor of the affine line other than `[0]` does not contain `X`. -/
 theorem X_notMem_of_ne {Q : PrimeDivisor (affineLine k)} (hQ : Q ≠ zeroDivisor k) :
-    X ∉ (Q.1 : PrimeSpectrum k[X]).asIdeal := by
+    X ∉ (toPrime Q.1).asIdeal := by
   intro hX
-  have hne : (Q.1 : PrimeSpectrum k[X]).asIdeal ≠ ⊤ := (Q.1 : PrimeSpectrum k[X]).isPrime.ne_top
   have hmax : (Ideal.span {X} : Ideal k[X]).IsMaximal :=
     PrincipalIdealRing.isMaximal_of_irreducible irreducible_X
-  have heq := hmax.eq_of_le hne ((Ideal.span_singleton_le_iff_mem _).mpr hX)
-  exact hQ (Subtype.ext (PrimeSpectrum.ext heq.symm))
+  have heq := hmax.eq_of_le (toPrime Q.1).isPrime.ne_top ((Ideal.span_singleton_le_iff_mem _).mpr hX)
+  have h' : toPrime Q.1 = toPrime (zeroPoint k) := PrimeSpectrum.ext heq.symm
+  exact hQ (Subtype.ext h')
 
 /-- The order of `X` along a prime divisor `Q` other than `[0]` is zero. -/
 theorem ordAt_coord_of_ne {Q : PrimeDivisor (affineLine k)} (hQ : Q ≠ zeroDivisor k) :
     ordAt (coord k) Q = 0 := by
-  have hu : IsUnit (algebraMap k[X] ((affineLine k).toScheme.presheaf.stalk Q.1) X) :=
-    (IsLocalization.AtPrime.isUnit_to_map_iff _ _ X).mpr (X_notMem_of_ne hQ)
-  unfold ordAt
-  rw [Scheme.ord_eq_iff Q.2 coord_ne_zero]
   have := isDiscreteValuationRing_stalk Q
+  have hu : IsUnit (algebraMap k[X] ((affineLine k).toScheme.presheaf.stalk Q.1) X) :=
+    (IsLocalization.AtPrime.isUnit_to_map_iff (S := (affineLine k).toScheme.presheaf.stalk Q.1)
+      (toPrime Q.1).asIdeal X).mpr (X_notMem_of_ne hQ)
+  unfold ordAt
+  rw [Scheme.ord_eq_iff Q.2 (coord_ne_zero k)]
   change Ring.ordFrac ((affineLine k).toScheme.presheaf.stalk Q.1) (coord k) = _
   rw [coord, IsScalarTower.algebraMap_apply k[X] ((affineLine k).toScheme.presheaf.stalk Q.1),
     Ring.ordFrac_of_isUnit hu]
@@ -311,23 +324,26 @@ theorem ordAt_coord_of_ne {Q : PrimeDivisor (affineLine k)} (hQ : Q ≠ zeroDivi
 
 /-- The order of `X` along `[0]` is one. -/
 theorem ordAt_coord_zeroDivisor : ordAt (coord k) (zeroDivisor k) = 1 := by
-  have := isDiscreteValuationRing_stalk (zeroDivisor k)
-  have hirr : Irreducible (algebraMap k[X] ((affineLine k).toScheme.presheaf.stalk (zeroPoint k)) X) := by
+  have : IsDiscreteValuationRing ((affineLine k).toScheme.presheaf.stalk (zeroPoint k)) :=
+    isDiscreteValuationRing_stalk (zeroDivisor k)
+  have hirr : Irreducible
+      (algebraMap k[X] ((affineLine k).toScheme.presheaf.stalk (zeroPoint k)) X) := by
     rw [IsDiscreteValuationRing.irreducible_iff_uniformizer,
-      ← IsLocalization.AtPrime.map_eq_maximalIdeal (zeroPoint k : PrimeSpectrum k[X]).asIdeal,
-      ← Set.image_singleton, ← Ideal.map_span]
-    rfl
+      ← IsLocalization.AtPrime.map_eq_maximalIdeal (toPrime (zeroPoint k)).asIdeal
+        ((affineLine k).toScheme.presheaf.stalk (zeroPoint k)),
+      toPrime_zeroPoint, Ideal.map_span, Set.image_singleton]
   unfold ordAt
-  rw [Scheme.ord_eq_iff (zeroDivisor k).2 coord_ne_zero]
+  rw [Scheme.ord_eq_iff (zeroDivisor k).2 (coord_ne_zero k)]
   change Ring.ordFrac ((affineLine k).toScheme.presheaf.stalk (zeroPoint k)) (coord k) = _
-  rw [coord, IsScalarTower.algebraMap_apply k[X] ((affineLine k).toScheme.presheaf.stalk (zeroPoint k)),
+  rw [coord,
+    IsScalarTower.algebraMap_apply k[X] ((affineLine k).toScheme.presheaf.stalk (zeroPoint k)),
     Ring.ordFrac_irreducible hirr]
   rfl
 
 /-- The divisor `[0]` is Cartier: it is the divisor of `X` on all of the affine line. -/
 theorem isCartier_zeroDivisor : IsCartier (Finsupp.single (zeroDivisor k) (1 : ℤ)) := by
   classical
-  refine fun _ => ⟨⊤, trivial, coord k, coord_ne_zero, fun Q _ => ?_⟩
+  refine fun _ => ⟨⊤, by simp, coord k, coord_ne_zero k, fun Q _ => ?_⟩
   rw [Finsupp.single_apply]
   split_ifs with h
   · rw [← h, ordAt_coord_zeroDivisor]
@@ -337,8 +353,8 @@ theorem isCartier_zeroDivisor : IsCartier (Finsupp.single (zeroDivisor k) (1 : �
 theorem isRCartier_smul_zeroDivisor (c : ℝ) :
     IsRCartier ((affineLineCanonical k).K.toReal + Finsupp.single (zeroDivisor k) c) := by
   have h : (affineLineCanonical k).K.toReal + Finsupp.single (zeroDivisor k) c =
-      c • (Finsupp.single (zeroDivisor k) (1 : ℤ)).toReal := by
-    simp [affineLineCanonical, Divisor.toReal]
+      c • Divisor.toReal (Finsupp.single (zeroDivisor k) (1 : ℤ)) := by
+    simp [affineLineCanonical, Divisor.toReal, Finsupp.mapRange_single, Finsupp.smul_single]
   rw [h]
   exact Submodule.smul_mem _ c (Submodule.subset_span ⟨_, isCartier_zeroDivisor, rfl⟩)
 
@@ -353,7 +369,7 @@ def affineLinePair (c : ℝ) (hc : 0 ≤ c) : Pair (affineLine k) where
 
 /-- F3: the pair `(𝔸¹, 2 [0])` is not lc. -/
 theorem affineLinePair_two_not_isLc : ¬ IsLc (affineLinePair k 2 zero_le_two) :=
-  not_isLc_of_one_lt (Q := zeroDivisor k) (by simp [affineLinePair])
+  not_isLc_of_one_lt (Q := zeroDivisor k) (by norm_num [affineLinePair])
 
 /-- F3: the pair `(𝔸¹, [0])` is not klt. -/
 theorem affineLinePair_one_not_isKlt : ¬ IsKlt (affineLinePair k 1 zero_le_one) :=
