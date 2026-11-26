@@ -7,7 +7,13 @@ import MinimalModel.Fidelity.Basic
 /-!
 # Fidelity checks on the affine line
 
-DRAFT
+This file gives the checks F3 of spec 06.3 in dimension one, and a part of the check F2. It builds the affine line `𝔸¹ = Spec k[X]` as a normal variety of dimension one. It gives the prime divisor `[0]`, the point of the ideal `(X)`. It shows that `[0]` is Cartier, because it is the divisor of the function `X`.
+
+The file also computes a canonical divisor. The form `dX` is not zero, and its divisor is zero. The proof uses the derivation `d/dX` on `k(X)`, which keeps each stalk. On a normal variety, each stalk at a prime divisor is a discrete valuation ring. Thus a rational function is regular there if and only if its order is not negative.
+
+With these, the file gives two negative instances. The pair `(𝔸¹, 2[0])` is not lc, and the pair `(𝔸¹, [0])` is not klt. These follow from the coefficient of `[0]`.
+
+The file does not show that the pair `(𝔸¹, 0)` is klt, lc or terminal. That needs a description of all divisorial valuations over `𝔸¹`, which is not done here. The file only builds this pair and shows that its boundary is zero.
 -/
 
 universe u
@@ -31,10 +37,7 @@ theorem isDiscreteValuationRing_stalk (P : PrimeDivisor X) :
     intro h
     have h2 := ringKrullDim_stalk_eq_coheight P.1
     rw [P.2, ringKrullDim_eq_zero_of_isField h] at h2
-    first
-    | exact absurd h2 (by decide)
-    | simp at h2
-    | exact absurd h2 (by norm_num)
+    exact absurd h2 (by decide)
   have hm : IsLocalRing.maximalIdeal (X.toScheme.presheaf.stalk P.1) ≠ ⊥ :=
     fun h => hnf ((IsLocalRing.isField_iff_maximalIdeal_eq).mpr h)
   have huniq : ∃! I : Ideal (X.toScheme.presheaf.stalk P.1), I ≠ ⊥ ∧ I.IsPrime :=
