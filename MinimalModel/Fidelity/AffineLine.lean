@@ -37,11 +37,11 @@ theorem isDiscreteValuationRing_stalk (P : PrimeDivisor X) :
     | exact absurd h2 (by norm_num)
   have hm : IsLocalRing.maximalIdeal (X.toScheme.presheaf.stalk P.1) ≠ ⊥ :=
     fun h => hnf ((IsLocalRing.isField_iff_maximalIdeal_eq).mpr h)
-  refine ((IsDiscreteValuationRing.TFAE _ hnf).out 1 4).mpr
-    ⟨X.isNormal.isIntegrallyClosed_stalk P.1, IsLocalRing.maximalIdeal _, ⟨hm, inferInstance⟩,
-      fun Q hQ => ?_⟩
-  have := (Ring.krullDimLE_one_iff_of_isPrime_bot.mp h1) Q hQ.1 hQ.2
-  exact IsLocalRing.eq_maximalIdeal this
+  have huniq : ∃! I : Ideal (X.toScheme.presheaf.stalk P.1), I ≠ ⊥ ∧ I.IsPrime :=
+    ⟨IsLocalRing.maximalIdeal _, ⟨hm, inferInstance⟩, fun I hI =>
+      IsLocalRing.eq_maximalIdeal ((Ring.krullDimLE_one_iff_of_isPrime_bot.mp h1) I hI.1 hI.2)⟩
+  have key := (IsDiscreteValuationRing.TFAE _ hnf).out 1 4
+  exact key.mpr ⟨X.isNormal.isIntegrallyClosed_stalk P.1, huniq⟩
 
 /-- On a normal variety, a nonzero rational function is regular at a prime divisor if and only if its order there is not negative. -/
 theorem mem_stalkSubring_iff (P : PrimeDivisor X) {g : FF X} (hg : g ≠ 0) :
@@ -56,9 +56,7 @@ theorem mem_stalkSubring_iff (P : PrimeDivisor X) {g : FF X} (hg : g ≠ 0) :
   rw [one_le_inv₀ (zero_lt_iff.mpr hv), stalkSubring, RingHom.mem_range]
   constructor
   · rintro ⟨s, rfl⟩
-    first
-    | exact IsDedekindDomain.HeightOneSpectrum.valuation_le_one (K := FF X) _ s
-    | exact IsDedekindDomain.HeightOneSpectrum.valuation_le_one (K := FF X) s
+    exact IsDedekindDomain.HeightOneSpectrum.valuation_le_one (K := FF X) _ s
   · intro h
     obtain ⟨a, ha⟩ := IsDiscreteValuationRing.exists_lift_of_le_one h
     exact ⟨a, ha⟩
@@ -108,11 +106,8 @@ instance : Algebra k[X] (FF (affineLine k)) :=
     (toΓA k)).toAlgebra
 
 instance : IsFractionRing k[X] (FF (affineLine k)) := by
-  haveI : IsDomain (CommRingCat.of k[X]) := inferInstanceAs (IsDomain k[X])
-  first
-  | exact functionField_isFractionRing_of_affine (CommRingCat.of k[X])
-  | exact inferInstanceAs
-      (IsFractionRing (CommRingCat.of k[X]) (Spec (CommRingCat.of k[X])).functionField)
+  have : IsDomain (CommRingCat.of k[X]) := inferInstanceAs (IsDomain k[X])
+  exact functionField_isFractionRing_of_affine (CommRingCat.of k[X])
 
 instance : IsScalarTower k k[X] (FF (affineLine k)) := by
   refine IsScalarTower.of_algebraMap_eq fun c => ?_
@@ -163,11 +158,12 @@ theorem exists_of_mem_stalkSubring {Q : (affineLine k).toScheme} {y : FF (affine
     (hy : y ∈ stalkSubring Q) : ∃ a b : k[X], b ∉ (toPrime Q).asIdeal ∧
       y * algebraMap k[X] _ b = algebraMap k[X] _ a := by
   obtain ⟨s, rfl⟩ := hy
-  obtain ⟨a, b, rfl⟩ := IsLocalization.mk'_surjective (toPrime Q).asIdeal.primeCompl s
-  refine ⟨a, b, b.2, ?_⟩
-  rw [IsScalarTower.algebraMap_apply k[X] ((affineLine k).toScheme.presheaf.stalk Q) (FF _) b,
-    IsScalarTower.algebraMap_apply k[X] ((affineLine k).toScheme.presheaf.stalk Q) (FF _) a,
-    ← map_mul, IsLocalization.mk'_spec]
+  obtain ⟨x, hx⟩ := IsLocalization.surj (toPrime Q).asIdeal.primeCompl s
+  refine ⟨x.1, x.2, x.2.2, ?_⟩
+  rw [IsScalarTower.algebraMap_apply k[X] ((affineLine k).toScheme.presheaf.stalk Q) (FF _)
+      (x.2 : k[X]),
+    IsScalarTower.algebraMap_apply k[X] ((affineLine k).toScheme.presheaf.stalk Q) (FF _) x.1,
+    ← map_mul, hx]
 
 variable (k)
 
