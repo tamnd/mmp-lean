@@ -4,6 +4,10 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 
 ## Unreleased
 
+### Added
+
+- `MinimalModel/Fidelity/ToricCone.lean`: the checks F2 and F3 for the pinned statement `ToricConeTheorem`. The cones `c12` and `c20` of `ℙ²` are a wall pair. By the statement, `-K` has degree `0` or more on their wall, and `K` is not nef. The variants with degree `0` or less, and with degree more than `0`, are false.
+
 ## v0.0.4 - 2026-11-26
 
 ### Added
