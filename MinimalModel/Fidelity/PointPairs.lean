@@ -8,11 +8,11 @@ import MinimalModel.Fidelity.Point
 /-!
 # Fidelity check F2: the classes of pairs and the programs on a point
 
-This file continues `MinimalModel/Fidelity/Point.lean`. It shows that the model `(Spec k, 0)` is in each class of pairs of spec 06.1: klt, lc, terminal, canonical and dlt. It also shows that the conclusions of S04, S20 and S22 hold for this model, and that the model is minimal.
+This file continues `MinimalModel/Fidelity/Point.lean`. It shows that the model `(Spec k, 0)` is in each class of pairs of spec 06.1: klt, lc, terminal, canonical and dlt. It also shows that the conclusions of S04 and S20 hold for this model, and that the model is minimal.
 
 The function field of `Spec k` is `k`. A divisorial valuation must take the value `exp (-1)` on some element, and it is trivial on `k`, so `Spec k` has no divisorial valuation. Thus each condition on the log discrepancies holds with no valuation to check. A model with no curves has no extremal contraction, so it has no step of a program.
 
-These instances show that the hypotheses of S04, S20 and S22 can hold together. They do not test the definitions in positive dimension.
+These instances show that the hypotheses of S04 and S20 can hold together. They do not test the definitions in positive dimension. They are not F2 for S22, because S22 is about pairs of dimension 4 and the point has dimension 0.
 -/
 
 universe u
@@ -147,7 +147,7 @@ theorem pointPair_isRationalBoundary : (pointPair k).IsRationalBoundary := fun Q
 theorem pointModel_coneDecomposition : IsKlt (pointModel k).P ∧ ConeDecomposition (pointModel k) :=
   ⟨pointPair_isKlt k, coneDecomposition_of_isEmpty (isEmpty_curve_of_subsingleton (X := pointVariety k))⟩
 
-/-- F2 for S20 and S22: the model `(Spec k, 0)` is an lc pair with a rational boundary, and it has no infinite program and no infinite sequence of flips. -/
+/-- F2 for S20 in dimension 0: the model `(Spec k, 0)` is an lc pair with a rational boundary, and it has no infinite program and no infinite sequence of flips. It is not F2 for S22, which is about dimension 4. -/
 theorem pointModel_terminates :
     IsLc (pointModel k).P ∧ (pointModel k).P.IsRationalBoundary ∧
       ¬ HasInfiniteProgram (pointModel k) ∧ ¬ HasInfiniteFlips (pointModel k) :=
