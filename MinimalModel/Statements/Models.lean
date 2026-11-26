@@ -7,7 +7,7 @@ import MinimalModel.Statements.Basic
 /-!
 # Family D: BCHM, models and the Sarkisov program
 
-The statements of family D of spec 06.2.2 that are planned at S0.
+The statements of family D of spec 06.2.2 that are planned at S0 and S1.
 -/
 
 universe u
@@ -38,5 +38,10 @@ def FiniteGenerationCanonical : Prop :=
 /-- S33, the existence of minimal models (spec 03). Each projective lc pair of dimension `n` with `K + Δ` pseudo-effective has a minimal model in the sense of KM98 Definition 3.50. This is open for `n ≥ 4`. -/
 def MinimalModelConj (n : ℕ) : Prop :=
   ∀ A : PairModel k, A.X.dim = n → IsLc A.P → IsPseudoEffective A.P.KΔ → ∃ B, IsMinimalModel A B
+
+/-- S35, the Mori fibre space output (BCHM Corollary 1.3.2, the absolute case). Let `(X, Δ)` be a projective `ℚ`-factorial klt pair such that `K + Δ` is not pseudo-effective. Then some program from `(X, Δ)` is finite and ends with a Mori fibre space. BCHM run the program with scaling of an ample divisor. The statement is about some program, as the source is. The row of spec 06.2.2 also asks that `Δ` is big; the source does not, and this statement does not. -/
+def MoriFibreSpaceOutput : Prop :=
+  ∀ A : PairModel k, IsQFactorial A.X → IsKlt A.P → ¬ IsPseudoEffective A.P.KΔ →
+    ∃ p : Program A, ∃ n : ℕ, p.len = n ∧ IsMoriFibreSpace (p.model n)
 
 end MinimalModel

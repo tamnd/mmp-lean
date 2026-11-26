@@ -8,6 +8,8 @@ import MinimalModel.Statements.LowDim
 import MinimalModel.Statements.Termination
 import MinimalModel.Statements.Models
 import MinimalModel.Statements.Abundance
+import MinimalModel.Statements.Boundedness
+import MinimalModel.Statements.Effective
 import MinimalModel.Fidelity.Basic
 import MinimalModel.Fidelity.Point
 import MinimalModel.Toric.Fan

@@ -41,6 +41,54 @@ sources:
     relationship: background
     note: The source of statement S28, the reduction of the termination of flips to the ACC and the lower semicontinuity of minimal log discrepancies.
     author_endorsement: false
+  - title: Fundamental theorems for the log minimal model program
+    authors: [Osamu Fujino]
+    id: "mmp:Fuj11"
+    type: paper
+    location: arXiv:0909.4445
+    relationship: background
+    note: The source of statement S05, the cone theorem for lc pairs.
+    author_endorsement: false
+  - title: Existence of log canonical flips and a special LMMP
+    authors: [Caucher Birkar]
+    id: "mmp:Bir12"
+    type: paper
+    location: arXiv:1104.4981
+    relationship: background
+    note: A source of statement S26, the existence of lc flips.
+    author_endorsement: false
+  - title: Existence of log canonical closures
+    authors: [Christopher D. Hacon, Chenyang Xu]
+    id: "mmp:HX13"
+    type: paper
+    location: arXiv:1105.1169
+    relationship: background
+    note: A source of statement S26, the existence of lc flips.
+    author_endorsement: false
+  - title: Flip theorem and the existence of minimal models for 3-folds
+    authors: [Shigefumi Mori]
+    id: "mmp:Mor88"
+    type: paper
+    location: Journal of the American Mathematical Society 1 (1988), 117-253
+    relationship: background
+    note: A source of statement S15, the existence of 3-fold flips.
+    author_endorsement: false
+  - title: Termination of log flips for algebraic 3-folds
+    authors: [Yujiro Kawamata]
+    id: "mmp:Kaw92"
+    type: paper
+    location: International Journal of Mathematics 3 (1992), 653-659
+    relationship: background
+    note: The source of statement S16, the termination of 3-fold lc flips.
+    author_endorsement: false
+  - title: Termination of pseudo-effective 4-fold flips
+    authors: [Joaquín Moraga]
+    id: "mmp:Mor25"
+    type: paper
+    location: arXiv:1802.10202
+    relationship: background
+    note: The source of statement S21, the termination of flips for pseudo-effective lc 4-folds.
+    author_endorsement: false
   - title: Toric varieties
     authors: [David A. Cox, John B. Little, Henry K. Schenck]
     id: "mmp:CLS11"
@@ -130,6 +178,82 @@ status:
       kind: statement
       status: open
       note: S50, the lower semicontinuity conjecture for minimal log discrepancies. It is open for n at least 4.
+    - name: MinimalModel.ConeTheoremLc
+      kind: statement
+      status: known
+      note: S05, the cone theorem for projective lc pairs (Fujino).
+    - name: MinimalModel.RationalityTheorem
+      kind: statement
+      status: known
+      note: S07, the rationality theorem, KM98 Theorem 3.5, with an ample H.
+    - name: MinimalModel.BasepointFree
+      kind: statement
+      status: known
+      note: S08, the base point free theorem, KM98 Theorem 3.3.
+    - name: MinimalModel.LcSurfaceMMP
+      kind: statement
+      status: known
+      note: S13, each program for a projective lc surface pair runs and ends (Fujino).
+    - name: MinimalModel.ThreefoldFlips
+      kind: statement
+      status: known
+      note: S15, the existence of flips for projective Q-factorial klt 3-folds (Mori, Shokurov).
+    - name: MinimalModel.ThreefoldTermination
+      kind: statement
+      status: known
+      note: S16, the termination of flips for projective lc 3-folds, T(3).
+    - name: MinimalModel.ThreefoldLcMMP
+      kind: statement
+      status: known
+      note: S18, each program for a projective lc 3-fold runs and ends.
+    - name: MinimalModel.SpecialTermination
+      kind: statement
+      status: known
+      note: S19, a reduction. Termination below dimension n gives special termination for Q-factorial dlt pairs of dimension n.
+    - name: MinimalModel.TerminationPseffLc4
+      kind: statement
+      status: known
+      note: S21, the termination of flips for projective lc 4-folds with a pseudo-effective log canonical divisor (Moraga; Chen and Tsakanikas).
+    - name: MinimalModel.TerminationScalingBig
+      kind: statement
+      status: known
+      note: S23, the termination of each program with scaling for a Q-factorial klt pair with a big boundary, BCHM Corollary 1.4.2.
+    - name: MinimalModel.TerminationBigLe5
+      kind: statement
+      status: claimed
+      note: S24, the termination of each program for klt pairs of dimension at most 5 with a big boundary or a big log canonical divisor (Han, Liu and Zhuang). It is never a hypothesis of another proof.
+    - name: MinimalModel.TerminationBig
+      kind: statement
+      status: claimed
+      note: S25, the statement of S24 in each dimension (Hashizume). It is never a hypothesis of another proof.
+    - name: MinimalModel.LcFlips
+      kind: statement
+      status: known
+      note: S26, the existence of lc flips (Birkar; Hacon and Xu).
+    - name: MinimalModel.MoriFibreSpaceOutput
+      kind: statement
+      status: known
+      note: S35, a program for a Q-factorial klt pair with a log canonical divisor that is not pseudo-effective ends with a Mori fibre space, BCHM Corollary 1.3.2.
+    - name: MinimalModel.AbundanceBig
+      kind: statement
+      status: known
+      note: S42, abundance for klt pairs with a nef and big log canonical divisor.
+    - name: MinimalModel.LiuXuReduction
+      kind: statement
+      status: known
+      note: S44, a reduction. Non-vanishing in dimension d gives abundance in dimension d for numerical dimension at most one (Liu and Xu).
+    - name: MinimalModel.ACCLct
+      kind: statement
+      status: known
+      note: S48, the ACC for log canonical thresholds (Hacon, McKernan and Xu).
+    - name: MinimalModel.MldBound
+      kind: statement
+      status: open
+      note: S51, the mld bound of Shokurov. The mld at a closed point is at most the dimension, with equality only at a smooth point outside the boundary.
+    - name: MinimalModel.FujitaFreeness
+      kind: statement
+      status: open
+      note: S56, Fujita's freeness conjecture. The full conjecture is claimed by OpenAI 038 and is not refereed.
     - name: MinimalModel.IsKlt.isLc
       kind: theorem
       status: proved

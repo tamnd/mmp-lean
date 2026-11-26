@@ -203,6 +203,9 @@ noncomputable def Pair.KΔ (P : Pair X) : Divisor ℝ X := P.K.K.toReal + P.Δ
 /-- The boundary has rational coefficients. -/
 def Pair.IsRationalBoundary (P : Pair X) : Prop := P.Δ.CoeffsIn (Set.range ((↑) : ℚ → ℝ))
 
+/-- The support of the reduced boundary `⌊Δ⌋`: the points in the closure of a prime divisor whose coefficient in `Δ` is at least one. For an lc pair, these prime divisors are the ones with coefficient one. -/
+def Pair.reducedSupp (P : Pair X) : Set X.toScheme := (P.Δ.roundDown 1).supp
+
 /-! ## Valuations and discrepancies -/
 
 /-- The value group of the valuations: `ℤ` with a zero, written multiplicatively. -/
@@ -424,6 +427,14 @@ end IntersectionData
 /-- A nef `ℝ`-divisor. -/
 def IsNef (I : IntersectionData X) (D : Divisor ℝ X) : Prop := ∀ C, 0 ≤ I.dot D C
 
+/-- The nef threshold of KM98 Theorem 3.5: the largest `t ≥ 0` such that `H + t D` is nef. Let `H` and `D` be `ℝ`-Cartier, `H` nef and `D` not nef. Then the set of these `t` is a closed bounded interval that contains `0`, so the supremum is a maximum. When `D` is nef, the set has no upper bound and the value is `0`. The statements use the threshold only when `D` is not nef. -/
+noncomputable def nefThreshold (I : IntersectionData X) (H D : Divisor ℝ X) : ℝ :=
+  sSup {t : ℝ | 0 ≤ t ∧ IsNef I (H + t • D)}
+
+/-- The scaling threshold of BCHM 3.10: the least `t ≥ 0` such that `D + t C` is nef. In a program with scaling of `C`, the divisor `D` is `K + Δ`. When no `t` makes `D + t C` nef, the set is empty and the value is `0`. Then no step with scaling exists, because a step with scaling asks that `D + λ C` is nef. -/
+noncomputable def scalingThreshold (I : IntersectionData X) (D C : Divisor ℝ X) : ℝ :=
+  sInf {t : ℝ | 0 ≤ t ∧ IsNef I (D + t • C)}
+
 /-- The morphism `f` contracts the curve `C`: the image of `C` is a closed point. -/
 def IsContracted {Z : Scheme.{u}} (f : X.toScheme ⟶ Z) (C : Curve X) : Prop :=
   IsClosed ({f.base C.1} : Set Z)
@@ -542,6 +553,26 @@ def HasInfiniteProgram (A : PairModel k) : Prop :=
 /-- An infinite sequence of flips from `A`. -/
 def HasInfiniteFlips (A : PairModel k) : Prop :=
   ∃ model : ℕ → PairModel k, model 0 = A ∧ ∀ i, IsFlip (model i) (model (i + 1))
+
+/-- The step data `s` from `A` to `B` sends the divisor `D` of `A` to the divisor `D'` of `B`: each prime divisor of `B` has the coefficient in `D'` of the prime divisor of `A` with the same image in the base. So `D'` is the strict transform of `D`. -/
+def MMPStepData.IsStrictTransformOf {A B : PairModel k} (s : MMPStepData A B) (D : Divisor ℝ A.X)
+    (D' : Divisor ℝ B.X) : Prop :=
+  ∀ Q : PrimeDivisor B.X, ∃ P : PrimeDivisor A.X, s.f.base P.1 = s.g.base Q.1 ∧ D' Q = D P
+
+/-- The step data `s` is an isomorphism near the set `S` of the first model: the contraction and the small map are isomorphisms over an open set of the base that contains the image of `S`. -/
+def MMPStepData.IsIsoNear {A B : PairModel k} (s : MMPStepData A B) (S : Set A.X.toScheme) : Prop :=
+  ∃ V : s.Z.toScheme.Opens, s.f.base '' S ⊆ (V : Set s.Z.toScheme) ∧ IsIso (s.f ∣_ V) ∧ IsIso (s.g ∣_ V)
+
+/-- `B` is the result of one step of the `(K + Δ)`-program with scaling of `C` on `A` (BCHM 3.10), and `C'` is the strict transform of `C` on `B`. Let `λ` be the scaling threshold of `C`. Then `K + Δ + λ C` is nef, and it is zero on each curve that the contraction contracts. The step is `(K + Δ)`-negative, as each step of a program is. -/
+def IsScalingStep (A B : PairModel k) (C : Divisor ℝ A.X) (C' : Divisor ℝ B.X) : Prop :=
+  ∃ s : MMPStepData A B, s.IsStrictTransformOf C C' ∧
+    IsNef A.I (A.P.KΔ + scalingThreshold A.I A.P.KΔ C • C) ∧
+    ∀ C₀, IsContracted s.f C₀ → A.I.dot (A.P.KΔ + scalingThreshold A.I A.P.KΔ C • C) C₀ = 0
+
+/-- Each program from `A` runs and ends. No sequence of steps from `A` is infinite. At the last model of each finite program, `K + Δ` is nef, or the model is a Mori fibre space, or one more step exists. So each program extends to a complete program. -/
+def EveryProgramEnds (A : PairModel k) : Prop :=
+  ¬ HasInfiniteProgram A ∧ ∀ (p : Program A) (n : ℕ), p.len = n →
+    IsMinimal (p.model n) ∨ IsMoriFibreSpace (p.model n) ∨ ∃ B, IsMMPStep (p.model n) B
 
 /-! ## Birational maps and minimal models -/
 
