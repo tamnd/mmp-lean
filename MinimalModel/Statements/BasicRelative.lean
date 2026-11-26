@@ -8,10 +8,10 @@ import MinimalModel.Statements.Curves
 /-!
 # More vocabulary for the statements of milestone S2
 
-This file adds the definitions that the statements S31, S45 and S46 use and that `Basic.lean` does not have:
+This file adds the definitions that the statements S31, S34, S45 and S46 use and that `Basic.lean` does not have:
 
 * numerical equivalence of `ℝ`-Cartier divisors and the Kodaira dimension;
-* the relative notions of BCHM Definition 3.1.1 and the models over a base of BCHM Definition 3.6.6.
+* the relative notions of BCHM Definition 3.1.1 and the models over a base of BCHM Definition 3.6.6, with the weak log canonical models of S34.
 
 Bigness over a base is `IsBigRel` of `Curves.lean`, which is BCHM 3.1.1(7) in the second form. BCHM use `ℝ`-linear equivalence over `Z`, which also allows the pullback of an `ℝ`-Cartier divisor of `Z`. The sum of an ample divisor over `Z` and such a pullback is ample over `Z`, so the two forms agree. Nefness over a base is `IsNefRel` of `Curves.lean`, with the condition that the divisor is `ℝ`-Cartier (BCHM 3.1.1(6)).
 
@@ -84,6 +84,20 @@ def HasLcModelOver (P : Pair X) {U : NormalVariety k} (π : X.toScheme ⟶ U.toS
   ∃ (Y : NormalVariety k) (Q : Pair Y) (g : Y.toScheme ⟶ U.toScheme), g ≫ U.str = Y.str ∧
     IsProjectiveHom g ∧ IsRAmpleOver Q.KΔ g ∧
     ∃ σ : FF Y ≃ₐ[k] FF X, IsBirContractionOver P Q π g σ ∧ DiscrepancyCompare P Q σ (· ≤ ·)
+
+/-- `φ : X ⇢ Y`, given by `σ`, is a weak log canonical model of `(X, Δ)` over `U` (BCHM Definition 3.6.6): a birational contraction over `U` to a variety `Y` that is projective over `U`, such that `φ` is `(K + Δ)`-non-positive and `K_Y + φ_* Δ` is nef over `U`. The pair `Q` carries `φ_* Δ`. BCHM also ask that `K + Δ` is lc. The statements that use this notion ask it of `P`. -/
+def IsWeakLcModelOver (P : Pair X) {Y : NormalVariety k} (Q : Pair Y) {U : NormalVariety k}
+    (π : X.toScheme ⟶ U.toScheme) (g : Y.toScheme ⟶ U.toScheme) (σ : FF Y ≃ₐ[k] FF X) : Prop :=
+  g ≫ U.str = Y.str ∧ IsProjectiveHom g ∧ IsNefRel Q.KΔ g ∧ IsBirContractionOver P Q π g σ ∧
+    DiscrepancyCompare P Q σ (· ≤ ·)
+
+/-- For the birational maps `ψ' : X ⇢ Y'` and `ψ : X ⇢ Y`, given by `σ'` and `σ`, and an isomorphism `ξ : Y' → Y`, `ψ = ξ ∘ ψ'`. On function fields this says `σ = σ' ∘ ξ^*`: for each function `s` on an open set of `Y`, `σ s = σ' (ξ^* s)`. -/
+def IsCompOfIso {Y' Y : NormalVariety k} (σ' : FF Y' ≃ₐ[k] FF X) (σ : FF Y ≃ₐ[k] FF X)
+    (ξ : Y'.toScheme ≅ Y.toScheme) : Prop :=
+  ∀ (W : Y.toScheme.Opens) (hY : genericPoint Y.toScheme ∈ W)
+    (hY' : genericPoint Y'.toScheme ∈ ξ.hom ⁻¹ᵁ W) (s : Γ(Y.toScheme, W)),
+    σ ((Y.toScheme.presheaf.germ W _ hY).hom s) =
+      σ' ((ξ.hom.app W ≫ Y'.toScheme.presheaf.germ (ξ.hom ⁻¹ᵁ W) _ hY').hom s)
 
 /-! ## The relative log canonical ring -/
 

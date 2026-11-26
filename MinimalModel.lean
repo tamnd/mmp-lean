@@ -15,6 +15,7 @@ import MinimalModel.Statements.Abundance
 import MinimalModel.Statements.Boundedness
 import MinimalModel.Statements.Effective
 import MinimalModel.Statements.BasicRelative
+import MinimalModel.Statements.LinearSystems
 import MinimalModel.Fidelity.Basic
 import MinimalModel.Fidelity.Point
 import MinimalModel.Fidelity.PointPairs
@@ -32,3 +33,4 @@ import MinimalModel.Fidelity.Centre
 import MinimalModel.Fidelity.AffineLinePairs
 import MinimalModel.Fidelity.PointStatements
 import MinimalModel.Fidelity.Relative
+import MinimalModel.Fidelity.LinearSystems
