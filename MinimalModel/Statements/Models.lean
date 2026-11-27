@@ -4,11 +4,12 @@ Released under the Apache 2.0 licence as described in the file LICENSE.
 -/
 import MinimalModel.Statements.BasicRelative
 import MinimalModel.Statements.LinearSystems
+import MinimalModel.Statements.Cones
 
 /-!
 # Family D: BCHM, models and the Sarkisov program
 
-The statements of family D of spec 06.2.2 that are planned at S0, S1 and S2. The statements S31 and S34 use the relative notions of `BasicRelative.lean`, and S34 uses the linear systems of `LinearSystems.lean`.
+The statements of family D of spec 06.2.2 that are planned at S0, S1, S2 and S3. The statements S31 and S34 use the relative notions of `BasicRelative.lean`, S34 uses the linear systems of `LinearSystems.lean`, and S37 uses the Mori dream spaces of `Cones.lean`. The statement S36 (`Sarkisov`) is not stated yet: it needs the Sarkisov links, which are not in the tree.
 -/
 
 universe u
@@ -86,5 +87,14 @@ def FinitenessOfModels [Uncountable k] (n : ℕ) : Prop :=
           ∀ (Y : NormalVariety k) (Q : Pair Y) (h : Y.toScheme ⟶ U.toScheme)
             (τ : FF Y ≃ₐ[k] FF X), IsWeakLcModelOver P Q π h τ →
             ∃ j, ∃ ξ : (Z j).toScheme ≅ Y.toScheme, IsCompOfIso (σ j) τ ξ}
+
+/-- S37, Fano type varieties are Mori dream spaces (BCHM, arXiv:math/0610203v2, Corollary 1.3.1, the absolute case). Let `X` be a projective `ℚ`-factorial variety with a dlt pair `(X, Δ)` such that `-(K + Δ)` is ample. Then `X` is a Mori dream space in the sense of Hu and Keel, Definition 1.10 (`IsMoriDreamSpace`).
+
+What the Lean form changes:
+* BCHM state the corollary for a projective morphism `π : X → U` to an affine variety `U`. This statement takes `U = Spec k`, as S35 does. Hu and Keel define a Mori dream space for a projective variety, so the absolute case is the one their definition covers.
+* The pair `(X, Δ)` of the tree asks that `K + Δ` is `ℝ`-Cartier, as BCHM do. Since `X` is `ℚ`-factorial, this is no condition.
+* The intersection numbers `A.I` are part of the model; by `dot_cartier` they are the intersection numbers of `X`. -/
+def FanoTypeMDS : Prop :=
+  ∀ A : PairModel k, IsQFactorial A.X → IsDlt A.P → IsAmple (-A.P.KΔ) → IsMoriDreamSpace A.X A.I
 
 end MinimalModel
