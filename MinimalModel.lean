@@ -18,6 +18,7 @@ import MinimalModel.Statements.BasicRelative
 import MinimalModel.Statements.LinearSystems
 import MinimalModel.Statements.Cones
 import MinimalModel.Statements.Sarkisov
+import MinimalModel.Statements.GeneralizedPairs
 import MinimalModel.Fidelity.Basic
 import MinimalModel.Fidelity.Point
 import MinimalModel.Fidelity.PointPairs
@@ -41,3 +42,4 @@ import MinimalModel.Fidelity.Surfaces
 import MinimalModel.Fidelity.Cohomology
 import MinimalModel.Fidelity.Cones
 import MinimalModel.Fidelity.Sarkisov
+import MinimalModel.Fidelity.GeneralizedPairs

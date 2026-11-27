@@ -4,11 +4,12 @@ Released under the Apache 2.0 licence as described in the file LICENSE.
 -/
 import MinimalModel.Statements.BasicRelative
 import MinimalModel.Statements.Boundedness
+import MinimalModel.Statements.GeneralizedPairs
 
 /-!
 # Family C: termination and flips
 
-The statements of family C of spec 06.2.2 that are planned at S0 and S1, and the statements S49 and S50 of family F that S28 uses. "Every program" is the form of each termination statement (spec 06.2.3): the statements say that no infinite sequence of steps exists, so they cover each choice of the extremal rays. S23 is about the programs with scaling only, as its source is, and it covers each choice of the rays in such a program.
+The statements of family C of spec 06.2.2 that are planned at S0, S1 and S3, and the statements S49 and S50 of family F that S28 uses. The statement S27 uses the generalized pairs of `GeneralizedPairs.lean`. "Every program" is the form of each termination statement (spec 06.2.3): the statements say that no infinite sequence of steps exists, so they cover each choice of the extremal rays. S23 is about the programs with scaling only, as its source is, and it covers each choice of the rays in such a program.
 -/
 
 universe u
@@ -81,6 +82,17 @@ def LcFlips : Prop :=
     IsRAmpleOver (-A.P.KΔ) f →
     ∃ (B : PairModel k) (g : B.X.toScheme ⟶ Z.toScheme), g ≫ Z.str = B.X.str ∧
       IsContraction g ∧ IsSmallHom g ∧ IsRAmpleOver B.P.KΔ g ∧ IsStrictTransform A B f g
+
+/-- S27, a fresh claim (Hu and Liu, arXiv:2603.03817, Theorem 1.1, with the base `U` a point). Let `(X, B, M)` be a projective lc generalized pair, and let `f : X → Z` be a flipping contraction: a small contraction of relative Picard number one with `-(K + B + M_X)` ample over `Z`. Then the flip `g : X⁺ → Z` exists: a small contraction from a generalized pair `(X⁺, B⁺, M)` with `K + B⁺ + M_{X⁺}` ample over `Z`, where `X ⇢ X⁺` is a birational map over `Z`, `B⁺` is the strict transform of `B`, and the nef part is the same b-divisor `M`. The class is `claimed`: this statement is never a hypothesis of another proof (spec 06.6). With `M = 0` this is S26. -/
+def GeneralizedLcFlips : Prop :=
+  ∀ (X : NormalVariety k) (I : IntersectionData X) (G : GenPair X), IsProjective X → IsGenLc G →
+    ∀ (Z : NormalVariety k) (f : X.toScheme ⟶ Z.toScheme), f ≫ Z.str = X.str → IsContraction f →
+    IsSmallHom f → IsExtremalContraction I f → IsRAmpleOver (-G.KBM) f →
+    ∃ (X' : NormalVariety k) (G' : GenPair X') (g : X'.toScheme ⟶ Z.toScheme), g ≫ Z.str = X'.str ∧
+      IsContraction g ∧ IsSmallHom g ∧ IsRAmpleOver G'.KBM g ∧
+      ∃ σ : FF X' ≃ₐ[k] FF X, IsBirMapOver (X := X) (Y := X') f g σ ∧
+        (∀ Q : PrimeDivisor X', ∃ P : PrimeDivisor X, SameDivisor σ P Q ∧ G'.B Q = G.B P) ∧
+        SameBDivisor G.N G'.N σ
 
 /-- The hypothesis (2) of Han and Liu, Theorem 1.1: each sequence of `ℚ`-factorial terminal flips in dimension `d` terminates. For each projective `ℚ`-factorial terminal pair of dimension `d`, each sequence of `(K + Δ)`-flips is finite. A flip keeps the source `ℚ`-factorial and terminal, so the hypothesis is asked of the first model. -/
 def QFactorialTerminalTermination (d : ℕ) : Prop :=

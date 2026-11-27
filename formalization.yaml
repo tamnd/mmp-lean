@@ -169,6 +169,14 @@ sources:
     relationship: background
     note: The source of statement S36 (Theorem 1.3, with Theorem 1.1 as a consequence) and of the Sarkisov links of types I to IV (Section 1) that it uses.
     author_endorsement: false
+  - title: Existence of the minimal model program for log canonical generalized pairs
+    authors: [Zhengyu Hu, Jihao Liu]
+    id: "mmp:HuL26"
+    type: paper
+    location: arXiv:2603.03817 v1
+    relationship: background
+    note: The source of statement S27 (Theorem 1.1) and of the generalized pairs (Definitions 2.5, 2.7 and 2.9) that it uses. The claim is not refereed.
+    author_endorsement: false
   - title: AxiomMath/MMP
     authors: [AxiomMath]
     id: "mmp:AxiomMMP"
@@ -302,6 +310,10 @@ status:
       kind: statement
       status: known
       note: S26, the existence of lc flips (Birkar; Hacon and Xu).
+    - name: MinimalModel.GeneralizedLcFlips
+      kind: statement
+      status: claimed
+      note: S27, the existence of flips for lc generalized pairs (Hu and Liu, arXiv:2603.03817, Theorem 1.1), with the base a point. It is never a hypothesis of another proof.
     - name: MinimalModel.MoriFibreSpaceOutput
       kind: statement
       status: known
@@ -398,6 +410,14 @@ status:
       kind: theorem
       status: proved
       note: Check F3 for S36. Each Mori fibre space is related to itself by the empty sequence of links (sarkisov_refl gives the conclusion of S36 for the run with no step). A Mori fibre space of Sarkisov.lean satisfies IsMoriFibreSpace and has positive dimension, a sequence of links gives a birational map, the contraction of a flop contracts a curve, and a divisorial contraction has an exceptional prime divisor.
+    - name: MinimalModel.pointGenPair_isGenLc
+      kind: theorem
+      status: proved
+      note: Check F2 for S27. The generalized pair (Spec k, 0, 0) is lc, and its nef part is the same b-divisor as itself (pointNefPart_sameBDivisor).
+    - name: MinimalModel.logDiscrepancyOfIs_iff
+      kind: theorem
+      status: proved
+      note: Check F3 for S27. With the boundary of a pair, the log discrepancy of GeneralizedPairs.lean is the log discrepancy of the pair. A generalized pair with M_X = 0 gives a pair (GenPair.toPair), and the pullback of the zero divisor is zero (isRPullback_zero).
     - name: MinimalModel.FujitaFreeness
       kind: statement
       status: open
