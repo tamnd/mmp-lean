@@ -39,6 +39,7 @@ import MinimalModel.Fidelity.Relative
 import MinimalModel.Fidelity.LinearSystems
 import MinimalModel.Fidelity.ToricCone
 import MinimalModel.Fidelity.Surfaces
+import MinimalModel.Reductions.Shokurov
 import MinimalModel.Fidelity.Cohomology
 import MinimalModel.Fidelity.Cones
 import MinimalModel.Fidelity.Sarkisov
