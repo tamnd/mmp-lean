@@ -7,13 +7,14 @@ import MinimalModel.Statements.Basic
 /-!
 # The cohomology of the divisorial sheaves
 
-This file adds to `MinimalModel/Statements/Basic.lean` the sheaf `𝒪_X(D)` of a Weil divisor `D` and the vanishing of its higher direct images. The statement S02 of spec 06.2.2 (Kawamata-Viehweg vanishing) uses them.
+This file adds to `MinimalModel/Statements/Basic.lean` the sheaf `𝒪_X(D)` of a Weil divisor `D` and the vanishing of its higher direct images. The statement S02 of spec 06.2.2 (Kawamata-Viehweg vanishing) uses them. The statement S03 (Kollár's injectivity and torsion-freeness) also uses the maps on cohomology given by multiplication by a rational function.
 
 ## The choices
 
 * The sections of `𝒪_X(D)` over a set `S` are the rational functions `φ` with `D + div φ ≥ 0` at each prime divisor whose generic point is in `S`, and `0`. The definition takes the additive subgroup of `k(X)` that these functions generate. It is the same set, because `ord_P (φ + ψ) ≥ min (ord_P φ, ord_P ψ)`, so the definition does not need this fact.
 * On an open set `V` of `X`, these groups and the inclusions form a presheaf of abelian groups on `V`. Its value on the empty set is all of `k(X)`, so it is not a sheaf. The sheaf `𝒪_V(D)` is its sheafification. On the nonempty open sets the two agree, because `V` is irreducible.
 * The cohomology is the cohomology of abelian sheaves of Mathlib, `CategoryTheory.Sheaf.H`: the `Ext` groups from the constant sheaf `ℤ`. For a sheaf of `𝒪_X`-modules it is the same as the cohomology of `𝒪_X`-modules (Hartshorne III.2.6).
+* Let `φ` be a nonzero rational function with `E + div φ ≥ 0` on `V`. Multiplication by `φ` maps `𝒪_V(D)` to `𝒪_V(D + E)` (`mulSheafHom`). It gives a map `H^i(V, 𝒪_X(D)) → H^i(V, 𝒪_X(D + E))` (`cohomMap`). When `φ` is a section of `𝒪_X(E)`, this is the map `× s` of the section `s` that `φ` gives.
 * For a morphism `f : X → U`, the higher direct images `R^i f_* 𝒪_X(D)` vanish exactly when `H^i(f⁻¹ W, 𝒪_X(D)) = 0` for each affine open set `W` of `U` (Hartshorne III.8.1 and III.8.5, for the quasi-coherent sheaf `𝒪_X(D)` and a quasi-compact separated `f`). The definition `HigherDirectImagesVanish` takes this form, so that it needs no derived pushforward.
 -/
 
@@ -57,6 +58,53 @@ def HigherCohomologyVanishes (D : Divisor ℤ X) (V : X.toScheme.Opens) : Prop :
 /-- `R^i f_* 𝒪_X(D) = 0` for each `i > 0`: the cohomology `H^i(f⁻¹ W, 𝒪_X(D))` vanishes in each positive degree for each affine open set `W` of the target. -/
 def HigherDirectImagesVanish {Z : Scheme.{u}} (D : Divisor ℤ X) (f : X.toScheme ⟶ Z) : Prop :=
   ∀ W : Z.Opens, IsAffineOpen W → HigherCohomologyVanishes D (f ⁻¹ᵁ W)
+
+/-- Multiplication by `φ` maps a section of `𝒪_X(D)` over `S` to a section of `𝒪_X(D + E)` over `S` when `φ ≠ 0` and `E + div φ ≥ 0` at each prime divisor whose generic point is in `S`. -/
+theorem mul_mem_divisorialSections {D E : Divisor ℤ X} {S : Set X.toScheme} {φ : FF X} (hφ : φ ≠ 0)
+    (hE : ∀ P : PrimeDivisor X, P.1 ∈ S → 0 ≤ E P + ordAt φ P) {ψ : FF X}
+    (hψ : ψ ∈ divisorialSections D S) : φ * ψ ∈ divisorialSections (D + E) S := by
+  have key : divisorialSections D S ≤
+      (divisorialSections (D + E) S).comap (AddMonoidHom.mulLeft φ) := by
+    refine (AddSubgroup.closure_le _).2 ?_
+    rintro χ ⟨hχ, hχD⟩
+    show φ * χ ∈ divisorialSections (D + E) S
+    refine AddSubgroup.subset_closure ⟨mul_ne_zero hφ hχ, fun P hP => ?_⟩
+    have h1 := hχD P hP
+    have h2 := hE P hP
+    have h3 : ordAt (φ * χ) P = ordAt φ P + ordAt χ P := by
+      unfold ordAt
+      exact Scheme.ord_mul hφ hχ
+    rw [Finsupp.add_apply, h3]
+    linarith
+  exact key hψ
+
+/-- Multiplication by `φ`, from the sections of `𝒪_X(D)` over `S` to the sections of `𝒪_X(D + E)`. -/
+def mulSectionsHom {D E : Divisor ℤ X} {S : Set X.toScheme} {φ : FF X} (hφ : φ ≠ 0)
+    (hE : ∀ P : PrimeDivisor X, P.1 ∈ S → 0 ≤ E P + ordAt φ P) :
+    divisorialSections D S →+ divisorialSections (D + E) S where
+  toFun ψ := ⟨φ * ψ, mul_mem_divisorialSections hφ hE ψ.2⟩
+  map_zero' := Subtype.ext (by simp)
+  map_add' a b := Subtype.ext (by simp [mul_add])
+
+/-- Multiplication by `φ`, as a map of presheaves from `divisorialPresheaf D V` to `divisorialPresheaf (D + E) V`, when `φ ≠ 0` and `E + div φ ≥ 0` on `V`. -/
+def mulPresheafHom {D E : Divisor ℤ X} {V : X.toScheme.Opens} {φ : FF X} (hφ : φ ≠ 0)
+    (hE : ∀ P : PrimeDivisor X, P.1 ∈ V → 0 ≤ E P + ordAt φ P) :
+    divisorialPresheaf D V ⟶ divisorialPresheaf (D + E) V where
+  app W := AddCommGrpCat.ofHom (mulSectionsHom (D := D) (E := E)
+    (S := Subtype.val '' (W.unop : Set V)) hφ (fun P hP => hE P (by obtain ⟨x, -, hx⟩ := hP; exact hx ▸ x.2)))
+  naturality _ _ _ := by ext; rfl
+
+/-- Multiplication by `φ`, as a map of sheaves from `𝒪_V(D)` to `𝒪_V(D + E)`: the sheafification of `mulPresheafHom`. -/
+def mulSheafHom {D E : Divisor ℤ X} {V : X.toScheme.Opens} {φ : FF X} (hφ : φ ≠ 0)
+    (hE : ∀ P : PrimeDivisor X, P.1 ∈ V → 0 ≤ E P + ordAt φ P) :
+    divisorialSheaf D V ⟶ divisorialSheaf (D + E) V :=
+  (presheafToSheaf (Opens.grothendieckTopology V) AddCommGrpCat.{u}).map
+    (mulPresheafHom (D := D) (E := E) (V := V) hφ hE)
+
+/-- The map `H^i(V, 𝒪_X(D)) → H^i(V, 𝒪_X(D'))` that a map of sheaves `𝒪_V(D) → 𝒪_V(D')` gives. -/
+def cohomMap {D D' : Divisor ℤ X} {V : X.toScheme.Opens} (f : divisorialSheaf D V ⟶ divisorialSheaf D' V)
+    (i : ℕ) : (Sheaf.H (divisorialSheaf D V) i : Type u) → (Sheaf.H (divisorialSheaf D' V) i : Type u) :=
+  fun x => Sheaf.H.map f i x
 
 end MinimalModel
 

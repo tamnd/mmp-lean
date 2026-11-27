@@ -9,7 +9,7 @@ import MinimalModel.Statements.Cohomology
 /-!
 # Family A: foundations
 
-The statements of family A of spec 06.2.2: S01, S02 and S04 to S09. The statement S03 needs vocabulary that is not in the tree yet. The statements S01, S02, S06 and S09 use the vocabulary of `Curves.lean` and `Cohomology.lean`.
+The statements of family A of spec 06.2.2: S01 to S09. The statements S01, S02, S03, S06 and S09 use the vocabulary of `Curves.lean` and `Cohomology.lean`.
 -/
 
 universe u
@@ -78,5 +78,40 @@ def LengthOfExtremalRays : Prop :=
   ∀ A : PairModel k, IsKlt A.P → ∀ R : ExtremalRay A.I, R.generator A.P.KΔR < 0 →
     ∃ C : Curve A.X, C.IsRational ∧ ray R.generator = ray (A.I.curveClass C) ∧
       0 < -A.I.dot A.P.KΔ C ∧ -A.I.dot A.P.KΔ C ≤ 2 * (A.X.dim : ℝ)
+
+/-- Kollár's injectivity theorem (J. Kollár, Higher direct images of dualizing sheaves I, Ann. of Math. 123 (1986), Theorem 2.2, in the form of O. Fujino, A transcendental approach to Kollár's injectivity theorem, arXiv:0704.0073, Theorem 1.1). Let `X` be a smooth projective variety and `L` a semiample Cartier divisor on `X`. Let `s` be a nonzero section of `𝒪_X(n L)` for some `n > 0`. Then for each `q ≥ 0` and each `m ≥ 1` the map `× s : H^q(X, 𝒪_X(K + m L)) → H^q(X, 𝒪_X(K + (m + n) L))` is injective.
+
+The section `s` is a rational function `φ ≠ 0` with `n L + div φ ≥ 0`, and `× s` is multiplication by `φ` (`mulSheafHom`). The target is written `𝒪_X((K + m L) + n L)`. A line bundle on `X` is `𝒪_X(L)` for a Cartier divisor `L`, because `X` is integral, and `L` is semiample when some multiple is free. -/
+def KollarInjectivity : Prop :=
+  ∀ X : NormalVariety k, X.IsSmooth → IsProjective X → ∀ (K : CanonicalDivisor X) (L : Divisor ℤ X),
+    IsCartier L → (∃ a : ℕ, 0 < a ∧ IsFree ((a : ℤ) • L)) → ∀ n : ℕ, 0 < n →
+    ∀ (φ : FF X) (hφ : φ ≠ 0)
+      (hs : ∀ P : PrimeDivisor X, P.1 ∈ (⊤ : X.toScheme.Opens) → 0 ≤ ((n : ℤ) • L) P + ordAt φ P),
+    ∀ m : ℕ, 0 < m → ∀ q : ℕ,
+      Function.Injective (cohomMap (mulSheafHom (D := K.K + (m : ℤ) • L) hφ hs) q)
+
+/-- Kollár's torsion-freeness theorem (J. Kollár, Higher direct images of dualizing sheaves I, Ann. of Math. 123 (1986), Theorem 2.1(i); in the form of O. Fujino, Fundamental theorems for the log minimal model program, Publ. RIMS 47 (2011), arXiv:0909.4445, 3.4(i), which cites Kollár, Shafarevich maps and automorphic forms, 10.15; here with `M = 0`). Let `X` be a smooth projective variety, `Δ` an effective `ℚ`-divisor on `X` with simple normal crossing support and `⌊Δ⌋ = 0`, and `f : X → Y` a surjective morphism onto a projective variety. Let `D` be a Cartier divisor with `D ∼_ℚ K + Δ`. Then `R^i f_* 𝒪_X(D)` is torsion-free for each `i ≥ 0`. The case `Δ = 0`, `D = K` is Kollár's theorem that `R^i f_* ω_X` is torsion-free.
+
+Torsion-free is read on the affine open sets `W` of `Y`, where `R^i f_* 𝒪_X(D)` is `H^i(f⁻¹ W, 𝒪_X(D))`, as in `HigherDirectImagesVanish`: multiplication by each nonzero `a ∈ Γ(W, 𝒪_Y)` is injective on it. Multiplication by `a` is multiplication by its pullback `f^* a`, a rational function with `div (f^* a) ≥ 0` on `f⁻¹ W`, so the map goes to `𝒪_X(D + 0)`. The statement takes as hypotheses that `f^* a ≠ 0` and `div (f^* a) ≥ 0` on `f⁻¹ W`. Both always hold, because `f` is dominant and `f^* a` is regular on `f⁻¹ W`.
+
+What the Lean form changes:
+* The variety `Y` is normal. This is no loss: `f` factors through the normalization `ν : Yⁿ → Y`, which is finite, so `R^i f_* = ν_* R^i g_*`, and `ν_*` keeps a sheaf torsion-free.
+* Fujino's 3.4(i) allows `D - (K + Δ) ∼_ℚ f^* M` for a `ℚ`-Cartier divisor `M` on `Y`. This statement takes `M = 0`, because the tree has no pullback of divisors along a morphism that is not birational. -/
+def KollarTorsionFreeness : Prop :=
+  ∀ (X Y : NormalVariety k) (f : X.toScheme ⟶ Y.toScheme), f ≫ Y.str = X.str →
+    X.IsSmooth → IsProjective X → IsProjective Y → Function.Surjective f.base →
+    ∀ (K : CanonicalDivisor X) (Δ : Divisor ℚ X) (D : Divisor ℤ X), 0 ≤ Δ → (∀ Q, Δ Q < 1) →
+      (∀ x : X.toScheme, IsSncAt {Q | Δ Q ≠ 0} x) → IsCartier D →
+      QLinEquiv D.toRat (K.K.toRat + Δ) →
+    ∀ W : Y.toScheme.Opens, IsAffineOpen W → ∀ hX : genericPoint X.toScheme ∈ f ⁻¹ᵁ W,
+    ∀ a : Γ(Y.toScheme, W), a ≠ 0 →
+      ∀ (ha : (f.app W ≫ X.toScheme.presheaf.germ (f ⁻¹ᵁ W) _ hX).hom a ≠ 0)
+        (hreg : ∀ P : PrimeDivisor X, P.1 ∈ f ⁻¹ᵁ W →
+          0 ≤ (0 : Divisor ℤ X) P + ordAt ((f.app W ≫ X.toScheme.presheaf.germ (f ⁻¹ᵁ W) _ hX).hom a) P),
+      ∀ i : ℕ, Function.Injective (cohomMap (mulSheafHom (D := D) ha hreg) i)
+
+/-- S03, Kollár's injectivity and torsion-freeness theorems (Kollár 1986, Theorems 2.1 and 2.2): the conjunction of `KollarInjectivity` and `KollarTorsionFreeness`. The torsion-freeness is the form of Fujino 3.4(i) with `M = 0`, which the lc program uses. -/
+def KollarTorsionFree : Prop :=
+  KollarInjectivity k ∧ KollarTorsionFreeness k
 
 end MinimalModel
