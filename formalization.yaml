@@ -129,6 +129,14 @@ sources:
     relationship: background
     note: The claimed counterexamples in dimension 4 that statement S57 records. The claim is not refereed. The title here is descriptive, and the reader role copies the title of the source.
     author_endorsement: false
+  - title: Higher direct images of dualizing sheaves I
+    authors: [Janos Kollar]
+    id: "mmp:Kol86"
+    type: paper
+    location: Annals of Mathematics 123 (1986)
+    relationship: background
+    note: The source of statement S03, the injectivity theorem (Theorem 2.2) and the torsion-freeness theorem (Theorem 2.1). The statement follows the forms of Fujino, arXiv:0704.0073 Theorem 1.1 and Fuj11 3.4(i). The reader role checks the theorem numbers against the paper.
+    author_endorsement: false
   - title: Mori dream spaces and GIT
     authors: [Yi Hu, Sean Keel]
     id: "mmp:HK00"
@@ -358,6 +366,14 @@ status:
       kind: statement
       status: open
       note: S54, the index conjecture for klt log Calabi-Yau pairs with coefficients in a finite set of rational numbers.
+    - name: MinimalModel.KollarTorsionFree
+      kind: statement
+      status: known
+      note: S03, Kollar's injectivity theorem (Kollar 1986 Theorem 2.2, as in Fujino arXiv:0704.0073 Theorem 1.1) and torsion-freeness theorem (Kollar 1986 Theorem 2.1(i), as in Fujino 2011 3.4(i) with M = 0). The two parts are KollarInjectivity and KollarTorsionFreeness.
+    - name: MinimalModel.cohomMap_id
+      kind: theorem
+      status: proved
+      note: Check F3 for S03. The identity of a divisorial sheaf gives the identity on cohomology, and mulSectionsHom_apply shows that the map of S03 is multiplication by the rational function.
     - name: MinimalModel.FanoTypeMDS
       kind: statement
       status: known
