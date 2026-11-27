@@ -6,6 +6,7 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 
 ### Added
 
+- The statement S36 `Sarkisov` (Hacon-McKernan, Theorem 1.3), with the vocabulary of `MinimalModel/Statements/Sarkisov.lean`: Mori fibre spaces, flops, the Sarkisov links of types I to IV, Sarkisov chains and runs of the program, and the fidelity checks `MinimalModel/Fidelity/Sarkisov.lean`.
 - The statement S27 `GeneralizedLcFlips` (Hu-Liu), with the vocabulary of generalized pairs in `MinimalModel/Statements/GeneralizedPairs.lean`: birational models, the pullback of ℝ-Cartier divisors, nef parts as b-divisors, generalized pairs, their log discrepancies and generalized lc, and the fidelity checks `MinimalModel/Fidelity/GeneralizedPairs.lean`.
 - The bridge package `MinimalModelBridge` builds in CI (`.github/workflows/bridge.yml`). It compares varieties, normal schemes, prime divisors and divisors with ℤ, ℚ and ℝ coefficients with those of AxiomMath/MMP, and restates the AxiomMath Kawamata-Viehweg theorem as `KawamataViehwegSNC` (O-R2-3, the statement).
 - The statement S03 `KollarTorsionFree`: Kollár's injectivity theorem and torsion-freeness (with M = 0), with multiplication by a rational function on sections and cohomology in `Cohomology.lean` and the fidelity checks `MinimalModel/Fidelity/Cohomology.lean`.

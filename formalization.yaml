@@ -161,6 +161,14 @@ sources:
     relationship: background
     note: The source of the form of the cone conjecture (Conjecture 1.1) that statement S55 states, with the base a point.
     author_endorsement: false
+  - title: The Sarkisov program
+    authors: [Christopher D. Hacon, James McKernan]
+    id: "mmp:HM13"
+    type: paper
+    location: Journal of Algebraic Geometry 22 (2013), arXiv:0905.0946
+    relationship: background
+    note: The source of statement S36 (Theorem 1.3, with Theorem 1.1 as a consequence) and of the Sarkisov links of types I to IV (Section 1) that it uses.
+    author_endorsement: false
   - title: Existence of the minimal model program for log canonical generalized pairs
     authors: [Zhengyu Hu, Jihao Liu]
     id: "mmp:HuL26"
@@ -374,6 +382,10 @@ status:
       kind: theorem
       status: proved
       note: Check F3 for S03. The identity of a divisorial sheaf gives the identity on cohomology, and mulSectionsHom_apply shows that the map of S03 is multiplication by the rational function.
+    - name: MinimalModel.Sarkisov
+      kind: statement
+      status: known
+      note: S36, Hacon-McKernan Theorem 1.3. Two Mori fibre spaces that are outcomes of runs of the minimal model program from one projective Q-factorial klt pair are joined by a sequence of Sarkisov links of types I, II, III, IVm and IVs, which induces the birational map between them.
     - name: MinimalModel.FanoTypeMDS
       kind: statement
       status: known
@@ -394,6 +406,10 @@ status:
       kind: theorem
       status: proved
       note: Check F3 for S37 and S55. The class of the zero divisor is zero, and the zero class is in the moving cone (zero_mem_movingCone) and in the effective cone (zero_mem_effCone).
+    - name: MinimalModel.SarkisovChain.self
+      kind: theorem
+      status: proved
+      note: Check F3 for S36. Each Mori fibre space is related to itself by the empty sequence of links (sarkisov_refl gives the conclusion of S36 for the run with no step). A Mori fibre space of Sarkisov.lean satisfies IsMoriFibreSpace and has positive dimension, a sequence of links gives a birational map, the contraction of a flop contracts a curve, and a divisorial contraction has an exceptional prime divisor.
     - name: MinimalModel.pointGenPair_isGenLc
       kind: theorem
       status: proved
