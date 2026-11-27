@@ -50,7 +50,7 @@ theorem shokurovLemma_pi {α ι β : Type*} [Finite ι] [LinearOrder β] {S : ι
     (hv : ∀ x i, v x i ∈ S i) (himp : ∀ x y, step x y → v x < v y) :
     ¬ ∃ f : ℕ → α, ∀ n, step (f n) (f (n + 1)) := by
   rintro ⟨f, hf⟩
-  haveI : IsPreorder β fun a b : β => b ≤ a :=
+  have : IsPreorder β fun a b : β => b ≤ a :=
     { refl := fun a => le_refl a
       trans := fun _ _ _ h₁ h₂ => le_trans h₂ h₁ }
   have hP : (Set.univ.pi S).PartiallyWellOrderedOn fun a b : ι → β => ∀ i, b i ≤ a i :=
