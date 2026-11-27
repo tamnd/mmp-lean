@@ -39,11 +39,11 @@ theorem isVariety_iff {X : Scheme.{u}} (f : X ⟶ Spec (CommRingCat.of k)) :
     MinimalModel.IsVariety X f ↔ AlgebraicGeometry.IsVariety k f := by
   constructor
   · intro h
-    haveI := h.integral
-    haveI := h.separated
-    haveI := h.finiteType
-    haveI := h.compact
-    haveI : QuasiCompact f := (quasiCompact_iff_compactSpace_of_field f).mpr h.compact
+    have := h.integral
+    have := h.separated
+    have := h.finiteType
+    have := h.compact
+    have : QuasiCompact f := (quasiCompact_iff_compactSpace_of_field f).mpr h.compact
     exact ⟨⟩
   · intro h
     exact ⟨h.toIsIntegral, h.toIsSeparated, h.toLocallyOfFiniteType,
