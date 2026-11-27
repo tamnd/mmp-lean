@@ -7,5 +7,5 @@ import MinimalModel
 /-!
 # The solution for `lake comparator`
 
-This file imports the package. The theorems that `Comparator/Challenge.lean` states are in the package, with the same names. `MinimalModel.Toric.toricConeTheorem` is in `MinimalModel/Toric/ConeTheorem.lean`.
+This file imports the package. The theorems that `Comparator/Challenge.lean` states are in the package, with the same names. `MinimalModel.Toric.toricConeTheorem` is in `MinimalModel/Toric/ConeTheorem.lean`, and `MinimalModel.shokurovLemma` is in `MinimalModel/Reductions/Shokurov.lean`.
 -/

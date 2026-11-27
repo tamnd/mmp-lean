@@ -39,7 +39,7 @@ sources:
     type: paper
     location: Proceedings of the Steklov Institute of Mathematics 246 (2004), 315-336
     relationship: background
-    note: The source of statement S28, the reduction of the termination of flips to the ACC and the lower semicontinuity of minimal log discrepancies.
+    note: The source of statement S28, the reduction of the termination of flips to the ACC and the lower semicontinuity of minimal log discrepancies, and of the abstract Shokurov lemma O-R4-1. The pinned statement of the lemma is in MinimalModel/Statements/Shokurov.lean.
     author_endorsement: false
   - title: Fundamental theorems for the log minimal model program
     authors: [Osamu Fujino]
@@ -754,10 +754,18 @@ status:
       kind: theorem
       status: proved
       note: Check F3 for S57. Each divisor on the point has a nonzero section, so the point is no counterexample to effective non-vanishing.
+    - name: MinimalModel.ShokurovLemma
+      kind: statement
+      status: known
+      note: The pinned statement of the abstract Shokurov lemma (Sho04), route item O-R4-1, in MinimalModel/Statements/Shokurov.lean. Row Q4 of spec 14 compares shokurovLemma with it.
     - name: MinimalModel.shokurovLemma
       kind: theorem
       status: proved
-      note: Route item O-R4-1, milestone S3. The abstract Shokurov lemma (Sho04), in MinimalModel/Reductions/Shokurov.lean. Over an axiomatic flip sequence, a lower semicontinuous local invariant on a compact nonempty locus of each state, with values in an ACC set, that strictly improves at each step, gives termination. The lemma has no geometry, and it uses only Mathlib.
+      note: Route item O-R4-1, milestone S3. The abstract Shokurov lemma in the form of the pinned statement ShokurovLemma, from not_exists_chain_of_lsc. The job comparator of the workflow trust checks it against Comparator/Challenge.lean.
+    - name: MinimalModel.not_exists_chain_of_lsc
+      kind: theorem
+      status: proved
+      note: The abstract Shokurov lemma (Sho04), in MinimalModel/Reductions/Shokurov.lean. Over an axiomatic flip sequence, a lower semicontinuous local invariant on a compact nonempty locus of each state, with values in an ACC set, that strictly improves at each step, gives termination. The lemma has no geometry, and it uses only Mathlib.
     - name: MinimalModel.shokurovLemma_pi
       kind: theorem
       status: proved
@@ -765,4 +773,4 @@ status:
     - name: MinimalModel.not_exists_chain_of_acc
       kind: theorem
       status: proved
-      note: An invariant with values in an ACC set that strictly increases at each step gives termination. The lemmas shokurovLemma and shokurovLemma_pi reduce to it.
+      note: An invariant with values in an ACC set that strictly increases at each step gives termination. The lemmas not_exists_chain_of_lsc and shokurovLemma_pi reduce to it.

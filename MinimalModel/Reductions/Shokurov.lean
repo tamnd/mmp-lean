@@ -4,6 +4,7 @@ Released under the Apache 2.0 licence as described in the file LICENSE.
 -/
 import Mathlib.Order.WellFoundedSet
 import Mathlib.Topology.Semicontinuity.Basic
+import MinimalModel.Statements.Shokurov
 
 /-!
 # The abstract Shokurov lemma
@@ -17,10 +18,13 @@ The file has no geometry. A flip sequence is axiomatic: a relation `step` on a t
 * `MinimalModel.not_exists_chain_of_acc`: an invariant with values in an ACC set that strictly increases at each step gives termination.
 * `MinimalModel.partiallyWellOrderedOn_ge_of_acc`: in a linear order, an ACC set is partially well ordered by `≥`.
 * `MinimalModel.shokurovLemma_pi`: the same as `not_exists_chain_of_acc` for a finite tuple of invariants, each in its own ACC set, that strictly increases in the product order. The proof is Dickson's lemma, `Set.PartiallyWellOrderedOn.pi`.
-* `MinimalModel.shokurovLemma`: the abstract Shokurov lemma. Each state has a compact nonempty locus of points and a lower semicontinuous local invariant on it, with values in an ACC set. When each point of the next locus has a larger value than some point of the current locus, the sequence is finite. Lower semicontinuity is used where Shokurov uses it: the minimum of the local invariant on the locus is attained, so it is a value of the invariant and lies in the ACC set.
+* `MinimalModel.not_exists_chain_of_lsc`: the abstract Shokurov lemma. Each state has a compact nonempty locus of points and a lower semicontinuous local invariant on it, with values in an ACC set. When each point of the next locus has a larger value than some point of the current locus, the sequence is finite. Lower semicontinuity is used where Shokurov uses it: the minimum of the local invariant on the locus is attained, so it is a value of the invariant and lies in the ACC set.
+* `MinimalModel.shokurovLemma`: the same, in the form of the pinned statement `ShokurovLemma` of `MinimalModel/Statements/Shokurov.lean`.
 
 In the application the states are the models of a sequence of flips of pairs of dimension `n` with coefficients in a fixed DCC set, the local invariant is the minimal log discrepancy, and the ACC set is the set of minimal log discrepancies of S49 (`MinimalModel.ACCMld`). The lower semicontinuity is S50 (`MinimalModel.LSCMld`). The geometric input, that the minimal log discrepancies do not decrease under a flip and increase over the flipped locus, is not in this file. The `reader` role checks the form of the improvement hypothesis against the source before S28 is proved from this lemma.
 -/
+
+universe u v w
 
 namespace MinimalModel
 
@@ -63,7 +67,7 @@ theorem shokurovLemma_pi {α ι β : Type*} [Finite ι] [LinearOrder β] {S : ι
 /-- **The abstract Shokurov lemma** (Shokurov 2004; route item O-R4-1). Let `step` be a relation on states, the steps of an axiomatic flip sequence. Each state `x` has a topological space of points `P x`, a compact nonempty locus `L x` in it, and a local invariant `a x` that is lower semicontinuous on `L x`. The values of the local invariants on the loci lie in a set `S` of a linear order with the ascending chain condition. The invariant strictly improves at each step: for each point `q` of the locus of the next state there is a point `p` of the locus of the current state with `a x p < a y q`. Then there is no infinite sequence of steps.
 
 The proof takes the minimum of `a x` on `L x`. It exists by lower semicontinuity and compactness (`LowerSemicontinuousOn.exists_isMinOn`), so it is a value of the local invariant and lies in `S`. It strictly increases at each step, and `not_exists_chain_of_acc` applies. Without the lower semicontinuity the infimum need not be in `S`. -/
-theorem shokurovLemma {α β : Type*} [LinearOrder β] {S : Set β} (hS : S.WellFoundedOn (· > ·))
+theorem not_exists_chain_of_lsc {α β : Type*} [LinearOrder β] {S : Set β} (hS : S.WellFoundedOn (· > ·))
     {P : α → Type*} [∀ x, TopologicalSpace (P x)] (L : ∀ x, Set (P x)) (a : ∀ x, P x → β)
     (hL : ∀ x, IsCompact (L x)) (hne : ∀ x, (L x).Nonempty)
     (hlsc : ∀ x, LowerSemicontinuousOn (a x) (L x)) (ha : ∀ x, ∀ p ∈ L x, a x p ∈ S)
@@ -74,5 +78,10 @@ theorem shokurovLemma {α β : Type*} [LinearOrder β] {S : Set β} (hS : S.Well
   intro x y hxy
   obtain ⟨p, hp, hlt⟩ := himp x y hxy (m y) (hm y)
   exact lt_of_le_of_lt (isMinOn_iff.1 (hmin x) p hp) hlt
+
+/-- **The abstract Shokurov lemma**, in the form of the pinned statement `ShokurovLemma` of `MinimalModel/Statements/Shokurov.lean`, from `not_exists_chain_of_lsc`. The job `comparator` of the workflow `trust` checks this theorem against the statement (row Q4 of spec 14). -/
+theorem shokurovLemma : ShokurovLemma.{u, v, w} := by
+  intro _ _ _ _ hS _ _ L a hL hne hlsc ha _ himp
+  exact not_exists_chain_of_lsc hS L a hL hne hlsc ha himp
 
 end MinimalModel
