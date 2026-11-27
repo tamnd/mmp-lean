@@ -63,6 +63,7 @@ theorem castelnuovoNoPoint : CastelnuovoNoPoint k := by
   exact ⟨A.X, 𝟙 _, hA.1, hA.2.1, A.projective, Category.id_comp _, inferInstance, p, hp, inferInstance⟩
 
 /-- The conclusion of the cone theorem without the condition `0 ≤ y · (K + Δ)` on the first summand. -/
+variable {k} in
 def ConeDecompositionNoNonneg (A : PairModel k) : Prop :=
   ∃ (ι : Type u) (_ : Countable ι) (C : ι → Curve A.X),
     (∀ i, A.I.dot A.P.KΔ (C i) < 0) ∧
@@ -73,7 +74,8 @@ def ConeDecompositionNoNonneg (A : PairModel k) : Prop :=
       ((fun i => ray (A.I.curveClass (C i))) '' {i | A.I.dot (A.P.KΔ + ε • H) (C i) < 0}).Finite
 
 /-- The variant without the condition on the first summand holds on each model, with no rays. -/
-theorem coneDecompositionNoNonneg {k : Type u} [Field k] (A : PairModel k) : ConeDecompositionNoNonneg A := by
+variable {k} in
+theorem coneDecompositionNoNonneg (A : PairModel k) : ConeDecompositionNoNonneg A := by
   refine ⟨PEmpty, inferInstance, fun i => i.elim, fun i => i.elim, fun z => ⟨fun hz => ?_, ?_⟩,
     fun i => i.elim, fun _ _ _ _ => Set.toFinite _⟩
   · exact ⟨z, hz, ∅, fun _ => 0, fun _ => le_rfl, by simp⟩
@@ -134,8 +136,9 @@ theorem pointPair_isPseudoEffective : IsPseudoEffective (pointPair k).KΔ :=
 
 /-- The model `(Spec k, 0)` is a minimal model of itself. -/
 theorem pointModel_isMinimalModel : IsMinimalModel (pointModel k) (pointModel k) :=
-  ⟨pointPair_isLc k, pointModel_isMinimal k, AlgEquiv.refl, fun Q => isEmptyElim Q,
-    fun P => isEmptyElim P⟩
+  ⟨pointPair_isLc k, pointModel_isMinimal k, AlgEquiv.refl,
+    fun Q => isEmptyElim (Q : PrimeDivisor (pointVariety k)),
+    fun P => isEmptyElim (P : PrimeDivisor (pointVariety k))⟩
 
 /-- F2 for S33 in dimension 0: `(Spec k, 0)` satisfies the hypotheses of S33 with `n = 0`, and it has a minimal model, itself. -/
 theorem pointModel_minimalModelConj :
