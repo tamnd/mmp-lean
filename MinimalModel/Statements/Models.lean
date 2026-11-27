@@ -5,11 +5,12 @@ Released under the Apache 2.0 licence as described in the file LICENSE.
 import MinimalModel.Statements.BasicRelative
 import MinimalModel.Statements.LinearSystems
 import MinimalModel.Statements.Cones
+import MinimalModel.Statements.Sarkisov
 
 /-!
 # Family D: BCHM, models and the Sarkisov program
 
-The statements of family D of spec 06.2.2 that are planned at S0, S1, S2 and S3. The statements S31 and S34 use the relative notions of `BasicRelative.lean`, S34 uses the linear systems of `LinearSystems.lean`, and S37 uses the Mori dream spaces of `Cones.lean`. The statement S36 (`Sarkisov`) is not stated yet: it needs the Sarkisov links, which are not in the tree.
+The statements of family D of spec 06.2.2 that are planned at S0, S1, S2 and S3. The statements S31 and S34 use the relative notions of `BasicRelative.lean`, S34 uses the linear systems of `LinearSystems.lean`, and S37 uses the Mori dream spaces of `Cones.lean`. S36 uses the Mori fibre spaces and the Sarkisov links of `Sarkisov.lean`.
 -/
 
 universe u
@@ -96,5 +97,19 @@ What the Lean form changes:
 * The intersection numbers `A.I` are part of the model; by `dot_cartier` they are the intersection numbers of `X`. -/
 def FanoTypeMDS : Prop :=
   ∀ A : PairModel k, IsQFactorial A.X → IsDlt A.P → IsAmple (-A.P.KΔ) → IsMoriDreamSpace A.X A.I
+
+
+/-- S36, the Sarkisov program (Hacon and McKernan, The Sarkisov program, J. Algebraic Geom. 22 (2013), arXiv:0905.0946, Theorem 1.3). Let `(Z, Φ)` be a projective `ℚ`-factorial klt pair. Let `φ : X → S` and `ψ : Y → T` be two Mori fibre spaces that are Sarkisov related: each is the outcome of a run of the `(K_Z + Φ)`-minimal model program, with the birational maps `Z ⇢ X` and `Z ⇢ Y`. Then the induced birational map `X ⇢ Y` is a composition of Sarkisov links.
+
+What the Lean form changes:
+* The pair of an outcome is the strict transform of `Φ`, as the steps of a program keep it (`MMPStepData`). So the Mori fibre space `φ` is for the pair `(X, Δ)` with `Δ` the strict transform of `Φ`, as in Hacon-McKernan, Conjecture 1.2(2).
+* The sequence of links ends with an isomorphism of Mori fibre spaces (`SarkisovChain`).
+* `k` is algebraically closed of characteristic zero, where Hacon and McKernan work over `ℂ`.
+
+Theorem 1.1 of the source follows: two Mori fibre spaces with `ℚ`-factorial terminal singularities are birational if and only if they are related by a sequence of Sarkisov links. Hacon and McKernan deduce it from Theorem 1.3, because such Mori fibre spaces are Sarkisov related. -/
+def Sarkisov : Prop :=
+  ∀ (Z : PairModel k) (M N : MoriFibreSpace k) (σ₁ : FF M.A.X ≃ₐ[k] FF Z.X)
+    (σ₂ : FF N.A.X ≃ₐ[k] FF Z.X), IsQFactorial Z.X → IsKlt Z.P →
+    IsMMPRun Z M.A σ₁ → IsMMPRun Z N.A σ₂ → SarkisovChain M N (σ₂.trans σ₁.symm)
 
 end MinimalModel
