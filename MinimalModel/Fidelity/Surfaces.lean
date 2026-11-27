@@ -6,11 +6,12 @@ import MinimalModel.Fidelity.PointStatements
 import MinimalModel.Statements.LowDim
 
 /-!
-# Fidelity: wrong variants of S10, S12 and S33, and the point for S33
+# Fidelity: wrong variants of S10, S11, S12 and S33, and the point for S33
 
 Checks F2 and F3 of spec 06.3 for the statements of milestone S0 on surfaces and on minimal models.
 
 * F3 for S10: without the condition that `f` maps `E` to the point `p`, Castelnuovo's theorem is trivial. The identity of `X` and any closed point of `X` satisfy the conclusion.
+* F3 for S11 and S04: without the condition `(K + Δ) · y ≥ 0` on the first summand, the conclusion of the cone theorem holds on each model, with no rays. So that condition carries the content of the theorem.
 * F3 for S12: without the condition that the output is minimal or a Mori fibre space, the program for surfaces is trivial, with the identity of `X`. Without the map from `X`, it is trivial too, with the point as the output.
 * F3 for S33: without the condition that `K_Y + Δ_Y` is nef, each lc pair is a minimal model of itself, so the existence of minimal models is trivial in each dimension.
 * F2 for S33 in dimension 0: the model `(Spec k, 0)` satisfies the hypotheses of S33 with `n = 0`, and it is a minimal model of itself.
@@ -60,6 +61,32 @@ theorem castelnuovoNoPoint : CastelnuovoNoPoint k := by
   intro A hA _ _ _ _
   obtain ⟨p, hp⟩ := A.X.exists_isClosed_singleton
   exact ⟨A.X, 𝟙 _, hA.1, hA.2.1, A.projective, Category.id_comp _, inferInstance, p, hp, inferInstance⟩
+
+/-- The conclusion of the cone theorem without the condition `0 ≤ y · (K + Δ)` on the first summand. -/
+def ConeDecompositionNoNonneg (A : PairModel k) : Prop :=
+  ∃ (ι : Type u) (_ : Countable ι) (C : ι → Curve A.X),
+    (∀ i, A.I.dot A.P.KΔ (C i) < 0) ∧
+    (∀ z, z ∈ A.I.coneOfCurves ↔ ∃ y ∈ A.I.coneOfCurves,
+      ∃ (s : Finset ι) (t : ι → ℝ), (∀ i, 0 ≤ t i) ∧ z = y + ∑ i ∈ s, t i • A.I.curveClass (C i)) ∧
+    (∀ i, ∃ R : ExtremalRay A.I, ray R.generator = ray (A.I.curveClass (C i))) ∧
+    ∀ H : Divisor ℝ A.X, IsAmple H → ∀ ε : ℝ, 0 < ε →
+      ((fun i => ray (A.I.curveClass (C i))) '' {i | A.I.dot (A.P.KΔ + ε • H) (C i) < 0}).Finite
+
+/-- The variant without the condition on the first summand holds on each model, with no rays. -/
+theorem coneDecompositionNoNonneg {k : Type u} [Field k] (A : PairModel k) : ConeDecompositionNoNonneg A := by
+  refine ⟨PEmpty, inferInstance, fun i => i.elim, fun i => i.elim, fun z => ⟨fun hz => ?_, ?_⟩,
+    fun i => i.elim, fun _ _ _ _ => Set.toFinite _⟩
+  · exact ⟨z, hz, ∅, fun _ => 0, fun _ => le_rfl, by simp⟩
+  · rintro ⟨y, hy, s, t, -, rfl⟩
+    have hs : s = ∅ := Finset.eq_empty_of_isEmpty s
+    simpa [hs] using hy
+
+/-- S11 with the conclusion `ConeDecompositionNoNonneg`. -/
+def SurfaceConeTheoremNoNonneg : Prop :=
+  ∀ A : PairModel k, A.IsSmoothSurface → ConeDecompositionNoNonneg A
+
+/-- F3 for S11: the variant without the condition on the first summand holds, with no rays. -/
+theorem surfaceConeTheoremNoNonneg : SurfaceConeTheoremNoNonneg k := fun A _ => coneDecompositionNoNonneg A
 
 /-- S12 without the condition `IsMinimal B ∨ IsMoriFibreSpace B` on the output. -/
 def SurfaceMMPNoOutput : Prop :=
