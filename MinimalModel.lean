@@ -16,6 +16,7 @@ import MinimalModel.Statements.Boundedness
 import MinimalModel.Statements.Effective
 import MinimalModel.Statements.BasicRelative
 import MinimalModel.Statements.LinearSystems
+import MinimalModel.Statements.Cones
 import MinimalModel.Fidelity.Basic
 import MinimalModel.Fidelity.Point
 import MinimalModel.Fidelity.PointPairs
@@ -37,3 +38,4 @@ import MinimalModel.Fidelity.LinearSystems
 import MinimalModel.Fidelity.ToricCone
 import MinimalModel.Fidelity.Surfaces
 import MinimalModel.Fidelity.Cohomology
+import MinimalModel.Fidelity.Cones
