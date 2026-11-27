@@ -29,7 +29,7 @@ variable {k : Type u} [Field k]
 
 /-- A Mori fibre space of `Sarkisov.lean` is a Mori fibre space in the sense of `Basic.lean`. -/
 theorem MoriFibreSpace.isMoriFibreSpace (M : MoriFibreSpace k) : IsMoriFibreSpace M.A :=
-  ⟨M.S, M.φ, M.over, M.contraction, M.dim_lt, M.extremal, M.negative⟩
+  ⟨M.S, M.φ, M.over_φ, M.contraction, M.dim_lt, M.extremal, M.negative⟩
 
 /-- The total space of a Mori fibre space has positive dimension. -/
 theorem MoriFibreSpace.dim_pos (M : MoriFibreSpace k) : 0 < M.A.X.dim :=

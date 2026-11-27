@@ -39,7 +39,7 @@ structure MoriFibreSpace (k : Type u) [Field k] where
   S : NormalVariety k
   /-- The fibration. -/
   φ : A.X.toScheme ⟶ S.toScheme
-  over : φ ≫ S.str = A.X.str
+  over_φ : φ ≫ S.str = A.X.str
   contraction : IsContraction φ
   dim_lt : S.dim < A.X.dim
   extremal : IsExtremalContraction A.I φ
