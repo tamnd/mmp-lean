@@ -8,6 +8,7 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 
 - The workflow `eval` elaborates the Lean texts of the eval sets of tamnd/mmp (spec 10.9): each known answer of `eval/tasks`, each faithful and planted statement of `eval/statements` and each definition of `eval/audit`, with `scripts/eval.py elab` of tamnd/mmp. It runs on demand and on a change to the workflow.
 - `MinimalModel/Fidelity/ToricCone.lean`: the checks F2 and F3 for the pinned statement `ToricConeTheorem`. The cones `c12` and `c20` of `ℙ²` are a wall pair. By the statement, `-K` has degree `0` or more on their wall, and `K` is not nef. The variants with degree `0` or less, and with degree more than `0`, are false.
+- `MinimalModel/Fidelity/Surfaces.lean`: F3 for S10, S11, S12 and S33, and F2 for S33 in dimension 0. Without the condition `(K + Δ) · y ≥ 0`, the conclusion of the cone theorem holds with no rays. Without the condition that `E` maps to the point, Castelnuovo's theorem holds with the identity. Without the condition on the output, or without the map, the program for surfaces is trivial. Without the nef condition, each lc pair is a minimal model of itself. The point satisfies the hypotheses of S33 with `n = 0` and is its own minimal model.
 
 ## v0.0.4 - 2026-11-26
 
