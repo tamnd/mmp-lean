@@ -129,6 +129,54 @@ sources:
     relationship: background
     note: The claimed counterexamples in dimension 4 that statement S57 records. The claim is not refereed. The title here is descriptive, and the reader role copies the title of the source.
     author_endorsement: false
+  - title: Higher direct images of dualizing sheaves I
+    authors: [Janos Kollar]
+    id: "mmp:Kol86"
+    type: paper
+    location: Annals of Mathematics 123 (1986)
+    relationship: background
+    note: The source of statement S03, the injectivity theorem (Theorem 2.2) and the torsion-freeness theorem (Theorem 2.1). The statement follows the forms of Fujino, arXiv:0704.0073 Theorem 1.1 and Fuj11 3.4(i). The reader role checks the theorem numbers against the paper.
+    author_endorsement: false
+  - title: Mori dream spaces and GIT
+    authors: [Yi Hu, Sean Keel]
+    id: "mmp:HK00"
+    type: paper
+    location: Michigan Mathematical Journal 48 (2000), arXiv:math/0004017
+    relationship: background
+    note: The source of the definition of a Mori dream space (Definition 1.10), which statement S37 uses.
+    author_endorsement: false
+  - title: Singularities of linear systems and boundedness of Fano varieties
+    authors: [Caucher Birkar]
+    id: "mmp:Bir21"
+    type: paper
+    location: Annals of Mathematics 193 (2021), arXiv:1609.05543
+    relationship: background
+    note: The source of statement S53 (Theorem 1.1) and of the bounded families (2.8) and the epsilon-lc pairs (2.2) that it uses.
+    author_endorsement: false
+  - title: The cone conjecture for Calabi-Yau pairs in dimension two
+    authors: [Burt Totaro]
+    id: "mmp:Tot10"
+    type: paper
+    location: Duke Mathematical Journal 154 (2010), arXiv:0901.3361
+    relationship: background
+    note: The source of the form of the cone conjecture (Conjecture 1.1) that statement S55 states, with the base a point.
+    author_endorsement: false
+  - title: The Sarkisov program
+    authors: [Christopher D. Hacon, James McKernan]
+    id: "mmp:HM13"
+    type: paper
+    location: Journal of Algebraic Geometry 22 (2013), arXiv:0905.0946
+    relationship: background
+    note: The source of statement S36 (Theorem 1.3, with Theorem 1.1 as a consequence) and of the Sarkisov links of types I to IV (Section 1) that it uses.
+    author_endorsement: false
+  - title: Existence of the minimal model program for log canonical generalized pairs
+    authors: [Zhengyu Hu, Jihao Liu]
+    id: "mmp:HuL26"
+    type: paper
+    location: arXiv:2603.03817 v1
+    relationship: background
+    note: The source of statement S27 (Theorem 1.1) and of the generalized pairs (Definitions 2.5, 2.7 and 2.9) that it uses. The claim is not refereed.
+    author_endorsement: false
   - title: AxiomMath/MMP
     authors: [AxiomMath]
     id: "mmp:AxiomMMP"
@@ -262,6 +310,10 @@ status:
       kind: statement
       status: known
       note: S26, the existence of lc flips (Birkar; Hacon and Xu).
+    - name: MinimalModel.GeneralizedLcFlips
+      kind: statement
+      status: claimed
+      note: S27, the existence of flips for lc generalized pairs (Hu and Liu, arXiv:2603.03817, Theorem 1.1), with the base a point. It is never a hypothesis of another proof.
     - name: MinimalModel.MoriFibreSpaceOutput
       kind: statement
       status: known
@@ -322,6 +374,50 @@ status:
       kind: statement
       status: open
       note: S54, the index conjecture for klt log Calabi-Yau pairs with coefficients in a finite set of rational numbers.
+    - name: MinimalModel.KollarTorsionFree
+      kind: statement
+      status: known
+      note: S03, Kollar's injectivity theorem (Kollar 1986 Theorem 2.2, as in Fujino arXiv:0704.0073 Theorem 1.1) and torsion-freeness theorem (Kollar 1986 Theorem 2.1(i), as in Fujino 2011 3.4(i) with M = 0). The two parts are KollarInjectivity and KollarTorsionFreeness.
+    - name: MinimalModel.cohomMap_id
+      kind: theorem
+      status: proved
+      note: Check F3 for S03. The identity of a divisorial sheaf gives the identity on cohomology, and mulSectionsHom_apply shows that the map of S03 is multiplication by the rational function.
+    - name: MinimalModel.Sarkisov
+      kind: statement
+      status: known
+      note: S36, Hacon-McKernan Theorem 1.3. Two Mori fibre spaces that are outcomes of runs of the minimal model program from one projective Q-factorial klt pair are joined by a sequence of Sarkisov links of types I, II, III, IVm and IVs, which induces the birational map between them.
+    - name: MinimalModel.FanoTypeMDS
+      kind: statement
+      status: known
+      note: S37, BCHM Corollary 1.3.1 in the absolute case. A projective Q-factorial variety with a dlt pair whose anti log canonical divisor is ample is a Mori dream space in the sense of Hu-Keel Definition 1.10.
+    - name: MinimalModel.BAB
+      kind: statement
+      status: known
+      note: S53, Birkar Theorem 1.1. For each dimension d and each epsilon > 0, the projective varieties with an epsilon-lc pair whose anti log canonical divisor is nef and big form a bounded family in the sense of Birkar 2.8.
+    - name: MinimalModel.ConeConj
+      kind: statement
+      status: open
+      note: S55, the cone conjecture of Kawamata and Morrison for klt Calabi-Yau pairs, Totaro Conjecture 1.1 with the base a point. Aut(X, Delta) has a rational polyhedral fundamental domain on the effective nef cone, and PsAut(X, Delta) has one on the effective movable cone.
+    - name: MinimalModel.isEpsLc_zero_iff
+      kind: theorem
+      status: proved
+      note: Check F3 for S53. A 0-lc pair is lc, IsEpsLc.mono weakens epsilon, and IsEpsLc.isKlt shows that an epsilon-lc pair with epsilon > 0 is klt.
+    - name: MinimalModel.numClass_zero
+      kind: theorem
+      status: proved
+      note: Check F3 for S37 and S55. The class of the zero divisor is zero, and the zero class is in the moving cone (zero_mem_movingCone) and in the effective cone (zero_mem_effCone).
+    - name: MinimalModel.SarkisovChain.self
+      kind: theorem
+      status: proved
+      note: Check F3 for S36. Each Mori fibre space is related to itself by the empty sequence of links (sarkisov_refl gives the conclusion of S36 for the run with no step). A Mori fibre space of Sarkisov.lean satisfies IsMoriFibreSpace and has positive dimension, a sequence of links gives a birational map, the contraction of a flop contracts a curve, and a divisorial contraction has an exceptional prime divisor.
+    - name: MinimalModel.pointGenPair_isGenLc
+      kind: theorem
+      status: proved
+      note: Check F2 for S27. The generalized pair (Spec k, 0, 0) is lc, and its nef part is the same b-divisor as itself (pointNefPart_sameBDivisor).
+    - name: MinimalModel.logDiscrepancyOfIs_iff
+      kind: theorem
+      status: proved
+      note: Check F3 for S27. With the boundary of a pair, the log discrepancy of GeneralizedPairs.lean is the log discrepancy of the pair. A generalized pair with M_X = 0 gives a pair (GenPair.toPair), and the pullback of the zero divisor is zero (isRPullback_zero).
     - name: MinimalModel.FujitaFreeness
       kind: statement
       status: open
