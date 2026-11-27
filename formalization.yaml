@@ -658,3 +658,15 @@ status:
       kind: theorem
       status: proved
       note: Check F3 for S57. Each divisor on the point has a nonzero section, so the point is no counterexample to effective non-vanishing.
+    - name: MinimalModel.shokurovLemma
+      kind: theorem
+      status: proved
+      note: Route item O-R4-1, milestone S3. The abstract Shokurov lemma (Sho04), in MinimalModel/Reductions/Shokurov.lean. Over an axiomatic flip sequence, a lower semicontinuous local invariant on a compact nonempty locus of each state, with values in an ACC set, that strictly improves at each step, gives termination. The lemma has no geometry, and it uses only Mathlib.
+    - name: MinimalModel.shokurovLemma_pi
+      kind: theorem
+      status: proved
+      note: The abstract Shokurov lemma for a finite tuple of invariants, each in its own ACC set, that strictly increases in the product order. The proof is Dickson's lemma, Set.PartiallyWellOrderedOn.pi.
+    - name: MinimalModel.not_exists_chain_of_acc
+      kind: theorem
+      status: proved
+      note: An invariant with values in an ACC set that strictly increases at each step gives termination. The lemmas shokurovLemma and shokurovLemma_pi reduce to it.
