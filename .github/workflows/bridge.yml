@@ -1,0 +1,95 @@
+name: bridge
+
+# Build the bridge package bridge/ (MinimalModelBridge) against AxiomMath/MMP and AxiomMath/Stacks on top of the Mathlib cache. The package imports only the parts of AxiomMath/Stacks that it needs, so the hosted runner builds it. The theorems of AxiomMath/MMP need the bridge runner of spec 09.4 (bridge/README.md).
+on:
+  push:
+    branches: [main]
+    paths:
+      - "bridge/**"
+      - "MinimalModel/Statements/**"
+      - "lean-toolchain"
+      - ".github/workflows/bridge.yml"
+  pull_request:
+    paths:
+      - "bridge/**"
+      - "MinimalModel/Statements/**"
+      - "lean-toolchain"
+      - ".github/workflows/bridge.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bridge-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  build:
+    name: lake build of the bridge
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    defaults:
+      run:
+        working-directory: bridge
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: free disk space
+        working-directory: .
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h /
+      - name: install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o elan-init.sh
+          sh elan-init.sh -y --default-toolchain none
+          rm elan-init.sh
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: get the Mathlib cache
+        run: lake exe cache get
+      - name: check the pins
+        run: |
+          python3 - <<'EOF'
+          import json
+          bridge = {p["name"]: p for p in json.load(open("lake-manifest.json"))["packages"]}
+          root = {p["name"]: p for p in json.load(open("../lake-manifest.json"))["packages"]}
+          assert bridge["MMP"]["rev"] == "1f9ade367087ec711a2ce1382bad279a5a0284c3", bridge["MMP"]["rev"]
+          for name, p in root.items():
+              assert bridge[name]["rev"] == p["rev"], (name, bridge[name]["rev"], p["rev"])
+          for name in sorted(bridge):
+              print(name, bridge[name].get("rev", bridge[name].get("dir")))
+          EOF
+      - name: build
+        run: lake build
+      - name: check the axioms
+        run: |
+          cat > axioms.lean <<'EOF'
+          import MinimalModelBridge
+          #print axioms MinimalModelBridge.primeDivisorEquiv
+          #print axioms MinimalModelBridge.divisorEquiv_apply
+          #print axioms MinimalModelBridge.forall_divisorEquiv_iff
+          #print axioms MinimalModelBridge.divisorEquiv_nonneg_iff
+          #print axioms MinimalModelBridge.divisorEquiv_le_iff
+          #print axioms MinimalModelBridge.isVariety_iff
+          #print axioms MinimalModelBridge.isNormalScheme_iff_isNormal
+          #print axioms MinimalModelBridge.NormalVariety.isVariety
+          #print axioms MinimalModelBridge.NormalVariety.isNormal
+          #print axioms MinimalModelBridge.NormalVariety.ofIsVariety
+          #print axioms MinimalModelBridge.KawamataViehwegSNC
+          EOF
+          lake env lean axioms.lean | tee axioms.txt
+          if grep "depends on axioms" axioms.txt | grep -vE "depends on axioms: \[(propext|Classical\.choice|Quot\.sound)(, (propext|Classical\.choice|Quot\.sound))*\]$"; then
+            echo "a bridge declaration uses an axiom outside propext, Classical.choice and Quot.sound"
+            exit 1
+          fi
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: bridge-manifest
+          path: |
+            bridge/lake-manifest.json
+            bridge/axioms.txt
+          if-no-files-found: ignore
+          retention-days: 30
