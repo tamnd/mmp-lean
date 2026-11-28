@@ -140,7 +140,7 @@ theorem IsExtremalRay.exists_linearMap (hs : F.IsSimplicialFan)
     {R : PointedCone ℝ (F.Ray → ℝ)} (hR : F.IsExtremalRay R) :
     ∃ m : (F.Ray → ℝ) →ₗ[ℝ] ℝ, (∀ c ∈ F.curveCone, 0 ≤ m c) ∧
       ∀ c ∈ F.curveCone, m c = 0 ↔ c ∈ R := by
-  letI : Fintype F.curveClasses := (finite_curveClasses hs).fintype
+  let _ : Fintype F.curveClasses := (finite_curveClasses hs).fintype
   have heq : F.curveCone = indexCone (Subtype.val : F.curveClasses → F.Ray → ℝ) univ := by
     rw [curveCone_eq_hull]
     exact hull_eq_indexCone_val F.curveClasses
