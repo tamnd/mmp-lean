@@ -6,6 +6,7 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 
 ### Added
 
+- Toric flips, part 3 (MinimalModel/Toric/FlipRay.lean): the curve class of a wall, the cone of curves and its extremal rays; two walls on one extremal ray are proportional, with the same sets J+ and J-, and the cone of J- lies in each of their walls.
 - Toric flips, part 2 (MinimalModel/Toric/FlipFan.lean): the circuit of a wall of a simplicial fan, unique up to scale, with both cones of the wall in the circuit fan; the join of a circuit with a simplex, and the same support for the joined fan and its flip.
 - Toric flips, part 1 (MinimalModel/Toric/Flip.lean): circuits and their two triangulations; the circuit fan is a simplicial fan, and it and the flipped fan have the same support.
 - The segmented full build of the bridge (bridge-full.yml, scripts/bridge-full.sh, bridge/full.txt, bridge/heavy.txt), and the map of S10 to S19 to the theorems of AxiomMath/MMP and the vocabulary gaps of each, in bridge/README.md.

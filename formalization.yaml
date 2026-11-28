@@ -674,6 +674,30 @@ status:
       kind: theorem
       status: proved
       note: Route R3, step 5 (toric flips, part 2). The fan of the join and its flip have the same support when J+ and J- are not empty.
+    - name: MinimalModel.Toric.Fan.WallData.curveClass
+      kind: def
+      status: proved
+      note: Route R3, step 5 (toric flips, part 3). The class of the curve of a wall as a vector of R^{Σ(1)}, the wall relation of its circuit (CLS11 Proposition 6.4.1). degree_eq_sum_curveClass gives the degree on the wall as the pairing with it, and degree_single recovers it from the degrees of the prime divisors.
+    - name: MinimalModel.Toric.Fan.IsExtremalRay
+      kind: def
+      status: proved
+      note: Route R3, step 5 (toric flips, part 3). An extremal ray of the cone of curves Fan.curveCone, the cone spanned by the classes of the wall curves, that is, a face spanned by one nonzero vector.
+    - name: MinimalModel.Toric.Fan.IsWallPair.eq_of_not_le
+      kind: theorem
+      status: proved
+      note: Route R3, step 5 (toric flips, part 3). At most one ray of a simplicial maximal cone of a wall pair is not in the other cone.
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.isProportional
+      kind: theorem
+      status: proved
+      note: Route R3, step 5 (toric flips, part 3). Two walls whose curves lie in an extremal ray have proportional classes, with a positive factor (Rei83 Corollary 2.5).
+    - name: MinimalModel.Toric.Fan.WallData.IsProportional.image_jPlus
+      kind: theorem
+      status: proved
+      note: Route R3, step 5 (toric flips, part 3). Walls with proportional classes have circuits with the same rays in J+ and, by image_jMinus, in J-, with proportional coefficients (circuitCoeff_eq); the other indices are in J0 (circuitCoeff_eq_zero). Rei83 Corollary 2.5, first half.
+    - name: MinimalModel.Toric.Fan.WallData.IsProportional.negCone_le_inf
+      kind: theorem
+      status: proved
+      note: Route R3, step 5 (toric flips, part 3). The cone of the rays of J- of a ray lies in both maximal cones of each wall of the ray, so V(cone(u_J-)) contains each curve of the ray.
     - name: MinimalModel.IsPlt
       kind: def
       status: proved
