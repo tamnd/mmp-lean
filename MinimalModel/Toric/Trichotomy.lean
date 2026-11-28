@@ -101,6 +101,7 @@ theorem exists_isFaceOf_indexCone_min {v : ι → E} {S : Set ι} {h g : E →�
     rw [LinearMap.sub_apply, LinearMap.smul_apply, smul_eq_mul, sub_eq_zero] at h0
     exact h0
 
+omit [Fintype ι] in
 /-- The cone of vectors that are positive multiples of one vector `w` is the cone of `w`, when there is one. -/
 theorem indexCone_eq_hull_singleton {v : ι → E} {T : Set ι} {w : E} {a : ι → ℝ}
     (ha : ∀ i ∈ T, 0 < a i) (hv : ∀ i ∈ T, v i = a i • w) {i₀ : ι} (hi₀ : i₀ ∈ T) :
@@ -186,8 +187,8 @@ theorem exists_isExtremalRay_degree_neg (hs : F.IsSimplicialFan) {H : F.TDivisor
     ∃ R, F.IsExtremalRay R ∧ ∃ σ₀ σ₀' : PointedCone ℝ (NR n), F.IsWallPair σ₀ σ₀' ∧
       ∃ W₀ : F.WallData σ₀ σ₀', W₀.curveClass ∈ R ∧ W₀.degree D < 0 := by
   classical
-  haveI : Finite F.curveClasses := (finite_curveClasses hs).to_subtype
-  letI : Fintype F.curveClasses := Fintype.ofFinite _
+  have : Finite F.curveClasses := (finite_curveClasses hs).to_subtype
+  let : Fintype F.curveClasses := Fintype.ofFinite _
   have hpos : ∀ i ∈ (Set.univ : Set F.curveClasses), 0 < F.curvePairing H i.1 := by
     rintro ⟨c, σ, σ', hw, W, rfl⟩ -
     show 0 < F.curvePairing H W.curveClass
@@ -240,17 +241,17 @@ theorem generator_mem_flipCone_of_unique {c : F.Ray → ℝ}
     fun ρ hρ => ?_, ?_⟩
   · show 0 ≤ c ρ / -c k + if ρ = k then 1 else 0
     by_cases hρk : ρ = k
-    · rw [if_pos hρk, hρk, div_neg, div_self hk.ne]
+    · rw [ite_eq_left hρk, hρk, div_neg, div_self hk.ne]
       norm_num
-    · rw [if_neg hρk, add_zero]
+    · rw [ite_eq_right hρk, add_zero]
       exact div_nonneg (not_lt.mp fun h => hρk (huniq ρ h)) (by linarith)
   · show c ρ / -c k + (if ρ = k then 1 else 0) = 0
     by_cases hρk : ρ = k
-    · rw [if_pos hρk, hρk, div_neg, div_self hk.ne, neg_add_cancel]
+    · rw [ite_eq_left hρk, hρk, div_neg, div_self hk.ne, neg_add_cancel]
     · have h0 : c ρ = 0 := by
         by_contra h0
         exact hρ ⟨Or.inr ⟨hneg, h0⟩, fun _ => hρk⟩
-      rw [if_neg hρk, h0, zero_div, add_zero]
+      rw [ite_eq_right hρk, h0, zero_div, add_zero]
   · have h1 : ∑ ρ, (c ρ / -c k) • toNR (F.generator ρ) = 0 := by
       have h2 : ∀ ρ, (c ρ / -c k) • toNR (F.generator ρ) =
           (-c k)⁻¹ • (c ρ • toNR (F.generator ρ)) := fun ρ => by
@@ -258,7 +259,7 @@ theorem generator_mem_flipCone_of_unique {c : F.Ray → ℝ}
       simp only [h2]
       rw [← Finset.smul_sum, hrel, smul_zero]
     simp only [add_smul, Finset.sum_add_distrib, h1, ite_smul, one_smul, zero_smul,
-      Finset.sum_ite_eq', Finset.mem_univ, if_true, zero_add]
+      Finset.sum_ite_eq', Finset.mem_univ, ite_true, zero_add]
 
 /-- **When `J₋` is one ray `k`, the cones of the flipped fan are the cones of the contraction.** On the star of `cone(u_k)` the generator `u_k` is in `Fan.flipCone c ν k` (`Fan.generator_mem_flipCone_of_unique`), and off the star both cones are `ν`. -/
 theorem flipCone_eq_contractCone_of_unique {c : F.Ray → ℝ}
@@ -373,18 +374,18 @@ theorem not_isStronglyConvex_contractCone (hs : F.IsSimplicialFan)
       ⟨fun ρ => W₀.curveClass ρ - if ρ = W₀.ray then 1 else 0, fun ρ => ?_, fun ρ hρ => ?_, ?_⟩
     · show 0 ≤ W₀.curveClass ρ - if ρ = W₀.ray then 1 else 0
       by_cases h : ρ = W₀.ray
-      · rw [if_pos h, h, W₀.curveClass_ray]
+      · rw [ite_eq_left h, h, W₀.curveClass_ray]
         norm_num
-      · rw [if_neg h, sub_zero]
+      · rw [ite_eq_right h, sub_zero]
         exact hJ ρ
     · show W₀.curveClass ρ - (if ρ = W₀.ray then 1 else 0) = 0
       have h0 : W₀.curveClass ρ = 0 := by
         by_contra h0
         exact hρ (hP ρ h0)
       have h1 : ρ ≠ W₀.ray := fun h => hray (by rw [← h]; exact h0)
-      rw [h0, if_neg h1, sub_zero]
+      rw [h0, ite_eq_right h1, sub_zero]
     · simp only [sub_smul, Finset.sum_sub_distrib, hrel, ite_smul, one_smul, zero_smul,
-        Finset.sum_ite_eq', Finset.mem_univ, if_true, zero_sub]
+        Finset.sum_ite_eq', Finset.mem_univ, ite_true, zero_sub]
   have h0 := hsc _ hu hnu
   exact W₀.ray_not_le (le_of_generator_mem (by rw [h0]; exact Submodule.zero_mem _))
 
