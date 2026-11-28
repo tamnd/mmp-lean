@@ -62,7 +62,8 @@ theorem mem_indexCone {v : ι → E} {T : Set ι} {x : E} :
     | mem y hy =>
       obtain ⟨i, hi, rfl⟩ := hy
       refine ⟨fun k => if k = i then 1 else 0, fun k => ?_, fun k hk => ?_, ?_⟩
-      · split_ifs <;> norm_num
+      · dsimp only
+        split_ifs <;> norm_num
       · have hki : k ≠ i := fun h => hk (h ▸ hi)
         simp [hki]
       · simp [ite_smul]
@@ -86,6 +87,7 @@ theorem mem_indexCone {v : ι → E} {T : Set ι} {x : E} :
     · rw [hcT i hi, zero_smul]
       exact zero_mem _
 
+omit [Fintype ι] in
 /-- The cone of a smaller set of indices is smaller. -/
 theorem indexCone_mono (v : ι → E) {S T : Set ι} (h : S ⊆ T) : indexCone v S ≤ indexCone v T :=
   Submodule.span_mono (Set.image_mono h)
@@ -251,7 +253,7 @@ def jZero : Set ι := {i | C.a i = 0}
 /-- Each index is in `J₊`, `J₋` or `J₀`. -/
 theorem jPlus_union_jMinus_union_jZero : C.jPlus ∪ C.jMinus ∪ C.jZero = Set.univ := by
   ext i
-  simp only [jPlus, jMinus, jZero, Set.mem_union, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+  simp only [jPlus, jMinus, jZero, Set.mem_union, Set.mem_ofPred_eq, Set.mem_univ, iff_true]
   rcases lt_trichotomy (C.a i) 0 with h | h | h
   · exact Or.inl (Or.inr h)
   · exact Or.inr h
