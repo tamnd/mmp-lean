@@ -295,6 +295,7 @@ section Join
 variable {ι κ E : Type*} [Fintype ι] [Fintype κ] [AddCommGroup E] [Module ℝ E]
 
 /-- The cone of the indices `inl '' T ∪ inr '' K` of a sum of two families is the sum of the cone of `T` in the first family and the cone of `K` in the second one. -/
+omit [Fintype ι] [Fintype κ] in
 theorem indexCone_sumElim (v : ι → E) (w : κ → E) (T : Set ι) (K : Set κ) :
     indexCone (Sum.elim v w) (Sum.inl '' T ∪ Sum.inr '' K) = indexCone v T ⊔ indexCone w K := by
   unfold indexCone

@@ -658,6 +658,22 @@ status:
       kind: theorem
       status: proved
       note: Route R3, step 5. A wall pair of a simplicial fan gives a circuit whose fan contains the two cones (mem_circuit_fan_left, mem_circuit_fan_right), so the original fan contains Circuit.fan and the flip is Circuit.neg.fan.
+    - name: MinimalModel.Toric.IsCircuit.sumElim
+      kind: theorem
+      status: proved
+      note: Route R3, step 5 (toric flips, part 2). A circuit relation extended by zero is a circuit relation of the family joined with points that are linearly independent modulo the span of the circuit.
+    - name: MinimalModel.Toric.Circuit.join
+      kind: def
+      status: proved
+      note: Route R3, step 5 (toric flips, part 2). The join of a circuit with a simplex, the local model of the star of a flipping locus with one cone in its link (Reid 1983, Section 2).
+    - name: MinimalModel.Toric.Circuit.mem_join_fan_cones
+      kind: theorem
+      status: proved
+      note: Route R3, step 5 (toric flips, part 2). The cones of the fan of the join are cone(u_T) + cone(w_K) with T missing an index of J+; mem_join_neg_fan_cones gives the flip with J-.
+    - name: MinimalModel.Toric.Circuit.support_join_neg_fan
+      kind: theorem
+      status: proved
+      note: Route R3, step 5 (toric flips, part 2). The fan of the join and its flip have the same support when J+ and J- are not empty.
     - name: MinimalModel.IsPlt
       kind: def
       status: proved
