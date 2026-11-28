@@ -790,6 +790,54 @@ status:
       kind: theorem
       status: proved
       note: "Route R3, step 5 (toric flips, part 5). Crossing a facet in a complete fan, with no hypothesis on the cones."
+    - name: MinimalModel.Toric.Fan.IsSimplicialFan.isRCartier
+      kind: theorem
+      status: proved
+      note: "Route R3, step 6 (toric flips, part 6). Each divisor of a simplicial fan is R-Cartier, since the generators of a simplicial cone are linearly independent."
+    - name: MinimalModel.Toric.Fan.IsMaximalCone.coneDim_eq
+      kind: theorem
+      status: proved
+      note: "Route R3, step 6 (toric flips, part 6). The maximal cones of a complete fan have dimension n."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.exists_isRaySupport
+      kind: theorem
+      status: proved
+      note: "Route R3, step 6 (toric flips, part 6). A support function of the divisor of Rei83 Section 2 that supports an extremal ray, below the linear form of each maximal cone."
+    - name: MinimalModel.Toric.Fan.IsRaySupport.degree_eq_zero
+      kind: theorem
+      status: proved
+      note: "Route R3, step 6 (toric flips, part 6). A wall met by a vector on which the support function is linear, on the negative side, is a wall of the ray."
+    - name: MinimalModel.Toric.Fan.IsRaySupport.eq_of_curveClass_ne_zero
+      kind: theorem
+      status: proved
+      note: "Route R3, step 6 (toric flips, part 6). The support function agrees with its linear form on a cone of the star at each ray of the circuit."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.exists_ray_not_le
+      kind: theorem
+      status: proved
+      note: "Route R3, step 6 (toric flips, part 6). A maximal cone that contains cone(u_{J-}) contains all the rays of the circuit but one ray of J+ (Rei83 Corollary 2.5)."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.exists_exchange
+      kind: theorem
+      status: proved
+      note: "Route R3, step 6 (toric flips, part 6). Crossing the facet of a cone of the star opposite another ray k of J+ exchanges k with the missing ray."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.exists_eq_circuitCone_sup_linkCone
+      kind: theorem
+      status: proved
+      note: "Route R3, step 6 (toric flips, part 6). The neighbour across that facet is in the star, it is cone(u_{J+ and J- minus k}) + lambda, with the same link cone."
+    - name: MinimalModel.Toric.Fan.linkCone_mem
+      kind: theorem
+      status: proved
+      note: "Route R3, step 6 (toric flips, part 6). The link cone of a cone of a simplicial fan is a cone of the fan."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.star_iff
+      kind: theorem
+      status: proved
+      note: "Route R3, step 6 (toric flips, part 6). The star of cone(u_{J-}) (Rei83 Corollary 2.5, Matsuki Proposition 14-2-1, CLS11 Proposition 15.4.5): a maximal cone contains cone(u_{J-}) exactly when it is cone(u_{J+ and J- minus k}) + lambda with k in J+ and lambda in the link."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.star
+      kind: theorem
+      status: proved
+      note: "Route R3, step 6 (toric flips, part 6). The star of cone(u_{J-}) as a set of cones."
+    - name: MinimalModel.Toric.Fan.link_subset
+      kind: theorem
+      status: proved
+      note: "Route R3, step 6 (toric flips, part 6). The cones of the link are cones of the fan."
     - name: MinimalModel.IsPlt
       kind: def
       status: proved
