@@ -6,6 +6,7 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 
 ### Added
 
+- CI checks that formalization.yaml parses.
 - Toric flips, part 4 (MinimalModel/Toric/FlipStar.lean): in a complete fan each facet of a maximal cone is a wall with a neighbour across it, and the neighbour across a wall of an extremal ray is the wall joined with a ray of J+.
 - Toric flips, part 3 (MinimalModel/Toric/FlipRay.lean): the curve class of a wall, the cone of curves and its extremal rays; two walls on one extremal ray are proportional, with the same sets J+ and J-, and the cone of J- lies in each of their walls.
 - Toric flips, part 2 (MinimalModel/Toric/FlipFan.lean): the circuit of a wall of a simplicial fan, unique up to scale, with both cones of the wall in the circuit fan; the join of a circuit with a simplex, and the same support for the joined fan and its flip.
