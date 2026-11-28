@@ -120,7 +120,7 @@ theorem IsExtremalRay.exists_eq_flipCone_of_pos (hc : F.IsComplete) (hs : F.IsSi
     by_contra hn
     obtain ⟨j, hj, hjσ⟩ : ∃ j : F.Ray, W₀.curveClass j < 0 ∧ ¬ j.1 ≤ σ := by
       by_contra hno
-      push_neg at hno
+      push Not at hno
       exact hn (negCone_le_iff.mpr hno)
     exact hn (h.negCone_le_of_eq hc hs hR hw₀ W₀ hW₀ hσ (fun x hx => hK x (hσν hx))
       (hK _ (Submodule.subset_span ⟨j, Or.inr ⟨hneg, hj.ne⟩, rfl⟩)) hjσ).1
