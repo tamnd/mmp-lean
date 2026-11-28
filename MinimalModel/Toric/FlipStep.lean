@@ -228,8 +228,10 @@ theorem IsExtremalRay.isToricStep_flippedFan (hc : F.IsComplete) (hs : F.IsSimpl
     hR.refines_flippedFan hc hs hw₀ W₀ hW₀ ⟨k, hk⟩,
     (hR.rays_flippedFan hc hs hw₀ W₀ hW₀ hk hk' hkk').trans
       (hR.rays_contractionFan hc hs hw₀ W₀ hW₀ hk hk' hkk').symm,
-    hR.isAmpleOver_flippedFan hc hs hw₀ W₀ hW₀ ⟨k, hk⟩ _ hD,
-    fun _ _ hρ => strictTransform_apply_of_eq D _ hρ⟩
+    hR.isAmpleOver_flippedFan hc hs hw₀ W₀ hW₀ ⟨k, hk⟩
+      (hR.rays_flippedFan hc hs hw₀ W₀ hW₀ hk hk' hkk').subset hD,
+    fun _ _ hρ => strictTransform_apply_of_eq D
+      (hR.rays_flippedFan hc hs hw₀ W₀ hW₀ hk hk' hkk').subset hρ⟩
 
 end Fan
 
