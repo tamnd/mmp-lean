@@ -395,7 +395,7 @@ theorem hull_or (A B : F.Ray → Prop) :
       {x | ∃ ρ : F.Ray, A ρ ∧ toNR (F.generator ρ) = x} ∪
         {x | ∃ ρ : F.Ray, B ρ ∧ toNR (F.generator ρ) = x} := by
     ext x
-    simp only [Set.mem_setOf_eq, Set.mem_union, or_and_right, exists_or]
+    simp only [Set.mem_ofPred_eq, Set.mem_union, or_and_right, exists_or]
   rw [hset]
   exact Submodule.span_union _ _
 
