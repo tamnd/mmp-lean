@@ -82,7 +82,7 @@ theorem finite_setOf_generator (P : F.Ray → Prop) :
     fun _ ⟨ρ, _, hρ⟩ => ⟨ρ, hρ⟩
 
 /-- A ray of the fan is in a cone when its generator is. -/
-theorem ray_le_of_mem {τ : PointedCone ℝ (NR n)} {ρ : F.Ray} (h : toNR (F.generator ρ) ∈ τ) :
+theorem le_of_generator_mem {τ : PointedCone ℝ (NR n)} {ρ : F.Ray} (h : toNR (F.generator ρ) ∈ τ) :
     ρ.1 ≤ τ := by
   rw [← F.latticeCone_generator ρ]
   exact latticeCone_singleton_le.mpr h
@@ -134,7 +134,7 @@ theorem exists_sum_eq_of_isMaximalCone (hc : F.IsComplete) {ν : PointedCone ℝ
       exact h0 (by simp [h])
     · refine Finset.sum_congr rfl fun ρ _ => ?_
       show (if h : ρ.1.1 ≤ ν then β' ⟨ρ.1, h⟩ else 0) • toNR (F.generator ρ.1) = _
-      rw [dif_pos ρ.2]
+      rw [dite_eq_left ρ.2]
 
 /-! ### The contraction -/
 
@@ -322,7 +322,7 @@ theorem exists_coeff (h : F.IsRaySupport R D φ) (hc : F.IsComplete)
 /-- **A negative coefficient.** Let `y = Σ β_ρ u_ρ` be a combination of the generators of a maximal cone `ν` on which `φ` agrees with its linear form on `ν`. If `β_l < 0`, then `c_l > 0`, and `ν` contains `cone(u_{J₋})`: the wall of `ν` opposite `l` is a wall of `R`. -/
 theorem pos_of_coeff_neg (h : F.IsRaySupport R D φ) (hc : F.IsComplete)
     (hs : F.IsSimplicialFan) (hR : F.IsExtremalRay R) {σ₀ σ₀' : PointedCone ℝ (NR n)}
-    (hw₀ : F.IsWallPair σ₀ σ₀') (W₀ : F.WallData σ₀ σ₀') (hW₀ : W₀.curveClass ∈ R)
+    (W₀ : F.WallData σ₀ σ₀') (hW₀ : W₀.curveClass ∈ R)
     {ν : PointedCone ℝ (NR n)} (hν : F.IsMaximalCone ν) {m : NR n →ₗ[ℝ] ℝ}
     (hm : ∀ x ∈ ν, φ x = m x) (β : F.Ray → ℝ) (hβν : ∀ ρ, β ρ ≠ 0 → ρ.1 ≤ ν)
     (hy : φ (∑ ρ, β ρ • toNR (F.generator ρ)) = m (∑ ρ, β ρ • toNR (F.generator ρ)))
@@ -367,7 +367,7 @@ theorem negCone_le_of_eq (h : F.IsRaySupport R D φ) (hc : F.IsComplete)
     by_contra hno
     have hno' : ∀ l, 0 ≤ β l := fun l => not_lt.mp fun hlt => hno ⟨l, hlt⟩
     apply hρν
-    apply ray_le_of_mem
+    apply le_of_generator_mem
     rw [F.eq_hull_generator hν.mem]
     exact (mem_hull_generator_iff (fun ρ' : F.Ray => ρ'.1 ≤ ν)).mpr
       ⟨β, hno', fun ρ' h' => by
@@ -376,7 +376,7 @@ theorem negCone_le_of_eq (h : F.IsRaySupport R D φ) (hc : F.IsComplete)
   have hy : φ (∑ ρ', β ρ' • toNR (F.generator ρ')) = m (∑ ρ', β ρ' • toNR (F.generator ρ')) := by
     rw [hβsum]
     exact hρ
-  obtain ⟨hcl, hneg⟩ := h.pos_of_coeff_neg hc hs hR hw₀ W₀ hW₀ hν hm β hβν hy hl
+  obtain ⟨hcl, hneg⟩ := h.pos_of_coeff_neg hc hs hR W₀ hW₀ hν hm β hβν hy hl
   have hneg' := negCone_le_iff.mp hneg
   refine ⟨hneg, fun hc0 => ?_⟩
   obtain ⟨j, hcj, hjν, hj⟩ := h.exists_ray_not_le hc hs hR hw₀ W₀ hW₀ hν hneg'
@@ -438,14 +438,14 @@ theorem negCone_le_of_eq (h : F.IsRaySupport R D φ) (hc : F.IsComplete)
     intro ρ'
     by_contra hlt
     have hlt' : γ ρ' < 0 := not_le.mp hlt
-    obtain ⟨hcρ', -⟩ := h.pos_of_coeff_neg hc hs hR hw₀ W₀ hW₀ hw.2.1 hm'' γ hγν'' hy'' hlt'
+    obtain ⟨hcρ', -⟩ := h.pos_of_coeff_neg hc hs hR W₀ hW₀ hw.2.1 hm'' γ hγν'' hy'' hlt'
     have h1 := hmax ρ' hcρ'
     rw [div_le_iff₀ hcρ'] at h1
     rw [hγ] at hlt'
     linarith
   -- so `u_ρ` is in `ν''`, and `ρ = j`
   have hρν'' : ρ.1 ≤ ν'' := by
-    apply ray_le_of_mem
+    apply le_of_generator_mem
     rw [← hγsum]
     refine Submodule.sum_mem _ fun ρ' _ => ?_
     by_cases h0 : γ ρ' = 0
@@ -638,19 +638,19 @@ theorem IsExtremalRay.isStronglyConvex_contractCone (hc : F.IsComplete)
       simp only [add_smul, Finset.sum_add_distrib, ha', add_neg_cancel]
     have hR' := eq_smul_of_sum_eq_zero hs hw₀ W₀ hν.mem hcj.ne' hj
       (d := fun ρ => a ρ + a' ρ) hd hsum
-    have hλ0 : 0 ≤ (a j + a' j) / W₀.curveClass j :=
+    have hlam0 : 0 ≤ (a j + a' j) / W₀.curveClass j :=
       div_nonneg (add_nonneg (ha0 j) (ha'0 j)) hcj.le
-    have hλ : (a j + a' j) / W₀.curveClass j = 0 := by
+    have hlam : (a j + a' j) / W₀.curveClass j = 0 := by
       have h1 : a k + a' k = (a j + a' j) / W₀.curveClass j * W₀.curveClass k := hR' k
       have h2 : 0 ≤ a k + a' k := add_nonneg (ha0 k) (ha'0 k)
       by_contra hne
-      have h3 : 0 < (a j + a' j) / W₀.curveClass j := lt_of_le_of_ne hλ0 (Ne.symm hne)
+      have h3 : 0 < (a j + a' j) / W₀.curveClass j := lt_of_le_of_ne hlam0 (Ne.symm hne)
       have h4 := mul_neg_of_pos_of_neg h3 hk
       linarith
     have ha : ∀ ρ, a ρ = 0 := by
       intro ρ
       have h1 : a ρ + a' ρ = (a j + a' j) / W₀.curveClass j * W₀.curveClass ρ := hR' ρ
-      rw [hλ, zero_mul] at h1
+      rw [hlam, zero_mul] at h1
       linarith [ha0 ρ, ha'0 ρ]
     simp only [ha, zero_smul, Finset.sum_const_zero]
   · rw [contractCone_of_not_le hν.mem hneg]
@@ -751,7 +751,7 @@ theorem IsExtremalRay.isFaceOf_contractCone (hc : F.IsComplete) (hs : F.IsSimpli
       rw [hd, sub_smul, add_smul, mul_smul, ite_smul, zero_smul]
     simp only [hterm]
     rw [Finset.sum_sub_distrib, Finset.sum_add_distrib, ← Finset.smul_sum,
-      Finset.sum_ite_eq' Finset.univ ρ, if_pos (Finset.mem_univ ρ), hr, sub_self]
+      Finset.sum_ite_eq' Finset.univ ρ, ite_eq_left (Finset.mem_univ ρ), hr, sub_self]
   have hdν : ∀ ρ', d ρ' ≠ 0 → ρ' ≠ j → ρ'.1 ≤ ν := by
     intro ρ' h0 hρ'j
     by_cases hρ'ρ : ρ' = ρ
@@ -760,21 +760,21 @@ theorem IsExtremalRay.isFaceOf_contractCone (hc : F.IsComplete) (hs : F.IsSimpli
     · refine hP ρ' ?_ hρ'j
       by_contra hn
       apply h0
-      rw [hd, if_neg hρ'ρ, hαP ρ' hn, hα'P ρ' hn, mul_zero, add_zero, sub_zero]
+      rw [hd, ite_eq_right hρ'ρ, hαP ρ' hn, hα'P ρ' hn, mul_zero, add_zero, sub_zero]
   have hR' := eq_smul_of_sum_eq_zero hs hw₀ W₀ hν.mem hcj.ne' hj hdν hdsum
-  have hdj : d j = a * α j + α' j := by rw [hd, if_neg (Ne.symm hρj), sub_zero]
-  have hλ0 : 0 ≤ d j / W₀.curveClass j :=
+  have hdj : d j = a * α j + α' j := by rw [hd, ite_eq_right (Ne.symm hρj), sub_zero]
+  have hlam0 : 0 ≤ d j / W₀.curveClass j :=
     div_nonneg (by rw [hdj]; exact add_nonneg (mul_nonneg ha.le (hα0 j)) (hα'0 j)) hcj.le
   -- a ray of `J₋` other than `ρ`
   obtain ⟨k'', hk'', hk''ρ⟩ : ∃ k'', W₀.curveClass k'' < 0 ∧ k'' ≠ ρ := by
     by_cases hkρ : k = ρ
     · exact ⟨k', hk', fun h' => hkk' (hkρ.trans h'.symm)⟩
     · exact ⟨k, hk, hkρ⟩
-  have hλ : d j / W₀.curveClass j = 0 := by
+  have hlam : d j / W₀.curveClass j = 0 := by
     have h1 : d k'' = d j / W₀.curveClass j * W₀.curveClass k'' := hR' k''
-    have h2 : d k'' = a * α k'' + α' k'' := by rw [hd, if_neg hk''ρ, sub_zero]
+    have h2 : d k'' = a * α k'' + α' k'' := by rw [hd, ite_eq_right hk''ρ, sub_zero]
     by_contra hne
-    have h3 : 0 < d j / W₀.curveClass j := lt_of_le_of_ne hλ0 (Ne.symm hne)
+    have h3 : 0 < d j / W₀.curveClass j := lt_of_le_of_ne hlam0 (Ne.symm hne)
     have h4 := mul_neg_of_pos_of_neg h3 hk''
     have h5 : 0 ≤ a * α k'' + α' k'' := add_nonneg (mul_nonneg ha.le (hα0 k'')) (hα'0 k'')
     linarith
@@ -782,7 +782,7 @@ theorem IsExtremalRay.isFaceOf_contractCone (hc : F.IsComplete) (hs : F.IsSimpli
   have hα : ∀ ρ', ρ' ≠ ρ → α ρ' = 0 := by
     intro ρ' hρ'
     have h1 : d ρ' = d j / W₀.curveClass j * W₀.curveClass ρ' := hR' ρ'
-    rw [hλ, zero_mul, hd, if_neg hρ', sub_zero] at h1
+    rw [hlam, zero_mul, hd, ite_eq_right hρ', sub_zero] at h1
     have h5 := mul_nonneg ha.le (hα0 ρ')
     have h6 := hα'0 ρ'
     have h7 : a * α ρ' = 0 := by linarith

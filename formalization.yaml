@@ -850,10 +850,10 @@ status:
       kind: theorem
       status: proved
       note: "Route R3, step 7 (toric flips, part 7). See `finite_setOf_generator` in MinimalModel/Toric/FlipContract.lean."
-    - name: MinimalModel.Toric.Fan.ray_le_of_mem
+    - name: MinimalModel.Toric.Fan.le_of_generator_mem
       kind: theorem
       status: proved
-      note: "Route R3, step 7 (toric flips, part 7). See `ray_le_of_mem` in MinimalModel/Toric/FlipContract.lean."
+      note: "Route R3, step 7 (toric flips, part 7). See `le_of_generator_mem` in MinimalModel/Toric/FlipContract.lean."
     - name: MinimalModel.Toric.Fan.hull_generator_mem
       kind: theorem
       status: proved
