@@ -717,7 +717,7 @@ status:
     - name: MinimalModel.Toric.Fan.exists_isWallPair_of_le
       kind: theorem
       status: proved
-      note: Route R3, step 5 (toric flips, part 4). Crossing a facet. In a complete fan with closed cones, a cone of dimension n-1 in a cone sigma of dimension n is the wall of a wall pair (sigma, sigma'). Generic point argument: p - t u for small t > 0 lies in a cone containing p.
+      note: Route R3, step 5 (toric flips, part 4). Crossing a facet. In a complete fan with closed cones, a cone of dimension n-1 in a cone sigma of dimension n is the wall of a wall pair (sigma, sigma'). By a generic point argument, p - t u for small t > 0 lies in a cone containing p.
     - name: MinimalModel.Toric.Fan.exists_isWallPair_of_le_of_isSimplicialFan
       kind: theorem
       status: proved
@@ -737,7 +737,7 @@ status:
     - name: MinimalModel.Toric.Fan.WallData.IsProportional.eq_inf_sup
       kind: theorem
       status: proved
-      note: Route R3, step 5 (toric flips, part 4). The neighbour across a wall of R is the wall plus rho: crossing from cone(u_{!=j}) + lambda gives cone(u_{!=k}) + lambda. Rei83 Section 2.
+      note: "Route R3, step 5 (toric flips, part 4). The neighbour across a wall of R is the wall plus rho: crossing from cone(u_{!=j}) + lambda gives cone(u_{!=k}) + lambda. Rei83 Section 2."
     - name: MinimalModel.IsPlt
       kind: def
       status: proved
