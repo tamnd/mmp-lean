@@ -24,6 +24,7 @@ The computation of part 9 with the relation `-c` gives that `-D` is ample over `
 * `Fan.IsExtremalRay.exists_eq_flipCone_of_pos`: the maximal cones of `F` in a cone `K_ν` of the star are the cones `Fan.flipCone c ν k` with `k ∈ J₊`.
 * `Fan.IsExtremalRay.isAmpleOver_contractionFan`: `-D` is ample over the contraction fan when `D · c < 0`.
 * `Fan.IsExtremalRay.hasRelPicardOne_contractionFan`: `F` has relative Picard number one over the contraction fan.
+* `Fan.IsExtremalRay.isAmpleOver_contraction`, `Fan.IsExtremalRay.hasRelPicardOne_contraction`: the same for the contraction as a set of cones, also when `J₋` is empty.
 * `Fan.IsExtremalRay.flipExists`: **the existence of toric flips.** When `D · c < 0` and `J₋` has two rays, the flipped fan with the strict transform of `D` is a toric step from `(F, D)`.
 -/
 
@@ -152,11 +153,10 @@ theorem IsExtremalRay.exists_linearMap_flipCone_of_pos (hc : F.IsComplete)
 /-! ### The side of `F` in the step -/
 
 /-- **`-D` is ample over the contraction** (Reid 1983, Section 2). Let `D` be a divisor with `D · c < 0`, where `c` is the class of a wall curve in `R`. Then `-D` has a support function that is strictly convex on each cone of the contraction fan `G`, at each maximal cone of `F` in it. -/
-theorem IsExtremalRay.isAmpleOver_contractionFan (hc : F.IsComplete) (hs : F.IsSimplicialFan)
+theorem IsExtremalRay.isAmpleOver_contraction (hc : F.IsComplete) (hs : F.IsSimplicialFan)
     (hR : F.IsExtremalRay R) {σ₀ σ₀' : PointedCone ℝ (NR n)} (hw₀ : F.IsWallPair σ₀ σ₀')
-    (W₀ : F.WallData σ₀ σ₀') (hW₀ : W₀.curveClass ∈ R) (hJ : ∃ k, W₀.curveClass k < 0)
-    {D : F.TDivisor ℝ} (hD : W₀.degree D < 0) :
-    F.IsAmpleOver (hR.contractionFan hc hs hw₀ W₀ hW₀ hJ).cones (-D) := by
+    (W₀ : F.WallData σ₀ σ₀') (hW₀ : W₀.curveClass ∈ R) {D : F.TDivisor ℝ}
+    (hD : W₀.degree D < 0) : F.IsAmpleOver (F.contraction W₀.curveClass) (-D) := by
   obtain ⟨φ, hφ⟩ := (hs.isRCartier (-D)).exists_isSupportFunctionOf
   refine ⟨φ, hφ, ?_⟩
   rintro τ ⟨ν, hν, hτ⟩ σ hσ hστ
@@ -189,12 +189,20 @@ theorem IsExtremalRay.isAmpleOver_contractionFan (hc : F.IsComplete) (hs : F.IsS
     have hxν := hτ.le hx
     rwa [contractCone_of_not_le hν.mem hneg] at hxν
 
+/-- **`-D` is ample over the contraction fan**, the contraction as a fan when `J₋` is not empty (`Fan.IsExtremalRay.isAmpleOver_contraction`). -/
+theorem IsExtremalRay.isAmpleOver_contractionFan (hc : F.IsComplete) (hs : F.IsSimplicialFan)
+    (hR : F.IsExtremalRay R) {σ₀ σ₀' : PointedCone ℝ (NR n)} (hw₀ : F.IsWallPair σ₀ σ₀')
+    (W₀ : F.WallData σ₀ σ₀') (hW₀ : W₀.curveClass ∈ R) (hJ : ∃ k, W₀.curveClass k < 0)
+    {D : F.TDivisor ℝ} (hD : W₀.degree D < 0) :
+    F.IsAmpleOver (hR.contractionFan hc hs hw₀ W₀ hW₀ hJ).cones (-D) :=
+  hR.isAmpleOver_contraction hc hs hw₀ W₀ hW₀ hD
+
 /-- **A divisor of degree zero on `R` is a pullback from the contraction.** Let `D` be a divisor with `D · c = 0`. Its support function is linear on each cone `K_ν` of the contraction: the linear form `m` of `ν` satisfies `m(u_ρ) = -D_ρ` at each ray of `K_ν`, by the relation, and so does the linear form of each cone `Fan.flipCone c ν k` with `k ∈ J₊`, and these cones cover `K_ν`. -/
-theorem IsExtremalRay.isPullback_of_degree_eq_zero (hc : F.IsComplete)
+theorem IsExtremalRay.isPullback_contraction (hc : F.IsComplete)
     (hs : F.IsSimplicialFan) (hR : F.IsExtremalRay R) {σ₀ σ₀' : PointedCone ℝ (NR n)}
     (hw₀ : F.IsWallPair σ₀ σ₀') (W₀ : F.WallData σ₀ σ₀') (hW₀ : W₀.curveClass ∈ R)
-    (hJ : ∃ k, W₀.curveClass k < 0) {D : F.TDivisor ℝ} (hD : W₀.degree D = 0) :
-    F.IsPullback (hR.contractionFan hc hs hw₀ W₀ hW₀ hJ).cones D := by
+    {D : F.TDivisor ℝ} (hD : W₀.degree D = 0) :
+    F.IsPullback (F.contraction W₀.curveClass) D := by
   obtain ⟨φ, hφ⟩ := (hs.isRCartier D).exists_isSupportFunctionOf
   refine ⟨φ, hφ, ?_⟩
   rintro τ ⟨ν, hν, hτ⟩
@@ -233,18 +241,24 @@ theorem IsExtremalRay.isPullback_of_degree_eq_zero (hc : F.IsComplete)
   · rw [contractCone_of_not_le hν.mem hneg] at hxK
     exact hm x hxK
 
+/-- **A divisor of degree zero on `R` is a pullback from the contraction fan** (`Fan.IsExtremalRay.isPullback_contraction`). -/
+theorem IsExtremalRay.isPullback_of_degree_eq_zero (hc : F.IsComplete)
+    (hs : F.IsSimplicialFan) (hR : F.IsExtremalRay R) {σ₀ σ₀' : PointedCone ℝ (NR n)}
+    (hw₀ : F.IsWallPair σ₀ σ₀') (W₀ : F.WallData σ₀ σ₀') (hW₀ : W₀.curveClass ∈ R)
+    (hJ : ∃ k, W₀.curveClass k < 0) {D : F.TDivisor ℝ} (hD : W₀.degree D = 0) :
+    F.IsPullback (hR.contractionFan hc hs hw₀ W₀ hW₀ hJ).cones D :=
+  hR.isPullback_contraction hc hs hw₀ W₀ hW₀ hD
+
 /-- **A divisor of nonzero degree on `R` is not a pullback from the contraction.** A linear form `m` with `m(u_ρ) = -D_ρ` at the rays of the circuit, the rays of the cone `K_{σ₀}` of the contraction, gives `D · c = -Σ c_ρ m(u_ρ) = 0` by the relation of the circuit. -/
-theorem IsExtremalRay.not_isPullback (hc : F.IsComplete) (hs : F.IsSimplicialFan)
-    (hR : F.IsExtremalRay R) {σ₀ σ₀' : PointedCone ℝ (NR n)} (hw₀ : F.IsWallPair σ₀ σ₀')
-    (W₀ : F.WallData σ₀ σ₀') (hW₀ : W₀.curveClass ∈ R) (hJ : ∃ k, W₀.curveClass k < 0)
+theorem IsExtremalRay.not_isPullback_contraction (hs : F.IsSimplicialFan)
+    {σ₀ σ₀' : PointedCone ℝ (NR n)} (hw₀ : F.IsWallPair σ₀ σ₀') (W₀ : F.WallData σ₀ σ₀')
     {D : F.TDivisor ℝ} (hD : W₀.degree D ≠ 0) :
-    ¬ F.IsPullback (hR.contractionFan hc hs hw₀ W₀ hW₀ hJ).cones D := by
+    ¬ F.IsPullback (F.contraction W₀.curveClass) D := by
   rintro ⟨φ, hφ, hlin⟩
   have hneg : F.negCone W₀.curveClass ≤ σ₀ :=
     (W₀.negCone_curveClass_le_inf (hs σ₀ hw₀.1.mem) hw₀).trans inf_le_left
-  obtain ⟨m, hm⟩ := hlin (F.contractCone W₀.curveClass σ₀) (by
-    rw [hR.cones_contractionFan]
-    exact ⟨σ₀, hw₀.1, PointedCone.IsFaceOf.refl _⟩)
+  obtain ⟨m, hm⟩ :=
+    hlin (F.contractCone W₀.curveClass σ₀) ⟨σ₀, hw₀.1, PointedCone.IsFaceOf.refl _⟩
   have hval : ∀ ρ : F.Ray, W₀.curveClass ρ ≠ 0 → m (toNR (F.generator ρ)) = -D ρ := by
     intro ρ hρ
     rw [← hm _ (Submodule.subset_span ⟨ρ, Or.inr ⟨hneg, hρ⟩, rfl⟩)]
@@ -264,14 +278,22 @@ theorem IsExtremalRay.not_isPullback (hc : F.IsComplete) (hs : F.IsSimplicialFan
   rw [W₀.degree_eq_sum_curveClass]
   linarith
 
+/-- **A divisor of nonzero degree on `R` is not a pullback from the contraction fan** (`Fan.IsExtremalRay.not_isPullback_contraction`). -/
+theorem IsExtremalRay.not_isPullback (hc : F.IsComplete) (hs : F.IsSimplicialFan)
+    (hR : F.IsExtremalRay R) {σ₀ σ₀' : PointedCone ℝ (NR n)} (hw₀ : F.IsWallPair σ₀ σ₀')
+    (W₀ : F.WallData σ₀ σ₀') (hW₀ : W₀.curveClass ∈ R) (hJ : ∃ k, W₀.curveClass k < 0)
+    {D : F.TDivisor ℝ} (hD : W₀.degree D ≠ 0) :
+    ¬ F.IsPullback (hR.contractionFan hc hs hw₀ W₀ hW₀ hJ).cones D :=
+  not_isPullback_contraction hs hw₀ W₀ hD
+
 /-- **Relative Picard number one** (Reid 1983, Section 2; Cox, Little and Schenck, Theorem 15.4.3). `F` has relative Picard number one over the contraction fan: a divisor `D₀` with `D₀ · c ≠ 0` is not a pullback, and for each divisor `D` the divisor `D - (D · c / D₀ · c) D₀` has degree zero on `R`, so it is a pullback. Each divisor is `ℝ`-Cartier, since `F` is simplicial. -/
-theorem IsExtremalRay.hasRelPicardOne_contractionFan (hc : F.IsComplete)
+theorem IsExtremalRay.hasRelPicardOne_contraction (hc : F.IsComplete)
     (hs : F.IsSimplicialFan) (hR : F.IsExtremalRay R) {σ₀ σ₀' : PointedCone ℝ (NR n)}
     (hw₀ : F.IsWallPair σ₀ σ₀') (W₀ : F.WallData σ₀ σ₀') (hW₀ : W₀.curveClass ∈ R)
-    (hJ : ∃ k, W₀.curveClass k < 0) {D₀ : F.TDivisor ℝ} (hD₀ : W₀.degree D₀ ≠ 0) :
-    F.HasRelPicardOne (hR.contractionFan hc hs hw₀ W₀ hW₀ hJ).cones := by
-  refine ⟨D₀, hs.isRCartier D₀, hR.not_isPullback hc hs hw₀ W₀ hW₀ hJ hD₀, fun D _ =>
-    ⟨W₀.degree D / W₀.degree D₀, hR.isPullback_of_degree_eq_zero hc hs hw₀ W₀ hW₀ hJ ?_⟩⟩
+    {D₀ : F.TDivisor ℝ} (hD₀ : W₀.degree D₀ ≠ 0) :
+    F.HasRelPicardOne (F.contraction W₀.curveClass) := by
+  refine ⟨D₀, hs.isRCartier D₀, not_isPullback_contraction hs hw₀ W₀ hD₀, fun D _ =>
+    ⟨W₀.degree D / W₀.degree D₀, hR.isPullback_contraction hc hs hw₀ W₀ hW₀ ?_⟩⟩
   have h1 : ∀ t : ℝ, W₀.degree (D - t • D₀) = W₀.degree D - t * W₀.degree D₀ := fun t => by
     rw [W₀.degree_eq_sum_curveClass, W₀.degree_eq_sum_curveClass, W₀.degree_eq_sum_curveClass,
       Finset.mul_sum, ← Finset.sum_sub_distrib]
@@ -279,6 +301,14 @@ theorem IsExtremalRay.hasRelPicardOne_contractionFan (hc : F.IsComplete)
     rw [Finsupp.sub_apply, Finsupp.smul_apply, smul_eq_mul]
     ring
   rw [h1, div_mul_cancel₀ _ hD₀, sub_self]
+
+/-- **Relative Picard number one over the contraction fan** (`Fan.IsExtremalRay.hasRelPicardOne_contraction`). -/
+theorem IsExtremalRay.hasRelPicardOne_contractionFan (hc : F.IsComplete)
+    (hs : F.IsSimplicialFan) (hR : F.IsExtremalRay R) {σ₀ σ₀' : PointedCone ℝ (NR n)}
+    (hw₀ : F.IsWallPair σ₀ σ₀') (W₀ : F.WallData σ₀ σ₀') (hW₀ : W₀.curveClass ∈ R)
+    (hJ : ∃ k, W₀.curveClass k < 0) {D₀ : F.TDivisor ℝ} (hD₀ : W₀.degree D₀ ≠ 0) :
+    F.HasRelPicardOne (hR.contractionFan hc hs hw₀ W₀ hW₀ hJ).cones :=
+  hR.hasRelPicardOne_contraction hc hs hw₀ W₀ hW₀ hD₀
 
 /-! ### The existence of flips -/
 

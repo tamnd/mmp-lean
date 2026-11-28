@@ -6,6 +6,8 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 
 ### Added
 
+- Toric flips, part 11: termination of the toric program for every sequence of abstract toric steps, conjunct 1 of ToricMMP (#45).
+- Toric flips, part 12: the divisorial step, the Mori fibre space case, preservation of completeness, simpliciality and rationality along steps, and the trichotomy at a last model with an ample divisor (#46).
 - Toric flips, part 10: relative Picard number one and -D ample over the contraction fan, and the existence of toric flips, Fan.IsExtremalRay.flipExists (#44).
 - Toric flips, part 9: the strict transform of a divisor negative on the wall is ample over the contraction fan, and the flipped fan is a toric step on the side of F⁺ (#43).
 - Toric flips, part 8: the flipped fan F⁺ (Fan.IsExtremalRay.flippedFan), a complete simplicial fan with the same support and rays as F that refines the contraction.
