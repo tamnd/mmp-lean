@@ -6,6 +6,7 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 
 ### Added
 
+- Toric flips, part 7: the contraction of an extremal ray (Fan.contractionFan), a complete quasi-fan refined by F, birational when J₋ is nonempty and small with the same rays when J₋ has at least two indices.
 - Toric flips, part 6: the star of an extremal ray is the join of the circuit cones with the link (Fan.IsExtremalRay.star_iff), with Reid's support function and the exchange lemma.
 - Toric flips, part 5 (MinimalModel/Toric/ConeClosed.lean, FlipSupport.lean): conic Carathéodory, finitely generated cones are closed, Farkas' lemma, faces of finitely generated cones are exposed; the cone of curves of a simplicial fan is finitely generated and closed, and each extremal ray has a nef divisor that supports it.
 - CI checks that formalization.yaml parses.
