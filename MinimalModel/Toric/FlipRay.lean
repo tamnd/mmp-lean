@@ -200,7 +200,7 @@ theorem image_jPlus (hσ : σ ∈ F.cones) (hs : IsSimplicial σ) :
     rw [curveClass_circuitRay]
     exact hi
   · intro hρ
-    rw [Set.mem_setOf_eq] at hρ
+    rw [Set.mem_ofPred_eq] at hρ
     by_cases hr : ∃ i, W.circuitRay i = ρ
     · obtain ⟨i, rfl⟩ := hr
       rw [curveClass_circuitRay] at hρ
@@ -219,7 +219,7 @@ theorem image_jMinus (hσ : σ ∈ F.cones) (hs : IsSimplicial σ) :
     rw [curveClass_circuitRay]
     exact hi
   · intro hρ
-    rw [Set.mem_setOf_eq] at hρ
+    rw [Set.mem_ofPred_eq] at hρ
     by_cases hr : ∃ i, W.circuitRay i = ρ
     · obtain ⟨i, rfl⟩ := hr
       rw [curveClass_circuitRay] at hρ
@@ -335,7 +335,7 @@ theorem IsProportional.image_jPlus (h : W.IsProportional W') (hσ : σ ∈ F.con
   obtain ⟨t, ht, hc⟩ := isProportional_iff.mp h
   rw [W.image_jPlus hσ hs, W'.image_jPlus hτ hs', hc]
   ext ρ
-  simp only [Set.mem_setOf_eq, Pi.smul_apply, smul_eq_mul]
+  simp only [Set.mem_ofPred_eq, Pi.smul_apply, smul_eq_mul]
   exact mul_pos_iff_of_pos_left ht
 
 /-- **The walls of a ray have the same `J₋`** (Reid 1983, Corollary 2.5). When two walls have proportional classes, the rays of the indices of `J₋` of their circuits are the same. -/
@@ -345,7 +345,7 @@ theorem IsProportional.image_jMinus (h : W.IsProportional W') (hσ : σ ∈ F.co
   obtain ⟨t, ht, hc⟩ := isProportional_iff.mp h
   rw [W.image_jMinus hσ hs, W'.image_jMinus hτ hs', hc]
   ext ρ
-  simp only [Set.mem_setOf_eq, Pi.smul_apply, smul_eq_mul]
+  simp only [Set.mem_ofPred_eq, Pi.smul_apply, smul_eq_mul]
   constructor
   · intro h1
     by_contra h2
