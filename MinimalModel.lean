@@ -30,6 +30,7 @@ import MinimalModel.Toric.ConeTheorem
 import MinimalModel.Toric.Examples
 import MinimalModel.Statements.Toric
 import MinimalModel.Toric.Program
+import MinimalModel.Toric.Flip
 import MinimalModel.Statements.ToricMMP
 import MinimalModel.Fidelity.AffineLine
 import MinimalModel.Fidelity.Centre

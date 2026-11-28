@@ -6,6 +6,7 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 
 ### Added
 
+- Toric flips, part 1 (MinimalModel/Toric/Flip.lean): circuits and their two triangulations; the circuit fan is a simplicial fan, and it and the flipped fan have the same support.
 - The segmented full build of the bridge (bridge-full.yml, scripts/bridge-full.sh, bridge/full.txt, bridge/heavy.txt), and the map of S10 to S19 to the theorems of AxiomMath/MMP and the vocabulary gaps of each, in bridge/README.md.
 - `MinimalModel/Statements/Shokurov.lean` pins the statement of `MinimalModel.shokurovLemma`, and the comparator checks the proof against the pinned statement.
 - `MinimalModel/Reductions/Shokurov.lean`: the abstract Shokurov lemma `MinimalModel.shokurovLemma` (O-R4-1), proved from Mathlib alone. Over an axiomatic sequence of steps, a lower semicontinuous invariant on compact loci with values in an ACC set, whose minimum strictly improves at each step, makes the sequence finite. With the forms `not_exists_chain_of_acc` and `shokurovLemma_pi` (Dickson's lemma).

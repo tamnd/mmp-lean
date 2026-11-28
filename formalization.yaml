@@ -618,6 +618,26 @@ status:
       kind: theorem
       status: proved
       note: Route R3, S2. The toric cone theorem in the form of the pinned statement ToricConeTheorem, from Fan.coneTheorem. The job comparator of the workflow trust checks it against Comparator/Challenge.lean.
+    - name: MinimalModel.Toric.Circuit.fan
+      kind: def
+      status: proved
+      note: Route R3, step 5 (toric flips, part 1). The fan of a circuit of lattice points with the relation a, of the cones that miss an index of J+ (Rei83 Section 2). The flip of this local model is the fan Circuit.neg.fan of the opposite relation.
+    - name: MinimalModel.Toric.IsCircuit.exists_mem_indexCone_compl
+      kind: theorem
+      status: proved
+      note: Route R3, step 5. The cones of a circuit that miss one index of J+ cover the cone of the whole circuit.
+    - name: MinimalModel.Toric.IsCircuit.indexCone_inf
+      kind: theorem
+      status: proved
+      note: Route R3, step 5. Two cones of a circuit that each miss an index of J+ meet in the cone of the common indices.
+    - name: MinimalModel.Toric.Circuit.isSimplicialFan_fan
+      kind: theorem
+      status: proved
+      note: Route R3, step 5. The fan of a circuit is simplicial, and so is its flip (isSimplicialFan_neg_fan).
+    - name: MinimalModel.Toric.Circuit.support_neg_fan
+      kind: theorem
+      status: proved
+      note: Route R3, step 5. When J+ and J- are not empty, the fan of a circuit and its flip have the same support, the cone of the circuit (support_fan).
     - name: MinimalModel.IsPlt
       kind: def
       status: proved
