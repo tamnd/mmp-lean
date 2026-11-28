@@ -351,9 +351,11 @@ theorem not_exists_infinite_toricStep {F : Fan n} (hF : F.IsComplete) (D : F.TDi
   have hmono : StrictMono Φ := strictMono_nat_of_lt_succ fun i =>
     lt_of_le_of_ne ((hstep i).supportFunction_le (hcomp i) (hΦ i) (hΦ (i + 1)))
       ((hstep i).supportFunction_ne (hcomp i) (hΦ i) (hΦ (i + 1)))
-  obtain ⟨i, j, hij, hcones⟩ :=
-    (finite_cones_of_rays_subset F.rays F.rays_finite).exists_lt_map_eq_of_forall_mem
-      (f := fun i : ℕ => (model i).F.cones) fun i => ⟨(model i).F, hsub i, rfl⟩
+  have hmem : ∀ i, (model i).F.cones ∈
+      {T : Set (PointedCone ℝ (NR n)) | ∃ F' : Fan n, F'.rays ⊆ F.rays ∧ F'.cones = T} :=
+    fun i => ⟨(model i).F, hsub i, rfl⟩
+  obtain ⟨i, j, hij, hcones⟩ := Set.Finite.exists_lt_map_eq_of_forall_mem
+    (f := fun i : ℕ => (model i).F.cones) hmem (finite_cones_of_rays_subset F.rays F.rays_finite)
   have hc : (model i).F.cones = (model j).F.cones := hcones
   have heq : Φ i = Φ j := by
     funext x
