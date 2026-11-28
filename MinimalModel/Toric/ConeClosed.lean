@@ -68,12 +68,11 @@ theorem exists_linearIndepOn_of_sum (v : ι → E) (T : Finset ι) :
         ?_, i₀, ?_⟩
       · simp only [neg_smul, Finset.sum_neg_distrib, hg', neg_zero]
       · show 0 < -(if i₀ ∈ t then g i₀ else 0)
-        rw [if_pos hi₀t]
+        simp only [hi₀t, ↓reduceIte]
         linarith
     · refine ⟨fun i => if i ∈ t then g i else 0, ht', hg', i₀, ?_⟩
       show 0 < (if i₀ ∈ t then g i₀ else 0)
-      rw [if_pos hi₀t]
-      exact hpos
+      simpa only [hi₀t, ↓reduceIte] using hpos
   have hi₀T : i₀ ∈ T := by
     by_contra h
     have := hgT i₀ h
@@ -116,6 +115,12 @@ theorem exists_linearIndepOn_mem_indexCone {v : ι → E} {T : Set ι} {x : E}
   obtain ⟨S, hS, hli, hmem⟩ := exists_linearIndepOn_of_sum v T.toFinset c hc
     (fun i hi => hcT i (by simpa using hi))
   exact ⟨S, fun i hi => by simpa using hS hi, hli, hmem⟩
+
+/-- The cone of a family indexed by the points of a set is the conic hull of the set. -/
+theorem hull_eq_indexCone_val (s : Set E) [Fintype s] :
+    PointedCone.hull ℝ s = indexCone (Subtype.val : s → E) univ := by
+  unfold indexCone
+  rw [Set.image_univ, Subtype.range_coe]
 
 end Caratheodory
 
@@ -171,12 +176,6 @@ theorem isClosed_indexCone {ι : Type*} [Fintype ι] (v : ι → E) (T : Set ι)
       exact indexCone_mono v hST hxS
   rw [h]
   exact (Set.toFinite _).isClosed_biUnion fun S hS => isClosed_indexCone_of_linearIndepOn hS.2
-
-/-- The cone of a family indexed by the points of a set is the conic hull of the set. -/
-theorem hull_eq_indexCone_val (s : Set E) [Fintype s] :
-    PointedCone.hull ℝ s = indexCone (Subtype.val : s → E) univ := by
-  unfold indexCone
-  rw [Set.image_univ, Subtype.range_coe]
 
 /-- **The conic hull of a finite set is closed.** -/
 theorem isClosed_hull_of_finite {s : Set E} (hs : s.Finite) :
@@ -281,12 +280,13 @@ theorem exists_linearMap_of_isFaceOf {ι : Type*} [Fintype ι] {v : ι → E}
       exact ⟨m, h1, h2, fun _ => h3⟩
   choose g hg0 hgG hgpos using H
   -- the sum of the forms
+  have hsum : ∀ x, (∑ i, g i) x = ∑ i, g i x := fun x => by simp
   have hm0 : ∀ j, 0 ≤ (∑ i, g i) (v j) := fun j => by
-    rw [LinearMap.coeFn_sum, Finset.sum_apply]
+    rw [hsum]
     exact Finset.sum_nonneg fun i _ => hg0 i j
   have hmG : ∀ j, (∑ i, g i) (v j) = 0 ↔ v j ∈ G := by
     intro j
-    rw [LinearMap.coeFn_sum, Finset.sum_apply]
+    rw [hsum]
     constructor
     · intro h
       by_contra hj
@@ -324,7 +324,7 @@ theorem exists_linearMap_of_isFaceOf {ι : Type*} [Fintype ι] {v : ι → E}
         Submodule.sum_mem _ fun k _ =>
           PointedCone.smul_mem _ (hc k) (mem_indexCone_of_mem v (mem_univ k))
       have h3 : c j • v j + ∑ k ∈ Finset.univ.erase j, c k • v k ∈ G := by
-        rw [Finset.add_sum_erase _ _ (Finset.mem_univ j)]
+        rw [Finset.add_sum_erase _ (fun k => c k • v k) (Finset.mem_univ j)]
         exact hx'
       have h5 : (c j)⁻¹ • (c j • v j) ∈ G :=
         PointedCone.smul_mem _ (inv_nonneg.mpr (hc j)) (hG.mem_of_add_mem_left h1 h2 h3)
