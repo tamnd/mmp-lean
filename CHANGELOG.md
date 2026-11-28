@@ -6,6 +6,7 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 
 ### Added
 
+- The segmented full build of the bridge (bridge-full.yml, scripts/bridge-full.sh, bridge/full.txt, bridge/heavy.txt), and the map of S10 to S19 to the theorems of AxiomMath/MMP and the vocabulary gaps of each, in bridge/README.md.
 - `MinimalModel/Statements/Shokurov.lean` pins the statement of `MinimalModel.shokurovLemma`, and the comparator checks the proof against the pinned statement.
 - `MinimalModel/Reductions/Shokurov.lean`: the abstract Shokurov lemma `MinimalModel.shokurovLemma` (O-R4-1), proved from Mathlib alone. Over an axiomatic sequence of steps, a lower semicontinuous invariant on compact loci with values in an ACC set, whose minimum strictly improves at each step, makes the sequence finite. With the forms `not_exists_chain_of_acc` and `shokurovLemma_pi` (Dickson's lemma).
 - The statement S36 `Sarkisov` (Hacon-McKernan, Theorem 1.3), with the vocabulary of `MinimalModel/Statements/Sarkisov.lean`: Mori fibre spaces, flops, the Sarkisov links of types I to IV, Sarkisov chains and runs of the program, and the fidelity checks `MinimalModel/Fidelity/Sarkisov.lean`.
