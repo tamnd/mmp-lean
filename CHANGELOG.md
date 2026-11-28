@@ -6,6 +6,7 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 
 ### Added
 
+- Toric flips, part 6: the star of an extremal ray is the join of the circuit cones with the link (Fan.IsExtremalRay.star_iff), with Reid's support function and the exchange lemma.
 - Toric flips, part 5 (MinimalModel/Toric/ConeClosed.lean, FlipSupport.lean): conic Carathéodory, finitely generated cones are closed, Farkas' lemma, faces of finitely generated cones are exposed; the cone of curves of a simplicial fan is finitely generated and closed, and each extremal ray has a nef divisor that supports it.
 - CI checks that formalization.yaml parses.
 - Toric flips, part 4 (MinimalModel/Toric/FlipStar.lean): in a complete fan each facet of a maximal cone is a wall with a neighbour across it, and the neighbour across a wall of an extremal ray is the wall joined with a ray of J+.
