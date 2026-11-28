@@ -638,6 +638,26 @@ status:
       kind: theorem
       status: proved
       note: Route R3, step 5. When J+ and J- are not empty, the fan of a circuit and its flip have the same support, the cone of the circuit (support_fan).
+    - name: MinimalModel.Toric.Fan.linearIndependent_generator
+      kind: theorem
+      status: proved
+      note: Route R3, step 5 (toric flips, part 2). The primitive generators of the rays of a fan in a simplicial cone of the fan are linearly independent.
+    - name: MinimalModel.Toric.Fan.WallData.circuit
+      kind: def
+      status: proved
+      note: Route R3, step 5. The circuit of a wall of two cones with the first one simplicial, the generators of their rays with the wall relation (1, -c) of the data of the wall (Rei83 Section 2). Fan.WallData.isCircuit proves that each relation is a multiple of it.
+    - name: MinimalModel.Toric.Fan.WallData.exists_coeffIn_neg
+      kind: theorem
+      status: proved
+      note: Route R3, step 5. A ray of the first cone of a wall that is not in the second cone has a negative coefficient in the wall relation, so its index is in J+.
+    - name: MinimalModel.Toric.Fan.WallData.degree_eq_sum
+      kind: theorem
+      status: proved
+      note: Route R3, step 5. The degree of a divisor on a wall is the sum of the coefficients of the circuit relation times the coefficients of the divisor.
+    - name: MinimalModel.Toric.Fan.IsWallPair.exists_circuit
+      kind: theorem
+      status: proved
+      note: Route R3, step 5. A wall pair of a simplicial fan gives a circuit whose fan contains the two cones (mem_circuit_fan_left, mem_circuit_fan_right), so the original fan contains Circuit.fan and the flip is Circuit.neg.fan.
     - name: MinimalModel.IsPlt
       kind: def
       status: proved
