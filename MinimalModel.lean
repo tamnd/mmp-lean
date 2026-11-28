@@ -39,6 +39,7 @@ import MinimalModel.Toric.FlipSupport
 import MinimalModel.Toric.FlipLink
 import MinimalModel.Toric.FlipContract
 import MinimalModel.Toric.FlipFlipped
+import MinimalModel.Toric.FlipStep
 import MinimalModel.Statements.ToricMMP
 import MinimalModel.Fidelity.AffineLine
 import MinimalModel.Fidelity.Centre
