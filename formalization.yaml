@@ -698,6 +698,46 @@ status:
       kind: theorem
       status: proved
       note: Route R3, step 5 (toric flips, part 3). The cone of the rays of J- of a ray lies in both maximal cones of each wall of the ray, so V(cone(u_J-)) contains each curve of the ray.
+    - name: MinimalModel.Toric.coneDim_mono
+      kind: theorem
+      status: proved
+      note: Route R3, step 5 (toric flips, part 4). A smaller cone has a smaller dimension.
+    - name: MinimalModel.Toric.LinearIndependent.indexCone_isFaceOf
+      kind: theorem
+      status: proved
+      note: Route R3, step 5 (toric flips, part 4). The cones of the subsets of a linearly independent family are faces of the cone of the family, so the faces of a simplicial cone are the cones of the subsets of its generators.
+    - name: MinimalModel.Toric.Fan.isMaximalCone_of_coneDim_eq
+      kind: theorem
+      status: proved
+      note: Route R3, step 5 (toric flips, part 4). A cone of the fan of dimension n is maximal.
+    - name: MinimalModel.Toric.Fan.le_of_isFaceOf_of_sum_mem
+      kind: theorem
+      status: proved
+      note: Route R3, step 5 (toric flips, part 4). A face containing the sum of the generators of the rays of a cone of the fan contains the cone.
+    - name: MinimalModel.Toric.Fan.exists_isWallPair_of_le
+      kind: theorem
+      status: proved
+      note: Route R3, step 5 (toric flips, part 4). Crossing a facet. In a complete fan with closed cones, a cone of dimension n-1 in a cone sigma of dimension n is the wall of a wall pair (sigma, sigma'). Generic point argument: p - t u for small t > 0 lies in a cone containing p.
+    - name: MinimalModel.Toric.Fan.exists_isWallPair_of_le_of_isSimplicialFan
+      kind: theorem
+      status: proved
+      note: Route R3, step 5 (toric flips, part 4). Crossing a facet in a complete simplicial fan.
+    - name: MinimalModel.Toric.Fan.exists_isWallPair_of_ray
+      kind: theorem
+      status: proved
+      note: Route R3, step 5 (toric flips, part 4). In a complete simplicial fan, each cone of dimension n has a neighbour across the facet opposite each of its rays.
+    - name: MinimalModel.Toric.Fan.WallData.IsProportional.curveClass_ray_pos
+      kind: theorem
+      status: proved
+      note: Route R3, step 5 (toric flips, part 4). The new ray across a wall of an extremal ray R is a ray of J+.
+    - name: MinimalModel.Toric.Fan.WallData.IsProportional.ray_eq
+      kind: theorem
+      status: proved
+      note: Route R3, step 5 (toric flips, part 4). When the wall contains all the rays of J+ but rho, the new ray across a wall of R is rho.
+    - name: MinimalModel.Toric.Fan.WallData.IsProportional.eq_inf_sup
+      kind: theorem
+      status: proved
+      note: Route R3, step 5 (toric flips, part 4). The neighbour across a wall of R is the wall plus rho: crossing from cone(u_{!=j}) + lambda gives cone(u_{!=k}) + lambda. Rei83 Section 2.
     - name: MinimalModel.IsPlt
       kind: def
       status: proved

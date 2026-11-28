@@ -33,6 +33,7 @@ import MinimalModel.Toric.Program
 import MinimalModel.Toric.Flip
 import MinimalModel.Toric.FlipFan
 import MinimalModel.Toric.FlipRay
+import MinimalModel.Toric.FlipStar
 import MinimalModel.Statements.ToricMMP
 import MinimalModel.Fidelity.AffineLine
 import MinimalModel.Fidelity.Centre
