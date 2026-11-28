@@ -1,0 +1,119 @@
+name: bridge full
+
+# The full build of the bridge package bridge/ (MinimalModelBridge) with the theorem modules of AxiomMath/MMP that the bridges of S10 to S19 (O-R2-2) and of the Kawamata-Viehweg theorem (O-R2-3) use: the modules of bridge/full.txt. The workflow bridge.yml builds only the vocabulary on each pull request; this one is the bridge runner of spec 09.4 on hosted runners.
+#
+# The build imports about 25,000 modules of AxiomMath/Stacks and AxiomMath/MMP and is longer than one job of 6 hours on a standard runner. So each run builds for at most 120 minutes, saves the partial build in the cache, and starts the next run with the next segment number on the same ref. The run that finishes the build prints the axioms of the declarations of bridge/full.txt and uploads the artifact bridge-full-records. A person starts the first run by hand. The model is the workflow audit-build of tamnd/mmp.
+on:
+  workflow_dispatch:
+    inputs:
+      segment:
+        description: the number of this run in the chain, 1 for the first run
+        default: "1"
+      max_segments:
+        description: the chain stops after this run number
+        default: "20"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bridge-full
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: full build of the bridge
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    permissions:
+      contents: read
+      actions: write # to save and delete the cache of the build and to start the next run
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: free disk space and add swap
+        run: scripts/bridge-full.sh room
+      - name: install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o elan-init.sh
+          sh elan-init.sh -y --default-toolchain none
+          rm elan-init.sh
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: get the Mathlib cache
+        working-directory: bridge
+        run: lake exe cache get
+      - name: check the pins
+        run: scripts/bridge-full.sh pins
+      - name: restore the partial build
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            .lake/build
+            bridge/.lake/build
+            bridge/.lake/packages/MMP/.lake/build
+            bridge/.lake/packages/Stacks/.lake/build
+          key: bridge-full-${{ hashFiles('bridge/lake-manifest.json') }}-${{ github.run_id }}
+          restore-keys: bridge-full-${{ hashFiles('bridge/lake-manifest.json') }}-
+      - name: build
+        id: build
+        env:
+          SEGMENT: ${{ inputs.segment }}
+        run: scripts/bridge-full.sh build 120
+      - name: save the partial build
+        if: always() && steps.build.outcome == 'success'
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            .lake/build
+            bridge/.lake/build
+            bridge/.lake/packages/MMP/.lake/build
+            bridge/.lake/packages/Stacks/.lake/build
+          key: bridge-full-${{ hashFiles('bridge/lake-manifest.json') }}-${{ github.run_id }}
+      - name: delete the older caches of the build
+        if: always() && steps.build.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          KEEP: bridge-full-${{ hashFiles('bridge/lake-manifest.json') }}-${{ github.run_id }}
+        run: |
+          gh cache list --repo "$GITHUB_REPOSITORY" --key bridge-full- --limit 100 --json id,key \
+            --jq ".[] | select(.key != \"$KEEP\") | .id" | while read -r id; do
+            gh cache delete "$id" --repo "$GITHUB_REPOSITORY"
+          done
+      - name: print the axioms
+        if: steps.build.outputs.done == 'true'
+        run: scripts/bridge-full.sh record
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: bridge-full-segment-${{ inputs.segment }}
+          path: |
+            out/segment.txt
+            out/time.txt
+            out/build.log
+            out/oom.txt
+          if-no-files-found: ignore
+          retention-days: 30
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always() && steps.build.outputs.done == 'true'
+        with:
+          name: bridge-full-records
+          path: out/
+          retention-days: 90
+      - name: start the next run
+        if: steps.build.outputs.done == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SEGMENT: ${{ inputs.segment }}
+          MAX: ${{ inputs.max_segments }}
+          REF: ${{ github.ref_name }}
+        run: |
+          if [ "$SEGMENT" -ge "$MAX" ]; then
+            echo "the chain stops at run $SEGMENT of at most $MAX"
+            exit 1
+          fi
+          gh workflow run bridge-full.yml --repo "$GITHUB_REPOSITORY" --ref "$REF" \
+            -f segment="$((SEGMENT + 1))" -f max_segments="$MAX"
+      - name: fail on a build error
+        if: steps.build.outputs.failed == 'true'
+        run: exit 1

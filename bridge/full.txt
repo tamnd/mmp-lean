@@ -1,0 +1,39 @@
+# The targets of the full bridge build (.github/workflows/bridge-full.yml, scripts/bridge-full.sh).
+# Each line is a module and a declaration of that module. The build builds each module; the last segment prints the axioms of each declaration.
+# The modules of AxiomMath/MMP are those of the map of S10 to S19 and of the Kawamata-Viehweg theorem in bridge/README.md, at commit 1f9ade367087ec711a2ce1382bad279a5a0284c3.
+MinimalModelBridge MinimalModelBridge.primeDivisorEquiv
+MinimalModelBridge MinimalModelBridge.divisorEquiv_apply
+MinimalModelBridge MinimalModelBridge.forall_divisorEquiv_iff
+MinimalModelBridge MinimalModelBridge.divisorEquiv_nonneg_iff
+MinimalModelBridge MinimalModelBridge.divisorEquiv_le_iff
+MinimalModelBridge MinimalModelBridge.isVariety_iff
+MinimalModelBridge MinimalModelBridge.isNormalScheme_iff_isNormal
+MinimalModelBridge MinimalModelBridge.NormalVariety.isVariety
+MinimalModelBridge MinimalModelBridge.NormalVariety.isNormal
+MinimalModelBridge MinimalModelBridge.NormalVariety.ofIsVariety
+MinimalModelBridge MinimalModelBridge.KawamataViehwegSNC
+# S10
+MMP.AlgebraicGeometry.Resolution.Surface.CastelnuovoContraction MMP.Resolution.Bridges.exists_contraction_of_isMinusOneCurve
+# S11
+MMP.AlgebraicGeometry.MMP.ConeTheorem.RelativeConeTheorem MMP.Mori.IsKltPair.exists_relativeClosedConeOfCurves_eq_add_hull
+# S12, S13
+MMP.AlgebraicGeometry.MMP.Surface.RationalBirationalProgram MMP.Fourfold.rationalBirationalProgramProperty_two
+# S14 (partial: nef and big, and complemented)
+MMP.AlgebraicGeometry.MMP.Surface.LcNefBigSemiample MMP.Fourfold.QDivisor.isRelativelySemiample_of_isLcPair_of_isRelativelyNef_of_isRelativelyBig
+MMP.AlgebraicGeometry.MMP.Surface.ComplementedLcSemiample MMP.Threefold.exists_isRelativelyFreeDivisor_of_isLogCanonicalPair_of_add_qLinearlyEquivalent
+# S15
+MMP.AlgebraicGeometry.MMP.Threefold.Flip.KltFlipExistence MMP.Fourfold.exists_isFlip_of_isKltPair
+MMP.AlgebraicGeometry.MMP.Threefold.DltFlipExistence MMP.Fourfold.IsContractionOfRay.exists_isFlip
+# S16
+MMP.AlgebraicGeometry.MMP.Threefold.DltFlipTermination MMP.Fourfold.SequenceOfFlips.terminates_of_isDltPair
+MMP.AlgebraicGeometry.MMP.Threefold.KltFlipTermination MMP.Fourfold.forall_projectiveKltTerminationLevel_and_terminates
+# S17 (partial: complemented)
+MMP.AlgebraicGeometry.MMP.Abundance.ComplementedLcThreefold MMP.Fourfold.isRelativelySemiample_of_isLogCanonicalPair_add_of_qLinearlyEquivalent
+# S12, S13, S15, S16, S18
+MMP.AlgebraicGeometry.MMP.Threefold.LogMMP MMP.Fourfold.projectiveLowerLogMMP_three
+MMP.AlgebraicGeometry.MMP.Threefold.Termination.RealKltProgram MMP.Fourfold.IsRealKltPair.exists_program_isRelativelyNef_or_isFibreType
+# S19 (n = 3 and n = 4)
+MMP.AlgebraicGeometry.MMP.Threefold.Termination.SpecialTermination MMP.Fourfold.exists_forall_ge_disjoint_exceptionalSet_of_isFlipOf
+MMP.AlgebraicGeometry.MMP.Fourfold.Termination.SpecialTermination MMP.Fourfold.SequenceOfFlips.eventually_disjoint_exceptionalSet_supp_roundDown
+# O-R2-3, the Kawamata-Viehweg theorem
+MMP.AlgebraicGeometry.Vanishing.KawamataViehweg MMP.Mori.subsingleton_derivedCohomologyOverField_divisorialSheaf_neg
