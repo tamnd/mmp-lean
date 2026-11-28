@@ -1,0 +1,6 @@
+# Modules of AxiomMath/Stacks that the OOM killer stopped in a parallel build (segments 6 and 9 of the audit build of tamnd/mmp, audit/axiom-mmp/heavy.txt).
+# scripts/bridge-full.sh builds each one alone before the full build.
+StacksFrontier.AlgebraicGeometry.NestedCocycleTail.Basic
+StacksFrontier.AlgebraicGeometry.ProjInclusionDegreeSection.Basic
+StacksFrontier.AlgebraicGeometry.ChartTransNonNested.DegreeSection
+StacksFrontier.RingTheory.MilnorPatching.Relative
