@@ -6,7 +6,7 @@ import MinimalModel.Toric.Flip
 import MinimalModel.Toric.ConeTheorem
 
 /-!
-# Toric flips, part 2: the circuit of a wall
+# Toric flips, part 2: the circuit of a wall and the join with a simplex
 
 This file is step 2 of the route to `flipExists` in `MinimalModel/Toric/Flip.lean` (route R3, spec 04.4). Let `σ` and `σ'` be two maximal cones of a simplicial fan `F` that meet in a wall. The generators of the rays of `σ` and `σ'` form a circuit (Reid 1983, Section 2; Matsuki, Chapter 14; Cox, Little and Schenck, Section 15.3).
 
@@ -14,10 +14,13 @@ We read the circuit off the data of the wall, `Fan.WallData`. Let `ρ'` be the r
 
 The signs are fixed as follows. The index `none` of `ρ'` is in `J₊`, and so is the index of a ray of `σ` that is not in `σ'`, since its coefficient `c_ρ` is negative (`Fan.WallData.exists_coeffIn_neg`). So `σ` and `σ'` are both cones of the fan `Circuit.fan` of the circuit: the original fan `F` contains the triangulation `Circuit.fan`, and the flip is `Circuit.neg.fan`. The degree of a divisor `D` on the wall is `Σ aᵢ D(ρᵢ)` (`Fan.WallData.degree_eq_sum`), so it changes sign when the circuit is replaced by the opposite circuit.
 
+The last section starts step 4, the flipped fan. The star of the flipping locus is the join of `Circuit.fan` with a link `L`. For one cone `λ` of the link, spanned by lattice points `w` that are linearly independent modulo the span of the circuit, the join is again a circuit, `Circuit.join`: the relation is extended by zero, so the points `w` are in `J₀`. Its fan has the cones `cone(u_T) + cone(w_K)` with `T` missing an index of `J₊` (`Circuit.mem_join_fan_cones`), and its flip has the cones with `T` missing an index of `J₋` (`Circuit.mem_join_neg_fan_cones`). The results of `MinimalModel/Toric/Flip.lean` then give that both are simplicial fans with the same support (`Circuit.support_join_neg_fan`).
+
 ## Main definitions
 
 * `Fan.WallData.circuitRay`, `Fan.WallData.circuitCoeff`: the rays of the circuit of a wall and the coefficients of the wall relation.
 * `Fan.WallData.circuit`: the circuit of a wall of two cones `σ`, `σ'` with `σ` simplicial.
+* `Circuit.join`: the join of a circuit with lattice points that are linearly independent modulo its span.
 
 ## Main results
 
@@ -28,6 +31,9 @@ The signs are fixed as follows. The index `none` of `ρ'` is in `J₊`, and so i
 * `Fan.WallData.mem_circuit_fan_left`, `Fan.WallData.mem_circuit_fan_right`: the cones `σ` and `σ'` are cones of the fan of the circuit.
 * `Fan.WallData.degree_eq_sum`: the degree of a divisor on the wall is `Σ aᵢ D(ρᵢ)`.
 * `Fan.IsWallPair.exists_circuit`: a wall pair of a simplicial fan gives a circuit whose fan contains the two cones.
+* `IsCircuit.sumElim`: a circuit relation extended by zero to a family that is independent modulo the span is a circuit relation.
+* `Circuit.mem_join_fan_cones`, `Circuit.mem_join_neg_fan_cones`: the cones of the fan of the join and of its flip.
+* `Circuit.support_join_fan`, `Circuit.support_join_neg_fan`: the fan of the join and its flip have the same support.
 -/
 
 namespace MinimalModel.Toric
@@ -136,8 +142,8 @@ theorem sum_coeffIn_smul {M : Type*} [AddCommMonoid M] [Module ℝ M] (g : F.Ray
   rw [h1, h2]
   refine Finset.sum_congr rfl fun ρ _ => ?_
   by_cases h : ρ.1 ∈ W.base
-  · simp only [coeffIn, if_pos h]
-  · simp only [coeffIn, if_neg h, zero_smul]
+  · simp [coeffIn, h]
+  · simp [coeffIn, h]
 
 /-- The wall relation over all the rays of `σ`: `u_ρ' = Σ c_ρ u_ρ`. -/
 theorem sum_coeffIn_smul_generator :
@@ -281,5 +287,124 @@ theorem IsWallPair.exists_circuit {σ σ' : PointedCone ℝ (NR n)} (hs : F.IsSi
     W.mem_circuit_fan_right hσ (hs σ hσ) hw.isMaximalCone_right.mem⟩
 
 end Fan
+
+/-! ### The join of a circuit with a simplex -/
+
+section Join
+
+variable {ι κ E : Type*} [Fintype ι] [Fintype κ] [AddCommGroup E] [Module ℝ E]
+
+/-- The cone of the indices `inl '' T ∪ inr '' K` of a sum of two families is the sum of the cone of `T` in the first family and the cone of `K` in the second one. -/
+theorem indexCone_sumElim (v : ι → E) (w : κ → E) (T : Set ι) (K : Set κ) :
+    indexCone (Sum.elim v w) (Sum.inl '' T ∪ Sum.inr '' K) = indexCone v T ⊔ indexCone w K := by
+  unfold indexCone
+  simp only [Set.image_union, Set.image_image, Sum.elim_inl, Sum.elim_inr]
+  exact Submodule.span_union _ _
+
+/-- Let `a` be a circuit relation of `v`, and let `w` be a family that is linearly independent modulo the span of `v`. Then `a`, extended by zero, is a circuit relation of the family `v, w`. -/
+theorem IsCircuit.sumElim {v : ι → E} {a : ι → ℝ} (h : IsCircuit v a) {w : κ → E}
+    (hw : ∀ (b : ι → ℝ) (c : κ → ℝ), ∑ i, b i • v i + ∑ k, c k • w k = 0 → c = 0) :
+    IsCircuit (Sum.elim v w) (Sum.elim a 0) := by
+  refine ⟨by simp [Fintype.sum_sum_type, h.1], fun b hb => ?_⟩
+  rw [Fintype.sum_sum_type] at hb
+  simp only [Sum.elim_inl, Sum.elim_inr] at hb
+  have hc : ∀ k, b (Sum.inr k) = 0 := fun k => congrFun (hw _ _ hb) k
+  have hb' : ∑ i, b (Sum.inl i) • v i = 0 := by simpa [hc] using hb
+  obtain ⟨s, hs⟩ := h.2 _ hb'
+  refine ⟨s, funext fun x => ?_⟩
+  cases x with
+  | inl i => simpa using congrFun hs i
+  | inr k => simp [hc k]
+
+end Join
+
+namespace Circuit
+
+variable {ι κ : Type*} [Fintype ι] [Fintype κ] (C : Circuit ι n) (w : κ → Fin n → ℤ)
+  (hw : ∀ (b : ι → ℝ) (c : κ → ℝ),
+    ∑ i, b i • toNR (C.u i) + ∑ k, c k • toNR (w k) = 0 → c = 0)
+
+/-- The join of a circuit with lattice points `w` that are linearly independent modulo the span of the `uᵢ`. The relation is extended by zero, so the points `w` are in `J₀`. The fan of the join is the join of the fan of the circuit with the faces of the simplicial cone of `w` (`mem_join_fan_cones`). This is the local model of the star of a flipping locus with one cone in its link (Reid 1983, Section 2). -/
+noncomputable def join : Circuit (ι ⊕ κ) n where
+  u := Sum.elim C.u w
+  a := Sum.elim C.a 0
+  isCircuit := by
+    have he : (fun i => toNR (Sum.elim C.u w i)) =
+        Sum.elim (fun i => toNR (C.u i)) fun k => toNR (w k) := by
+      funext x
+      cases x <;> rfl
+    show IsCircuit (fun i => toNR (Sum.elim C.u w i)) (Sum.elim C.a 0)
+    rw [he]
+    exact C.isCircuit.sumElim hw
+
+/-- The set `J₊` of the join is the set `J₊` of the circuit. -/
+theorem jPlus_join : (C.join w hw).jPlus = Sum.inl '' C.jPlus := by
+  ext x
+  cases x with
+  | inl i => simp [jPlus, join]
+  | inr k => simp [jPlus, join]
+
+/-- The set `J₋` of the join is the set `J₋` of the circuit. -/
+theorem jMinus_join : (C.join w hw).jMinus = Sum.inl '' C.jMinus := by
+  ext x
+  cases x with
+  | inl i => simp [jMinus, join]
+  | inr k => simp [jMinus, join]
+
+/-- The opposite of the join is the join of the opposite circuit. -/
+theorem neg_join : (C.join w hw).neg = C.neg.join w hw := by
+  simp only [neg, join, Circuit.mk.injEq, true_and]
+  funext x
+  cases x <;> simp
+
+/-- The cone of the join of the indices `inl '' T ∪ inr '' K` is the sum of the cone `cone(u_T)` of the circuit and the cone of the points `w_k` with `k ∈ K`. -/
+theorem join_cone (T : Set ι) (K : Set κ) :
+    (C.join w hw).cone (Sum.inl '' T ∪ Sum.inr '' K) =
+      C.cone T ⊔ indexCone (fun k => toNR (w k)) K := by
+  have he : (fun i => toNR ((C.join w hw).u i)) =
+      Sum.elim (fun i => toNR (C.u i)) fun k => toNR (w k) := by
+    funext x
+    cases x <;> rfl
+  show indexCone (fun i => toNR ((C.join w hw).u i)) _ = _
+  rw [he, indexCone_sumElim]
+  rfl
+
+/-- The cones of the fan of the join are the sums `cone(u_T) + cone(w_K)`, where `T` misses an index of `J₊` and `K` is any set of indices of `w`. So the fan of the join is the join of `C.fan` with the faces of the cone of `w`. -/
+theorem mem_join_fan_cones {σ : PointedCone ℝ (NR n)} :
+    σ ∈ (C.join w hw).fan.cones ↔ ∃ T : Set ι, ∃ j ∈ C.jPlus, j ∉ T ∧
+      ∃ K : Set κ, σ = C.cone T ⊔ indexCone (fun k => toNR (w k)) K := by
+  rw [mem_fan_cones, jPlus_join]
+  constructor
+  · rintro ⟨S, _, ⟨j, hj, rfl⟩, hjS, rfl⟩
+    refine ⟨Sum.inl ⁻¹' S, j, hj, hjS, Sum.inr ⁻¹' S, ?_⟩
+    rw [← C.join_cone w hw]
+    congr 1
+    ext x
+    cases x <;> simp
+  · rintro ⟨T, j, hj, hjT, K, rfl⟩
+    exact ⟨_, _, ⟨j, hj, rfl⟩, by simpa using hjT, (C.join_cone w hw T K).symm⟩
+
+/-- The cones of the flip of the join are the sums `cone(u_T) + cone(w_K)`, where `T` misses an index of `J₋`. So the flip of the join is the join of the flip `C.neg.fan` with the faces of the cone of `w`. -/
+theorem mem_join_neg_fan_cones {σ : PointedCone ℝ (NR n)} :
+    σ ∈ (C.join w hw).neg.fan.cones ↔ ∃ T : Set ι, ∃ j ∈ C.jMinus, j ∉ T ∧
+      ∃ K : Set κ, σ = C.cone T ⊔ indexCone (fun k => toNR (w k)) K := by
+  rw [C.neg_join w hw, C.neg.mem_join_fan_cones w hw, C.jPlus_neg]
+  exact Iff.rfl
+
+/-- When `J₊` and `J₋` are not empty, the fan of the join and its flip have the same support, the sum of the cone of the circuit and the cone of `w`. -/
+theorem support_join_neg_fan {j₀ k₀ : ι} (hj₀ : j₀ ∈ C.jPlus) (hk₀ : k₀ ∈ C.jMinus) :
+    (C.join w hw).neg.fan.support = (C.join w hw).fan.support :=
+  (C.join w hw).support_neg_fan (j₀ := Sum.inl j₀) (k₀ := Sum.inl k₀)
+    (by rw [jPlus_join]; exact ⟨j₀, hj₀, rfl⟩) (by rw [jMinus_join]; exact ⟨k₀, hk₀, rfl⟩)
+
+/-- The support of the fan of the join is the sum of the cone of the circuit and the cone of `w`, when `J₊` is not empty. -/
+theorem support_join_fan {j₀ : ι} (hj₀ : j₀ ∈ C.jPlus) :
+    (C.join w hw).fan.support =
+      ((C.cone Set.univ ⊔ indexCone (fun k => toNR (w k)) Set.univ : PointedCone ℝ (NR n)) :
+        Set (NR n)) := by
+  rw [(C.join w hw).support_fan (j₀ := Sum.inl j₀) (by rw [jPlus_join]; exact ⟨j₀, hj₀, rfl⟩),
+    ← C.join_cone w hw, Set.image_univ, Set.image_univ, Set.range_inl_union_range_inr]
+
+end Circuit
 
 end MinimalModel.Toric
