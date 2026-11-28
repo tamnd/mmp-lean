@@ -65,7 +65,7 @@ theorem apply_le_of_relation {v : ι → E} {c D : ι → ℝ} (hrel : ∑ i, c 
   have he : 0 < m (v j) + D j := by
     have h := mul_apply_add_eq_of_relation hrel hS hm
     by_contra hle
-    push_neg at hle
+    push Not at hle
     nlinarith [mul_nonneg (neg_nonneg.mpr hj.le) (neg_nonneg.mpr hle)]
   have hdiff : m (∑ i, b i • v i) - m' (∑ i, b i • v i) = b j * (m (v j) + D j) := by
     simp only [map_sum, map_smul, smul_eq_mul]
@@ -169,7 +169,7 @@ theorem IsExtremalRay.exists_eq_flipCone (hc : F.IsComplete) (hs : F.IsSimplicia
     · exact ⟨j', hj', fun hj'S => hj'S.2 hneg' rfl⟩
     · obtain ⟨j, hj, hjν⟩ : ∃ j : F.Ray, W₀.curveClass j < 0 ∧ ¬ j.1 ≤ ν' := by
         by_contra hno
-        push_neg at hno
+        push Not at hno
         exact hneg' (negCone_le_iff.mpr hno)
       exact ⟨j, hj, fun hjS => hjS.1.elim hjν fun h' => hneg' h'.1⟩
   have hle : F.flipCone W₀.curveClass ν' j' ≤ F.flipCone W₀.curveClass ν j := by

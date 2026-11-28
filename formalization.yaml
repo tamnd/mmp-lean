@@ -1142,6 +1142,46 @@ status:
       kind: theorem
       status: proved
       note: "Route R3, step 9 (toric flips, part 9). See `IsExtremalRay.isToricStep_flippedFan` in MinimalModel/Toric/FlipStep.lean."
+    - name: MinimalModel.Toric.Fan.exists_mem_flipCone_of_pos
+      kind: theorem
+      status: proved
+      note: "Route R3, step 10 (toric flips, part 10). See `exists_mem_flipCone_of_pos` in MinimalModel/Toric/FlipExists.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.isMaximalCone_flipCone_of_pos
+      kind: theorem
+      status: proved
+      note: "Route R3, step 10 (toric flips, part 10). See `IsExtremalRay.isMaximalCone_flipCone_of_pos` in MinimalModel/Toric/FlipExists.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.exists_eq_flipCone_of_pos
+      kind: theorem
+      status: proved
+      note: "Route R3, step 10 (toric flips, part 10). See `IsExtremalRay.exists_eq_flipCone_of_pos` in MinimalModel/Toric/FlipExists.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.exists_linearMap_flipCone_of_pos
+      kind: theorem
+      status: proved
+      note: "Route R3, step 10 (toric flips, part 10). See `IsExtremalRay.exists_linearMap_flipCone_of_pos` in MinimalModel/Toric/FlipExists.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.isAmpleOver_contractionFan
+      kind: theorem
+      status: proved
+      note: "Route R3, step 10 (toric flips, part 10). See `IsExtremalRay.isAmpleOver_contractionFan` in MinimalModel/Toric/FlipExists.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.isPullback_of_degree_eq_zero
+      kind: theorem
+      status: proved
+      note: "Route R3, step 10 (toric flips, part 10). See `IsExtremalRay.isPullback_of_degree_eq_zero` in MinimalModel/Toric/FlipExists.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.not_isPullback
+      kind: theorem
+      status: proved
+      note: "Route R3, step 10 (toric flips, part 10). See `IsExtremalRay.not_isPullback` in MinimalModel/Toric/FlipExists.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.hasRelPicardOne_contractionFan
+      kind: theorem
+      status: proved
+      note: "Route R3, step 10 (toric flips, part 10). See `IsExtremalRay.hasRelPicardOne_contractionFan` in MinimalModel/Toric/FlipExists.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.flipExists
+      kind: theorem
+      status: proved
+      note: "Route R3, step 10 (toric flips, part 10). See `IsExtremalRay.flipExists` in MinimalModel/Toric/FlipExists.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.exists_isToricStep
+      kind: theorem
+      status: proved
+      note: "Route R3, step 10 (toric flips, part 10). See `IsExtremalRay.exists_isToricStep` in MinimalModel/Toric/FlipExists.lean."
     - name: MinimalModel.IsPlt
       kind: def
       status: proved

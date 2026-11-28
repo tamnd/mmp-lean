@@ -6,6 +6,7 @@ All changes that a user can see are in this file. The format follows Keep a Chan
 
 ### Added
 
+- Toric flips, part 10: relative Picard number one and -D ample over the contraction fan, and the existence of toric flips, Fan.IsExtremalRay.flipExists (#44).
 - Toric flips, part 9: the strict transform of a divisor negative on the wall is ample over the contraction fan, and the flipped fan is a toric step on the side of F⁺ (#43).
 - Toric flips, part 8: the flipped fan F⁺ (Fan.IsExtremalRay.flippedFan), a complete simplicial fan with the same support and rays as F that refines the contraction.
 - Toric flips, part 7: the contraction of an extremal ray (Fan.contractionFan), a complete quasi-fan refined by F, birational when J₋ is nonempty and small with the same rays when J₋ has at least two indices.
