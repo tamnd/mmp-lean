@@ -1182,6 +1182,66 @@ status:
       kind: theorem
       status: proved
       note: "Route R3, step 10 (toric flips, part 10). See `IsExtremalRay.exists_isToricStep` in MinimalModel/Toric/FlipExists.lean."
+    - name: MinimalModel.Toric.exists_nonempty_interior_of_biUnion
+      kind: theorem
+      status: proved
+      note: "Route R3, step 11 (toric flips, part 11: termination of the toric program). See `exists_nonempty_interior_of_biUnion` in MinimalModel/Toric/Termination.lean."
+    - name: MinimalModel.Toric.eq_of_isFaceOf_of_mem_interior
+      kind: theorem
+      status: proved
+      note: "Route R3, step 11 (toric flips, part 11: termination of the toric program). See `eq_of_isFaceOf_of_mem_interior` in MinimalModel/Toric/Termination.lean."
+    - name: MinimalModel.Toric.linearMap_eq_of_eqOn_isOpen
+      kind: theorem
+      status: proved
+      note: "Route R3, step 11 (toric flips, part 11: termination of the toric program). See `linearMap_eq_of_eqOn_isOpen` in MinimalModel/Toric/Termination.lean."
+    - name: MinimalModel.Toric.Fan.isMaximalCone_of_nonempty_interior
+      kind: theorem
+      status: proved
+      note: "Route R3, step 11 (toric flips, part 11: termination of the toric program). See `isMaximalCone_of_nonempty_interior` in MinimalModel/Toric/Termination.lean."
+    - name: MinimalModel.Toric.Fan.nonempty_interior_of_isComplete
+      kind: theorem
+      status: proved
+      note: "Route R3, step 11 (toric flips, part 11: termination of the toric program). See `nonempty_interior_of_isComplete` in MinimalModel/Toric/Termination.lean."
+    - name: MinimalModel.Toric.Fan.Refines.support_eq
+      kind: theorem
+      status: proved
+      note: "Route R3, step 11 (toric flips, part 11: termination of the toric program). See `Refines.support_eq` in MinimalModel/Toric/Termination.lean."
+    - name: MinimalModel.Toric.Fan.Refines.isComplete_base
+      kind: theorem
+      status: proved
+      note: "Route R3, step 11 (toric flips, part 11: termination of the toric program). See `Refines.isComplete_base` in MinimalModel/Toric/Termination.lean."
+    - name: MinimalModel.Toric.Fan.Refines.isComplete_of_base
+      kind: theorem
+      status: proved
+      note: "Route R3, step 11 (toric flips, part 11: termination of the toric program). See `Refines.isComplete_of_base` in MinimalModel/Toric/Termination.lean."
+    - name: MinimalModel.Toric.Fan.Refines.rays_subset
+      kind: theorem
+      status: proved
+      note: "Route R3, step 11 (toric flips, part 11: termination of the toric program). See `Refines.rays_subset` in MinimalModel/Toric/Termination.lean."
+    - name: MinimalModel.Toric.Fan.IsSupportFunctionOf.of_neg
+      kind: theorem
+      status: proved
+      note: "Route R3, step 11 (toric flips, part 11: termination of the toric program). See `IsSupportFunctionOf.of_neg` in MinimalModel/Toric/Termination.lean."
+    - name: MinimalModel.Toric.IsToricStep.supportFunction_le
+      kind: theorem
+      status: proved
+      note: "Route R3, step 11 (toric flips, part 11: termination of the toric program). See `IsToricStep.supportFunction_le` in MinimalModel/Toric/Termination.lean."
+    - name: MinimalModel.Toric.IsToricStep.supportFunction_ne
+      kind: theorem
+      status: proved
+      note: "Route R3, step 11 (toric flips, part 11: termination of the toric program). See `IsToricStep.supportFunction_ne` in MinimalModel/Toric/Termination.lean."
+    - name: MinimalModel.Toric.finite_cones_of_rays_subset
+      kind: theorem
+      status: proved
+      note: "Route R3, step 11 (toric flips, part 11: termination of the toric program). See `finite_cones_of_rays_subset` in MinimalModel/Toric/Termination.lean."
+    - name: MinimalModel.Toric.not_exists_infinite_toricStep
+      kind: theorem
+      status: proved
+      note: "Route R3, step 11 (toric flips, part 11: termination of the toric program). See `not_exists_infinite_toricStep` in MinimalModel/Toric/Termination.lean."
+    - name: MinimalModel.Toric.toricMMP_not_exists_infinite
+      kind: theorem
+      status: proved
+      note: "Route R3, step 11 (toric flips, part 11: termination of the toric program). See `toricMMP_not_exists_infinite` in MinimalModel/Toric/Termination.lean."
     - name: MinimalModel.Toric.Fan.IsExtremalRay.isAmpleOver_contraction
       kind: theorem
       status: proved
