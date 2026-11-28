@@ -738,6 +738,58 @@ status:
       kind: theorem
       status: proved
       note: "Route R3, step 5 (toric flips, part 4). The neighbour across a wall of R is the wall plus rho: crossing from cone(u_{!=j}) + lambda gives cone(u_{!=k}) + lambda. Rei83 Section 2."
+    - name: MinimalModel.Toric.exists_linearIndepOn_mem_indexCone
+      kind: theorem
+      status: proved
+      note: "Route R3, step 5 (toric flips, part 5). Caratheodory's theorem for cones. A point of the cone of a finite family is in the cone of a linearly independent subfamily."
+    - name: MinimalModel.Toric.isClosed_indexCone
+      kind: theorem
+      status: proved
+      note: "Route R3, step 5 (toric flips, part 5). The cone of a finite family in a Hausdorff real topological vector space is closed. It is a finite union of simplicial cones, each the image of the closed orthant under a closed embedding."
+    - name: MinimalModel.Toric.isClosed_hull_of_finite
+      kind: theorem
+      status: proved
+      note: "Route R3, step 5 (toric flips, part 5). The conic hull of a finite set is closed."
+    - name: MinimalModel.Toric.isClosed_of_fg
+      kind: theorem
+      status: proved
+      note: "Route R3, step 5 (toric flips, part 5). A finitely generated pointed cone is closed."
+    - name: MinimalModel.Toric.Fan.isClosed_of_mem
+      kind: theorem
+      status: proved
+      note: "Route R3, step 5 (toric flips, part 5). The cones of a fan are closed, so the closedness hypotheses of the toric cone theorem and of Fan.exists_isWallPair_of_le always hold."
+    - name: MinimalModel.Toric.exists_dual_of_notMem_indexCone
+      kind: theorem
+      status: proved
+      note: "Route R3, step 5 (toric flips, part 5). Farkas' lemma for finitely generated cones, from ProperCone.hyperplane_separation_point of Mathlib and isClosed_indexCone."
+    - name: MinimalModel.Toric.exists_linearMap_of_notMem_hull
+      kind: theorem
+      status: proved
+      note: "Route R3, step 5 (toric flips, part 5). Farkas' lemma with a linear form. A point outside the conic hull of a finite set is separated from it by a linear form that is nonnegative on the set."
+    - name: MinimalModel.Toric.exists_linearMap_of_isFaceOf
+      kind: theorem
+      status: proved
+      note: "Route R3, step 5 (toric flips, part 5). Each face of a finitely generated cone is exposed. A linear form is nonnegative on the cone and vanishes on it exactly on the face."
+    - name: MinimalModel.Toric.Fan.WallData.curveClass_eq
+      kind: theorem
+      status: proved
+      note: "Route R3, step 5 (toric flips, part 5). In a simplicial fan, the class of a wall curve depends only on the wall."
+    - name: MinimalModel.Toric.Fan.finite_curveClasses
+      kind: theorem
+      status: proved
+      note: "Route R3, step 5 (toric flips, part 5). A simplicial fan has finitely many classes of wall curves, so its cone of curves is finitely generated (Fan.curveCone_fg) and closed (Fan.isClosed_curveCone)."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.exists_linearMap
+      kind: theorem
+      status: proved
+      note: "Route R3, step 5 (toric flips, part 5). An extremal ray of the cone of curves of a simplicial fan is cut out by a linear form that is nonnegative on the cone of curves."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.exists_tDivisor
+      kind: theorem
+      status: proved
+      note: "Route R3, step 5 (toric flips, part 5). A nef divisor that supports an extremal ray (Rei83 Section 2). Its degree is nonnegative on each wall and zero exactly on the walls of the ray, and its support functions satisfy the wall inequality across each wall."
+    - name: MinimalModel.Toric.Fan.exists_isWallPair_of_le_of_isComplete
+      kind: theorem
+      status: proved
+      note: "Route R3, step 5 (toric flips, part 5). Crossing a facet in a complete fan, with no hypothesis on the cones."
     - name: MinimalModel.IsPlt
       kind: def
       status: proved
