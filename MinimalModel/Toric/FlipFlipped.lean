@@ -146,7 +146,6 @@ theorem circuitCone_sup_mem_flipped {c : F.Ray → ℝ} {L : PointedCone ℝ (NR
   obtain ⟨τ, hτ, hneg, rfl⟩ := hL
   refine ⟨τ, j, hτ, hj, ?_⟩
   rw [flipCone_of_le hneg hj.ne]
-  exact PointedCone.IsFaceOf.refl _
 
 /-- The flipped fan keeps the cones of the fan in a maximal cone outside the star of `cone(u_{J₋})`, when `J₋` is not empty. -/
 theorem mem_flipped_of_not_le {c : F.Ray → ℝ} {σ ν : PointedCone ℝ (NR n)}
@@ -361,13 +360,15 @@ theorem IsExtremalRay.flipCone_inf (hc : F.IsComplete) (hs : F.IsSimplicialFan)
       (hR.generator_mem_of_sum_mem hc hs hw₀ W₀ hW₀ hν₁ hν₂ hb0
         (fun ρ h0 => (hR.generator_mem_contractCone_iff hc hs hw₀ W₀ hW₀ hν₁).mpr (hb1' ρ h0).1)
         (flipCone_le_contractCone W₀.curveClass ν₂ j₂ (Submodule.mem_inf.mp hx).2) h0)
+  have hx₁ : ∑ ρ, b' ρ • toNR (F.generator ρ) ∈ F.contractCone W₀.curveClass ν₁ := by
+    rw [hb']
+    exact flipCone_le_contractCone W₀.curveClass ν₁ j₁ (Submodule.mem_inf.mp hx).1
   have hP1 : ∀ ρ, b' ρ ≠ 0 →
       ρ.1 ≤ ν₁ ∨ (F.negCone W₀.curveClass ≤ ν₁ ∧ W₀.curveClass ρ ≠ 0) := fun ρ h0 =>
     (hR.generator_mem_contractCone_iff hc hs hw₀ W₀ hW₀ hν₁).mp
       (hR.generator_mem_of_sum_mem hc hs hw₀ W₀ hW₀ hν₂ hν₁ hb'0
         (fun ρ h0 => (hR.generator_mem_contractCone_iff hc hs hw₀ W₀ hW₀ hν₂).mpr (hb2' ρ h0).1)
-        (by rw [hb']; exact flipCone_le_contractCone W₀.curveClass ν₁ j₁
-          (Submodule.mem_inf.mp hx).1) h0)
+        hx₁ h0)
   by_cases hneg₂ : F.negCone W₀.curveClass ≤ ν₂
   · by_cases hneg₁ : F.negCone W₀.curveClass ≤ ν₁
     · -- both cones are in the star: `b - b' = s c` with `s = 0`
