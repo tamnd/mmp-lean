@@ -26,6 +26,8 @@ jobs:
           persist-credentials: false
       - name: writing rules
         run: python3 scripts/style.py
+      - name: formalization.yaml parses
+        run: python3 -c "import yaml; yaml.safe_load(open('formalization.yaml'))"
       - name: escape hatches
         run: sh scripts/scan.sh
       - name: statement hashes
