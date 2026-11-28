@@ -838,6 +838,162 @@ status:
       kind: theorem
       status: proved
       note: "Route R3, step 6 (toric flips, part 6). The cones of the link are cones of the fan."
+    - name: MinimalModel.Toric.Fan.mem_hull_generator_iff
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `mem_hull_generator_iff` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.isRationalPolyhedral_hull_generator
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `isRationalPolyhedral_hull_generator` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.finite_setOf_generator
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `finite_setOf_generator` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.le_of_generator_mem
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `le_of_generator_mem` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.hull_generator_mem
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `hull_generator_mem` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.exists_sum_eq_of_isMaximalCone
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `exists_sum_eq_of_isMaximalCone` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.fullCircuitCone
+      kind: def
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `fullCircuitCone` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.contractCone
+      kind: def
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `contractCone` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.contraction
+      kind: def
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `contraction` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.contractCone_of_not_le
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `contractCone_of_not_le` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.contractCone_of_le
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `contractCone_of_le` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.le_contractCone
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `le_contractCone` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.isRationalPolyhedral_contractCone
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `isRationalPolyhedral_contractCone` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.finite_setOf_isFaceOf_contractCone
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `finite_setOf_isFaceOf_contractCone` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.finite_contraction
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `finite_contraction` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.fullCircuitCone_sup_mem_contraction
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `fullCircuitCone_sup_mem_contraction` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.mem_contraction_of_not_le
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `mem_contraction_of_not_le` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.isFaceOf_inf_of_isFaceOf
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `isFaceOf_inf_of_isFaceOf` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.IsRaySupport.exists_eq_linear
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `exists_eq_linear` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.IsRaySupport.apply_eq_of_mem_hull
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `apply_eq_of_mem_hull` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.IsRaySupport.apply_eq_of_mem_contractCone
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `apply_eq_of_mem_contractCone` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.IsRaySupport.exists_coeff
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `exists_coeff` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.IsRaySupport.pos_of_coeff_neg
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `pos_of_coeff_neg` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.IsRaySupport.negCone_le_of_eq
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `negCone_le_of_eq` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.IsRaySupport.mem_contractCone_of_eq
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `mem_contractCone_of_eq` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.IsRaySupport.mem_contractCone_iff
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `mem_contractCone_iff` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.IsRaySupport.inf_isFaceOf
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `inf_isFaceOf` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.isQuasiFan_contraction
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `isQuasiFan_contraction` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.refines_contraction
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `refines_contraction` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.eq_smul_of_sum_eq_zero
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `eq_smul_of_sum_eq_zero` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.isStronglyConvex_contractCone
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `isStronglyConvex_contractCone` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.contractionFan
+      kind: def
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `contractionFan` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.cones_contractionFan
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `cones_contractionFan` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.support_eq_of_refines
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `support_eq_of_refines` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.mem_cones_of_refines
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `mem_cones_of_refines` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.support_contractionFan
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `support_contractionFan` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.isComplete_contractionFan
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `isComplete_contractionFan` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.isFaceOf_contractCone
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `isFaceOf_contractCone` in MinimalModel/Toric/FlipContract.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.rays_contractionFan
+      kind: theorem
+      status: proved
+      note: "Route R3, step 7 (toric flips, part 7). See `rays_contractionFan` in MinimalModel/Toric/FlipContract.lean."
     - name: MinimalModel.IsPlt
       kind: def
       status: proved
