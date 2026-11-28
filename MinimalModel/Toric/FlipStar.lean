@@ -217,7 +217,7 @@ theorem exists_isWallPair_of_ray (hc : F.IsComplete) (hs : F.IsSimplicialFan) (h
   have hli : LinearIndependent ℝ fun ρ : {ρ : F.Ray // ρ.1 ≤ σ} => toNR (F.generator ρ.1) :=
     linearIndependent_generator hσ (hs σ hσ)
   have hσv := eq_indexCone_generator hσ
-  have hface := hli.indexCone_isFaceOf ({⟨ρ, hρ⟩}ᶜ : Set {ρ : F.Ray // ρ.1 ≤ σ})
+  have hface := LinearIndependent.indexCone_isFaceOf hli ({⟨ρ, hρ⟩}ᶜ : Set {ρ : F.Ray // ρ.1 ≤ σ})
   rw [← hσv] at hface
   have hτ := F.face_mem σ hσ _ hface
   -- the generator of `ρ` is not in the span of the facet
