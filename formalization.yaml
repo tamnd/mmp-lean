@@ -1182,6 +1182,122 @@ status:
       kind: theorem
       status: proved
       note: "Route R3, step 10 (toric flips, part 10). See `IsExtremalRay.exists_isToricStep` in MinimalModel/Toric/FlipExists.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.isAmpleOver_contraction
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `IsExtremalRay.isAmpleOver_contraction` in MinimalModel/Toric/FlipExists.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.isPullback_contraction
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `IsExtremalRay.isPullback_contraction` in MinimalModel/Toric/FlipExists.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.not_isPullback_contraction
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `IsExtremalRay.not_isPullback_contraction` in MinimalModel/Toric/FlipExists.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.hasRelPicardOne_contraction
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `IsExtremalRay.hasRelPicardOne_contraction` in MinimalModel/Toric/FlipExists.lean."
+    - name: MinimalModel.Toric.indexCone_isFaceOf_of_nonneg
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `indexCone_isFaceOf_of_nonneg` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.exists_isFaceOf_indexCone_min
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `exists_isFaceOf_indexCone_min` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.indexCone_eq_hull_singleton
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `indexCone_eq_hull_singleton` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.exists_isFaceOf_indexCone_eq_hull
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `exists_isFaceOf_indexCone_eq_hull` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.Fan.curvePairing
+      kind: def
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `curvePairing` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.Fan.WallData.degree_pos_of_isAmple
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `WallData.degree_pos_of_isAmple` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.Fan.exists_isExtremalRay_degree_neg
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `exists_isExtremalRay_degree_neg` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.Fan.generator_mem_flipCone_of_unique
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `generator_mem_flipCone_of_unique` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.Fan.flipCone_eq_contractCone_of_unique
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `flipCone_eq_contractCone_of_unique` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.Fan.flipped_eq_contraction_of_unique
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `flipped_eq_contraction_of_unique` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.cones_flippedFan_of_unique
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `IsExtremalRay.cones_flippedFan_of_unique` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.rays_flippedFan_of_unique
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `IsExtremalRay.rays_flippedFan_of_unique` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.divisorialStep
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `IsExtremalRay.divisorialStep` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.Fan.not_isStronglyConvex_contractCone
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `not_isStronglyConvex_contractCone` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.isToricMoriFibreSpace
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `IsExtremalRay.isToricMoriFibreSpace` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.Fan.IsExtremalRay.isToricMoriFibreSpace_or_isToricStep
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `IsExtremalRay.isToricMoriFibreSpace_or_isToricStep` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.Fan.trichotomy
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `trichotomy` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.Fan.IsProjectiveFan.trichotomy
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `IsProjectiveFan.trichotomy` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.IsToricStep.isComplete
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `IsToricStep.isComplete` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.IsToricStep.isSimplicialFan
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `IsToricStep.isSimplicialFan` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.IsToricStep.rays_subset
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `IsToricStep.rays_subset` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.IsToricStep.rational
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `IsToricStep.rational` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.isComplete_isSimplicialFan_of_steps
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `isComplete_isSimplicialFan_of_steps` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.rational_of_steps
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `rational_of_steps` in MinimalModel/Toric/Trichotomy.lean."
+    - name: MinimalModel.Toric.toricMMP_trichotomy
+      kind: theorem
+      status: proved
+      note: "Route R3, step 12 (toric flips, part 12). See `toricMMP_trichotomy` in MinimalModel/Toric/Trichotomy.lean."
     - name: MinimalModel.IsPlt
       kind: def
       status: proved
